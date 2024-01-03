@@ -30,6 +30,7 @@ export const {
             if (!existingUser) return token
 
             token.role = existingUser.role
+            token.profilePic = existingUser.profilePic
 
             return token
         },
@@ -39,6 +40,9 @@ export const {
             }
             if (token.role && session.user) {
                 session.user.role = token.role as UserRole
+            }
+            if (token.profilePic && session.user) {
+                session.user.profilePic = token.profilePic as string | null
             }
             return session
         },

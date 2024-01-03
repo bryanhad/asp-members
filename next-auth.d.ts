@@ -1,9 +1,13 @@
-import { UserRole } from "@prisma/client";
-import { DefaultSession } from "next-auth";
+import { UserRole } from '@prisma/client'
+import { DefaultSession } from 'next-auth'
 
-export type ExtendedUser = DefaultSession['user'] & {
-    role: UserRole
-}
+export type ExtendedUser = Omit<
+    DefaultSession['user'] & {
+        role: UserRole
+        profilePic: string | null
+    },
+    'image'
+>
 
 declare module 'next-auth' {
     interface Session {
