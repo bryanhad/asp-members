@@ -4,7 +4,7 @@ import { db } from '@/lib/db'
 import { getUserByEmail } from '@/data/user'
 import { getEmailVerificationTokenByToken } from '@/data/email-verification-token'
 
-export const verifyEmail = async (token: string) => {
+export const verifyEmailAction = async (token: string) => {
     const existingToken = await getEmailVerificationTokenByToken(token)
 
     if (!existingToken) {

@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { CardWrapper } from './card-wrapper'
 import { BeatLoader } from 'react-spinners'
 import { useCallback, useEffect, useState } from 'react'
-import { verifyEmail } from '@/actions/verify-email'
+import { verifyEmailAction } from '@/actions/verify-email'
 import { FormError } from '../form-error'
 import { FormSuccess } from '../form-success'
 
@@ -23,7 +23,7 @@ export const EmailVerificationCard = () => {
             return
         }
         try {
-            const data = await verifyEmail(token)
+            const data = await verifyEmailAction(token)
             if (data.success) {
                 setSuccess(data.success)
             }
