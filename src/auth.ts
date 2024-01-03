@@ -29,6 +29,8 @@ export const {
             const existingUser = await getUserById(token.sub)
             if (!existingUser) return token
 
+            token.name = existingUser.name
+            token.email = existingUser.email
             token.role = existingUser.role
             token.profilePic = existingUser.profilePic
 
@@ -43,6 +45,10 @@ export const {
             }
             if (token.profilePic && session.user) {
                 session.user.profilePic = token.profilePic as string | null
+            }
+            if (session.user) {
+                session.user.name = token.name
+                session.user.email = token.email
             }
             return session
         },
