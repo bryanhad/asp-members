@@ -17,6 +17,6 @@ model User {
   name          String
   email         String    @unique
   emailVerified DateTime?
-  image         String?
+  profilePic    String?
   password      String
 }
