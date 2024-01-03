@@ -25,7 +25,6 @@ import LoadingButton from '../loading-button'
 export const LoginForm = () => {
     const [error, setError] = useState<string | undefined>()
     const [success, setSuccess] = useState<string | undefined>()
-    console.log(success)
 
     const [isPending, startTransition] = useTransition()
 

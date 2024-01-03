@@ -34,6 +34,8 @@ export default auth((req) => {
     }
 
     if (!isLoggedIn && !isPublicRoute) {
+        console.log('yuea')
+
         //if user isn't logged in and is not on one of the public routes, get'em to login!
         return Response.redirect(new URL(`/auth/login`, nextUrl))
     }
