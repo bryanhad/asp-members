@@ -40,10 +40,14 @@ export const RegisterForm = () => {
         setSuccess('')
 
         startTransition(async () => {
-            const data = await registerAction(values)
+            try {
+                const data = await registerAction(values)
 
-            setError(data.error)
-            setSuccess(data.success)
+                setError(data.error)
+                setSuccess(data.success)
+            } catch (err) {
+                setError('Something went wrong!')
+            }
         })
     }
 

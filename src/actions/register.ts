@@ -5,6 +5,8 @@ import { RegisterSchema } from '@/schemas'
 import bcrypt from 'bcryptjs'
 import { db } from '@/lib/db'
 import { getUserByEmail } from '@/data/user'
+import { generateEmailVerificationToken } from '@/lib/tokens'
+import { sendEmailVerificationEmail } from '@/lib/mail'
 
 export const registerAction = async (
     values: z.infer<typeof RegisterSchema>
@@ -33,7 +35,16 @@ export const registerAction = async (
         },
     })
 
-    //TODO: Send verification email token
+    // bear in mind that the user could just not verify their acccount when they register their account..
+    // so at this point, the record for the new user has been created, but the emailVerification is still empty..
+    // so we should also send the verificationEmail in the login action, if the user's user record email isn't verified
 
-    return { success: 'User created!' }
+    const emailVerificationToken = await generateEmailVerificationToken(email)
+
+    await sendEmailVerificationEmail(
+        emailVerificationToken.email,
+        emailVerificationToken.token,
+    )
+
+    return { success: 'Check your email to verify your account!' }
 }

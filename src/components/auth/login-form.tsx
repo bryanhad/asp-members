@@ -18,21 +18,14 @@ import { FormError } from '../form-error'
 import { FormSuccess } from '../form-success'
 import { loginAction } from '@/actions/login'
 import { useState, useTransition } from 'react'
-import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { LoginSchema } from '@/schemas'
 import LoadingButton from '../loading-button'
 
 export const LoginForm = () => {
-    const searchParams = useSearchParams()
-
-    const urlError =
-        searchParams.get('error') === 'OAuthAccountNotLinked'
-            ? 'Email already in use with different provider!'
-            : ''
-
-    const [error, setError] = useState<string | undefined>('')
-    const [success, setSuccess] = useState<string | undefined>('')
+    const [error, setError] = useState<string | undefined>()
+    const [success, setSuccess] = useState<string | undefined>()
+    console.log(success)
 
     const [isPending, startTransition] = useTransition()
 
@@ -56,10 +49,10 @@ export const LoginForm = () => {
                     form.reset()
                     setError(data.error)
                 }
-                // if (data?.success) {
-                //     form.reset()
-                //     setSuccess(data.success)
-                // }
+                if (data?.success) {
+                    form.reset()
+                    setSuccess(data.success)
+                }
                 // if (data?.twoFactor) {
                 //     setShowTwoFactor(true)
                 // }
@@ -128,7 +121,7 @@ export const LoginForm = () => {
                             )}
                         />
                     </div>
-                    <FormError message={error || urlError} />
+                    <FormError message={error} />
                     <FormSuccess message={success} />
                     <LoadingButton
                         isLoading={isPending}
