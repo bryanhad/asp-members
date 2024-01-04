@@ -4,7 +4,7 @@ type AuthLayoutProps = {
 
 export default function AuthLayout({children}: AuthLayoutProps) {
   return (
-    <div className="h-full flex items-center justify-center bg-sky-500">
+    <div className="">
       {children}
     </div>
   )
