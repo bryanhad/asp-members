@@ -5,22 +5,53 @@ import {
     DEFAULT_LOGIN_REDIRECT,
     apiAuthPrefix,
     authRoutes,
+    publicApiPrefix,
     publicRoutes,
 } from '@/routes'
+import { NextResponse } from 'next/server'
 
 const { auth } = NextAuth(authConfig) // so isntead of getting the auth from the auth.ts, we get the auth from auth.config.ts..
 // this is so that our prisma could run on the middleware which runs on the edge
 
+const allowedOrigins =
+    process.env.NODE_ENV === 'production'
+        ? ['https://mydomain.com', 'https://www.mydomain.com']
+        : ['http://localhost:3000']
+
 export default auth((req) => {
     const { nextUrl } = req
     const isLoggedIn = !!req.auth
+    const origin = req.headers.get('origin')
+
+    console.log('middleware ran!')
+    console.log({
+        method: req.method,
+        url: req.url,
+        origin,
+    })
+
+    // if u want to block rest API tools like thunderclient or postman, u can add condittion for no origin.. (!origin)
+    if (origin && !allowedOrigins.includes(origin)) {
+        return new NextResponse(null, {
+            status: 400,
+            statusText: 'Bad Request',
+            headers: {
+                'Content-Type': 'text/plain',
+            },
+        })
+    }
 
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
     const isAuthRoute = authRoutes.includes(nextUrl.pathname)
+    const isPublicApiRoute = nextUrl.pathname.startsWith(publicApiPrefix)
 
     if (isApiAuthRoute) {
         //basically don't this middleware won't do anything lol
+        return null
+    }
+
+    if (isPublicApiRoute) {
         return null
     }
 
@@ -42,7 +73,9 @@ export default auth((req) => {
         const encodedCallbackUrl = encodeURIComponent(callbackUrl)
 
         //if user isn't logged in and is not on one of the public routes, get'em to login!
-        return Response.redirect(new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl))
+        return Response.redirect(
+            new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
+        )
     }
 
     return null
