@@ -9,7 +9,10 @@ import { getUserByEmail } from '@/data/user'
 import { generateEmailVerificationToken } from '@/lib/tokens'
 import { sendEmailVerificationEmail } from '@/lib/mail'
 
-export const loginAction = async (values: z.infer<typeof LoginSchema>) => {
+export const loginAction = async (
+    values: z.infer<typeof LoginSchema>,
+    callbackUrl?: string | null
+) => {
     const validatedFields = LoginSchema.safeParse(values)
 
     if (!validatedFields.success) {
@@ -18,38 +21,39 @@ export const loginAction = async (values: z.infer<typeof LoginSchema>) => {
 
     const { email, password } = validatedFields.data
 
-    
     try {
         const existingUser = await getUserByEmail(email)
 
         if (!existingUser || !existingUser.email) {
-            return {error: 'Email does not exist'}
+            return { error: 'Email does not exist' }
         }
 
-        if (!existingUser.emailVerified) { // if email is still not verified, send the email verification email
-            const emailVerificationToken = await generateEmailVerificationToken(existingUser.email)
+        if (!existingUser.emailVerified) {
+            // if email is still not verified, send the email verification email
+            const emailVerificationToken = await generateEmailVerificationToken(
+                existingUser.email
+            )
 
             await sendEmailVerificationEmail(
                 emailVerificationToken.email,
-                emailVerificationToken.token,
+                emailVerificationToken.token
             )
 
-            return {success: 'Check your email to verify your account!'}
+            return { success: 'Check your email to verify your account!' }
         }
 
-        
         await signIn('credentials', {
             email,
             password,
-            redirectTo: DEFAULT_LOGIN_REDIRECT,
+            redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
         })
     } catch (err) {
         if (err instanceof AuthError) {
             switch (err.type) {
-                case 'CredentialsSignin': 
-                    return {error: 'Invalid credentials!'}
+                case 'CredentialsSignin':
+                    return { error: 'Invalid credentials!' }
                 default:
-                    return {error: 'Something went wrong!'}
+                    return { error: 'Something went wrong!' }
             }
         }
 

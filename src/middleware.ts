@@ -34,10 +34,15 @@ export default auth((req) => {
     }
 
     if (!isLoggedIn && !isPublicRoute) {
-        console.log('yuea')
+        let callbackUrl = nextUrl.pathname
+        if (nextUrl.search) {
+            callbackUrl += nextUrl.search
+        }
+
+        const encodedCallbackUrl = encodeURIComponent(callbackUrl)
 
         //if user isn't logged in and is not on one of the public routes, get'em to login!
-        return Response.redirect(new URL(`/auth/login`, nextUrl))
+        return Response.redirect(new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl))
     }
 
     return null

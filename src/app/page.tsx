@@ -7,7 +7,7 @@ export default function Home() {
             <div className="space-y-6 text-center">
                 <h1 className="text-6xl">🔐 ASP-Member</h1>
                 <p>Platfor for ASP Lawfirm memebrs</p>
-                <LoginButton>
+                <LoginButton mode='modal' asChild>
                     <Button>Sign In</Button>
                 </LoginButton>
             </div>

@@ -21,8 +21,12 @@ import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { LoginSchema } from '@/schemas'
 import LoadingButton from '../loading-button'
+import { useSearchParams } from 'next/navigation'
 
 export const LoginForm = () => {
+    const searchParams = useSearchParams()
+    const callbackUrl  = searchParams.get('callbackUrl')
+
     const [error, setError] = useState<string | undefined>()
     const [success, setSuccess] = useState<string | undefined>()
 
@@ -42,7 +46,7 @@ export const LoginForm = () => {
 
         startTransition(async () => {
             try {
-                const data = await loginAction(values)
+                const data = await loginAction(values, callbackUrl)
 
                 if (data?.error) {
                     form.reset()
@@ -52,9 +56,6 @@ export const LoginForm = () => {
                     form.reset()
                     setSuccess(data.success)
                 }
-                // if (data?.twoFactor) {
-                //     setShowTwoFactor(true)
-                // }
             } catch (err) {
                 setError('Something went wrong!')
             }
