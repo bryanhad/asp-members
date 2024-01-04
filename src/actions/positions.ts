@@ -2,6 +2,7 @@
 import { getPositionByName } from '@/data/position'
 import { db } from '@/lib/db'
 import { PositionsSchema } from '@/schemas'
+import { revalidatePath } from 'next/cache'
 import * as z from 'zod'
 
 export const AddPosition = async (values: z.infer<typeof PositionsSchema>) => {
@@ -22,5 +23,6 @@ export const AddPosition = async (values: z.infer<typeof PositionsSchema>) => {
         data: { name },
     })
 
+    revalidatePath('/positions')
     return { success: `Position '${name}' successfuly added!` }
 }
