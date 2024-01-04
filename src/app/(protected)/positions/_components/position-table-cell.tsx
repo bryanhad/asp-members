@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { PiPencilSimpleLine } from 'react-icons/pi'
 import EditingForm from './editing-form'
+import { cn } from '@/lib/utils'
 
 type PositionTableCellProps = {
     position: {
@@ -24,7 +25,11 @@ export default function PositionTableCell({
     const [isEditing, setIsEditing] = useState(false)
 
     return (
-        <div className="flex items-center justify-between px-6 py-2 rounded-md bg-secondary gap-4">
+        <div
+            className={cn(
+                'flex flex-col sm:flex-row items-center sm:h-[65px] justify-between p-2 sm:px-6 rounded-md border-border border-[1px] sm:gap-4'
+            )}
+        >
             {isEditing ? (
                 <EditingForm
                     closeForm={() => setIsEditing(false)}
@@ -32,9 +37,13 @@ export default function PositionTableCell({
                 />
             ) : (
                 <>
-                    <div className="flex items-center gap-2">
-                        <p>{position.name}</p>
-                        <Button onClick={() => setIsEditing(true)}>
+                    <div className="flex items-center gap-2 flex-[1]">
+                        <p className="flex-[1]">{position.name}</p>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setIsEditing(true)}
+                        >
                             <PiPencilSimpleLine />
                         </Button>
                         <DeleteButtonModal
@@ -42,7 +51,7 @@ export default function PositionTableCell({
                             label={`Position '${position.name}' will be deleted permanently.`}
                         />
                     </div>
-                    <div className="flex flex-col items-center gap-1">
+                    <div className="flex sm:flex-col items-center gap-3 sm:gap-1">
                         <p className="text-secondary-foreground/20 text-sm">
                             Member count:
                         </p>

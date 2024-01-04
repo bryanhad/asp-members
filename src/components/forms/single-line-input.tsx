@@ -38,9 +38,10 @@ export default function SingleLineInput({
                     size="lg"
                     type="button"
                     rounded="noRounded"
-                    variant="default"
+                    variant="outline-y-only"
                     onClick={onCancelClicked}
                     disabled={isLoading}
+                    className={'px-3 py-2'}
                 >
                     {cancelButtonText}
                 </Button>
@@ -51,7 +52,7 @@ export default function SingleLineInput({
                 type="submit"
                 rounded="onlyRightMd"
                 variant="single-line-submit-button"
-                className="group-focus-within:border-none"
+                className={cn({'px-3': cancelButtonText})}
             >
                 {buttonText}
             </LoadingButton>

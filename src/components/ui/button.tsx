@@ -22,6 +22,7 @@ const buttonVariants = cva(
                 link: 'underline-offset-3 hover:underline text-foreground/50 hover:text-foreground/80 duration-300 text-sm',
                 'single-line-submit-button':
                     'border-y border-r border-emerald-500 shadow-sm hover:bg-emerald-400 bg-emerald-500 text-white dark:hover:bg-emerald-500 dark:bg-emerald-600',
+                'outline-y-only': 'border-y border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
             },
             rounded: {
                 md: 'rounded-md',

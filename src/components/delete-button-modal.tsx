@@ -60,7 +60,9 @@ export default function DeleteButtonModal({
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild onClick={() => setOpen(true)}>
-                <FiTrash />
+                <Button variant="ghost" size='sm' className='dark:text-red-600 text-red-500'>
+                    <FiTrash />
+                </Button>
             </DialogTrigger>
             <DialogContent className="p-0 w-auto bg-transparent border-none">
                 <Card className="w-[400px] shadow-md">

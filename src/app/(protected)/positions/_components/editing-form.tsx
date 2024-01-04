@@ -49,7 +49,7 @@ export default function EditingForm({ closeForm, position }: EditingFormProps) {
 
     return (
         <Form {...form}>
-            <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+            <form className="flex-[1] w-full" onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="space-y-4">
                     <FormField
                         control={form.control}
