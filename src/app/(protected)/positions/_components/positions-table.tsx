@@ -2,7 +2,6 @@ import {
     fetchFilteredPositions,
     fetchPositionsPageAmount,
 } from '@/data/position'
-import Link from 'next/link'
 import TablePagination from '../../../../components/table/table-pagination'
 import PositionTableCell from './position-table-cell'
 

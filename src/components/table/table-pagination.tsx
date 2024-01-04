@@ -1,15 +1,6 @@
 'use client'
 
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from '@/components/ui/pagination'
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa6"
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 
 import { generatePagination } from '@/lib/utils'
 import clsx from 'clsx'
@@ -46,16 +37,16 @@ export default function TablePagination({
                 <div className="flex -space-x-px">
                     {allPages.map((page, index) => {
                         let position:
-                            | "first"
-                            | "last"
-                            | "single"
-                            | "middle"
+                            | 'first'
+                            | 'last'
+                            | 'single'
+                            | 'middle'
                             | undefined
 
-                        if (index === 0) position = "first"
-                        if (index === allPages.length - 1) position = "last"
-                        if (allPages.length === 1) position = "single"
-                        if (page === "...") position = "middle"
+                        if (index === 0) position = 'first'
+                        if (index === allPages.length - 1) position = 'last'
+                        if (allPages.length === 1) position = 'single'
+                        if (page === '...') position = 'middle'
 
                         return (
                             <PaginationNumber
@@ -87,23 +78,23 @@ function PaginationNumber({
 }: {
     page: number | string
     href: string
-    position?: "first" | "last" | "middle" | "single"
+    position?: 'first' | 'last' | 'middle' | 'single'
     isActive: boolean
 }) {
     const className = clsx(
-        "flex h-10 w-10 items-center justify-center text-sm border dark:border-slate-500",
+        'flex h-10 w-10 items-center justify-center text-sm border dark:border-slate-500',
         {
-            "rounded-l-md": position === "first" || position === "single",
-            "rounded-r-md": position === "last" || position === "single",
-            "z-10 bg-blue-600 dark:bg-blue-700 border-blue-600 dark:border-blue-700 text-white dark:text-slate-200":
+            'rounded-l-md': position === 'first' || position === 'single',
+            'rounded-r-md': position === 'last' || position === 'single',
+            'z-10 bg-blue-600 dark:bg-blue-700 border-blue-600 dark:border-blue-700 text-white dark:text-slate-200':
                 isActive,
-            "hover:bg-gray-100 dark:hover:bg-active-dark":
-                !isActive && position !== "middle",
-            "text-gray-300": position === "middle",
-        },
+            'hover:bg-gray-100 dark:hover:bg-active-dark':
+                !isActive && position !== 'middle',
+            'text-gray-300': position === 'middle',
+        }
     )
 
-    return isActive || position === "middle" ? (
+    return isActive || position === 'middle' ? (
         <div className={className}>{page}</div>
     ) : (
         <Link href={href} className={className}>
@@ -118,22 +109,22 @@ function PaginationArrow({
     isDisabled,
 }: {
     href: string
-    direction: "left" | "right"
+    direction: 'left' | 'right'
     isDisabled?: boolean
 }) {
     const className = clsx(
-        "flex h-10 w-10 items-center justify-center rounded-md border dark:border-slate-500",
+        'flex h-10 w-10 items-center justify-center rounded-md border dark:border-slate-500',
         {
-            "pointer-events-none text-gray-300 dark:text-slate-500 dark:border-slate-600":
+            'pointer-events-none text-gray-300 dark:text-slate-500 dark:border-slate-600':
                 isDisabled,
-            "hover:bg-gray-100 dark:hover:bg-active-dark": !isDisabled,
-            "mr-2 md:mr-4": direction === "left",
-            "ml-2 md:ml-4": direction === "right",
-        },
+            'hover:bg-gray-100 dark:hover:bg-active-dark': !isDisabled,
+            'mr-2 md:mr-4': direction === 'left',
+            'ml-2 md:ml-4': direction === 'right',
+        }
     )
 
     const icon =
-        direction === "left" ? (
+        direction === 'left' ? (
             <FaChevronLeft className="w-4" />
         ) : (
             <FaChevronRight className="w-4" />

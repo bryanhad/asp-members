@@ -1,13 +1,11 @@
 'use client'
 
-import SingleLineInput from '@/components/forms/single-line-input'
+import { deletePosition } from '@/actions/positions'
+import DeleteButtonModal from '@/components/delete-button-modal'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { PiPencilSimpleLine } from 'react-icons/pi'
 import EditingForm from './editing-form'
-import DeleteButtonModal from '@/components/delete-button-modal'
-import DeleteConfirmationModal from '@/components/delete-confirmation-modal'
-import { deletePosition } from '@/actions/positions'
 
 type PositionTableCellProps = {
     position: {

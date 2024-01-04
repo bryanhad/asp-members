@@ -35,12 +35,13 @@ export default function SingleLineInput({
             />
             {cancelButtonText && (
                 <Button
-                size="lg"
-                type="button"
-                rounded="noRounded"
-                variant='default'
-                onClick={onCancelClicked}
-                disabled={isLoading}>   
+                    size="lg"
+                    type="button"
+                    rounded="noRounded"
+                    variant="default"
+                    onClick={onCancelClicked}
+                    disabled={isLoading}
+                >
                     {cancelButtonText}
                 </Button>
             )}
