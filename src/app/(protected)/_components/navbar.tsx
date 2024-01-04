@@ -4,31 +4,16 @@ import { UserButton } from '@/components/auth/user-button'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { BurgerMenu } from './burger-menu'
 
 export const Navbar = () => {
-    const pathname = usePathname()
-
-    const links = [
-        { name: 'Settings', href: '/settings' },
-        { name: 'Server', href: '/server' },
-        { name: 'Client', href: '/client' },
-        { name: 'Admin', href: '/admin' },
-    ]
-
     return (
-        <nav className="bg-secondary flex justify-between items-center p-4 rounded-xl w-[600px] shadow-sm">
-            <div className="flex gap-x-2">
-                {links.map((link) => (
-                    <Button
-                        asChild
-                        key={link.name}
-                        variant={pathname === link.href ? 'default' : 'outline'}
-                    >
-                        <Link href={link.href}>{link.name}</Link>
-                    </Button>
-                ))}
+        <nav className="fixed top-0 left-0 w-full bg-white z-50">
+            <div className="max-w-[1540px] mx-auto h-[50px] flex justify-between px-7  items-center">
+                <h1>LOGO</h1>
+                <BurgerMenu />
             </div>
-            <UserButton />
+            {/* <UserButton /> */}
         </nav>
     )
 }

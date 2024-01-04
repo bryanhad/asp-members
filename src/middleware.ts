@@ -23,12 +23,12 @@ export default auth((req) => {
     const isLoggedIn = !!req.auth
     const origin = req.headers.get('origin')
 
-    console.log('middleware ran!')
-    console.log({
-        method: req.method,
-        url: req.url,
-        origin,
-    })
+    // console.log('middleware ran!')
+    // console.log({
+    //     method: req.method,
+    //     url: req.url,
+    //     origin,
+    // })
 
     // if u want to block rest API tools like thunderclient or postman, u can add condittion for no origin.. (!origin)
     if (origin && !allowedOrigins.includes(origin)) {
