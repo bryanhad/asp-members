@@ -12,7 +12,7 @@ export default function OuterContainer({
     return (
         <div
             className={cn(
-                'w-full max-w-[1400px] bg-red-500 px-4 mx-auto flex-[1] lg:pl-[250px]',
+                'w-full max-w-[1400px] px-4 mx-auto flex-[1] lg:pl-[250px]',
                 className
             )}
         >

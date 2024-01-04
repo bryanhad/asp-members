@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import {
     Dialog,
@@ -13,14 +15,36 @@ import { Label } from '@/components/ui/label'
 import BurgerMenuContent from './burger-menu-content'
 import { RiMenu4Line } from 'react-icons/ri'
 import Link from 'next/link'
+import { cn } from '@/lib/utils'
+import { usePathname } from 'next/navigation'
 
 export function BurgerMenu() {
+    const pathname = usePathname()
+
     const links = [
-        { name: 'Dashboard', href: '/dashboard' },
-        { name: 'Settings', href: '/settings' },
-        { name: 'Server', href: '/server' },
-        { name: 'Client', href: '/client' },
-        { name: 'Admin', href: '/admin' },
+        {
+            name: 'Test',
+            nestedLinks: [
+                { name: 'Dashboard', href: '/dashboard' },
+                { name: 'Settings', href: '/settings' },
+                { name: 'Server', href: '/server' },
+                { name: 'Client', href: '/client' },
+                { name: 'Admin', href: '/admin' },
+            ],
+        },
+        {
+            name: 'General',
+            nestedLinks: [
+                { name: 'Users', href: '/users' },
+                { name: 'Members', href: '/members' },
+                { name: 'Blogs', href: '/blogs' },
+                { name: 'Positions', href: '/positions' },
+            ],
+        },
+        {
+            name: 'User',
+            nestedLinks: [{ name: 'Profile', href: '/settings' }],
+        },
     ]
 
     return (
@@ -31,15 +55,40 @@ export function BurgerMenu() {
                 </Button>
             </DialogTrigger>
             <BurgerMenuContent className="flex flex-col pt-6">
-                <div>
-                    <h1>Logo</h1>
-                    <div className="flex flex-col gap-4 mt-4 pl-6">
+                <div >
+                    <DialogClose asChild className='flex-[1]'>
+                        <Link href='/dashboard' className='p-2'>Logo</Link>
+                    </DialogClose>
+
+                    <div className="flex flex-col gap-4 mt-4 pr-5">
                         {links.map((link) => (
-                            <DialogClose asChild key={link.name}>
-                                <Link href={link.href} className="">
+                            <div key={link.name} className="flex flex-col">
+                                <Button
+                                    size="sm"
+                                    variant="looksOnly"
+                                    className="justify-end font-semibold"
+                                >
                                     {link.name}
-                                </Link>
-                            </DialogClose>
+                                </Button>
+                                {link.nestedLinks.map((item) => (
+                                    <DialogClose asChild key={link.name}>
+                                        <Button
+                                            key={item.name}
+                                            variant="link"
+                                            size="sm"
+                                            className={cn('justify-end mr-2', {
+                                                'font-normal text-foreground':
+                                                    pathname === item.href,
+                                            })}
+                                            asChild
+                                        >
+                                            <Link href={item.href}>
+                                                {item.name}
+                                            </Link>
+                                        </Button>
+                                    </DialogClose>
+                                ))}
+                            </div>
                         ))}
                     </div>
                 </div>
