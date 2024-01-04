@@ -44,3 +44,25 @@ model PasswordResetToken {
 
   @@unique([email, token]) //only one unique token for specific email
 }
+
+model Member {
+  id String @id @default(cuid())
+
+  email        String   @unique
+  name         String
+  picture      String
+  description  String?
+  education    String[]
+  organization String[]
+  practices    String[]
+  positionId   String
+  position     Position @relation(fields: [positionId], references: [id])
+
+  joinedSince DateTime?
+}
+
+model Position {
+  id      String   @id @default(cuid())
+  name    String   @unique
+  members Member[]
+}

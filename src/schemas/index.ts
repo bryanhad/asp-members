@@ -59,3 +59,7 @@ export const SettingsSchema = z
             path: ['password'],
         }
     )
+
+export const PositionsSchema = z.object({
+    name: z.string().min(1, { message: 'Position name must be atleast 4 characters long' }),
+})
