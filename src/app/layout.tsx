@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
+import { cn } from '@/lib/utils'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,9 +18,9 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body className={cn('flex flex-col', inter.className)}>
                 <Toaster />
-                {children}
+                <main className="bg-sky-600 flex-[1] flex flex-col">{children}</main>
             </body>
         </html>
     )
