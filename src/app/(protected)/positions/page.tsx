@@ -1,5 +1,5 @@
-import PositionForm from '@/components/forms/position-form'
-import PositionsTable from '@/components/tables/positions-table'
+import AddForm from '@/app/(protected)/positions/_components/add-form'
+import PositionsTable from '@/app/(protected)/positions/_components/positions-table'
 
 type PositionPageProps = {
     searchParams?: {
@@ -13,8 +13,8 @@ export default function PositionsPage({ searchParams }: PositionPageProps) {
     const currentPage = Number(searchParams?.page) || 1
 
     return (
-        <div className='space-y-4'>
-            <PositionForm />
+        <div className="space-y-4">
+            <AddForm />
             <PositionsTable query={query} currentPage={currentPage} />
         </div>
     )

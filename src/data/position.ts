@@ -2,8 +2,16 @@ import { db } from '@/lib/db'
 
 export const getPositionByName = async (name: string) => {
     try {
-        const user = await db.position.findUnique({ where: { name } })
-        return user
+        const position = await db.position.findUnique({ where: { name } })
+        return position
+    } catch (err) {
+        return null
+    }
+}
+export const getPositionById = async (id: string) => {
+    try {
+        const position = await db.position.findUnique({ where: { id } })
+        return position
     } catch (err) {
         return null
     }
@@ -49,7 +57,7 @@ export async function fetchPositionsPageAmount(query: string) {
             where: {
                 name: {
                     contains: query,
-                    mode: "insensitive",
+                    mode: 'insensitive',
                 },
             },
             select: {
@@ -59,7 +67,7 @@ export async function fetchPositionsPageAmount(query: string) {
         const totalPages = Math.ceil(Number(_all) / ITEMS_PER_PAGE)
         return totalPages
     } catch (error) {
-        console.error("Database Error:", error)
-        throw new Error("Failed to fetch total pages number of Positions.")
+        console.error('Database Error:', error)
+        throw new Error('Failed to fetch total pages number of Positions.')
     }
 }

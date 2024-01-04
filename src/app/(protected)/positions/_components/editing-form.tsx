@@ -1,8 +1,12 @@
 'use client'
 
+import { editPosition } from '@/actions/positions'
+import SingleLineInput from '@/components/forms/single-line-input'
 import { PositionsSchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import * as z from 'zod'
 import {
     Form,
@@ -12,36 +16,34 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form'
-import { useState, useTransition } from 'react'
-import { Input } from '../ui/input'
-import { FormError } from '../form-error'
-import { FormSuccess } from '../form-success'
-import LoadingButton from '../loading-button'
-import { AddPosition } from '@/actions/positions'
-import SingleLineInput from './single-line-input'
+type EditingFormProps = {
+    closeForm: () => void
+    position: {
+        name: string
+        id: string
+    }
+}
 
-export default function PositionForm() {
-    const [error, setError] = useState<string | undefined>()
-    const [success, setSuccess] = useState<string | undefined>()
-
+export default function EditingForm({ closeForm, position }: EditingFormProps) {
     const form = useForm<z.infer<typeof PositionsSchema>>({
         resolver: zodResolver(PositionsSchema),
         defaultValues: {
-            name: '',
+            name: position.name,
         },
     })
 
     const [isPending, startTransition] = useTransition()
 
     async function onSubmit(values: z.infer<typeof PositionsSchema>) {
-        setError('')
-        setSuccess('')
-
         startTransition(async () => {
-            const data = await AddPosition(values)
-
-            setError(data?.error)
-            setSuccess(data?.success)
+            const data = await editPosition(values, position.id)
+            if (data.error) {
+                toast.error(data.error)
+            }
+            if (data.success) {
+                toast.success(data.success)
+                closeForm()
+            }
         })
     }
 
@@ -54,10 +56,13 @@ export default function PositionForm() {
                         name="name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Add new position</FormLabel>
                                 <FormControl>
                                     <SingleLineInput
+                                        buttonText="Save edit"
                                         isLoading={isPending}
+                                        className="flex-[1]"
+                                        cancelButtonText="cancel"
+                                        onCancelClicked={closeForm}
                                         {...field}
                                     />
                                 </FormControl>
@@ -66,8 +71,6 @@ export default function PositionForm() {
                         )}
                     />
                 </div>
-                <FormError message={error} />
-                <FormSuccess message={success} />
             </form>
         </Form>
     )
