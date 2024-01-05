@@ -2,8 +2,19 @@ import { db } from '@/lib/db'
 
 export const getMemberByEmail = async (email: string) => {
     try {
-        const user = await db.member.findUnique({ where: { email } })
-        return user
+        const member = await db.member.findUnique({ where: { email } })
+        return member
+    } catch (err) {
+        return null
+    }
+}
+export const getMemberById = async (id: string) => {
+    try {
+        const member = await db.member.findUnique({
+            where: { id },
+            include: { position: true },
+        })
+        return member
     } catch (err) {
         return null
     }
@@ -28,7 +39,7 @@ export async function fetchFilteredMembers(
                     mode: 'insensitive',
                 },
             },
-            include: {position: true},
+            include: { position: true },
             orderBy: { id: 'desc' },
         })
         return members
