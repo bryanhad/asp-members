@@ -7,7 +7,6 @@ import { UserRole } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
-    console.log('masuk!')
     const role = await currentRole()
 
     if (role !== UserRole.ADMIN) {

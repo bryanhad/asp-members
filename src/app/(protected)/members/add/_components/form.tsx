@@ -24,8 +24,6 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form'
-import { FormError } from '@/components/form-error'
-import { FormSuccess } from '@/components/form-success'
 import LoadingButton from '@/components/loading-button'
 import { Input } from '@/components/ui/input'
 import Image from 'next/image'
@@ -33,19 +31,22 @@ import { Textarea } from '@/components/ui/textarea'
 import { Position } from '@prisma/client'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import MultiInput from '@/components/forms/multi-input'
 // import { DatePickerDemo } from '@/components/date-picker'
 
 type AddMemberFormProps = {
     positions: Position[]
 }
 
-type AddMemberResponse = {
-    error: string;
-    success?: undefined;
-} | {
-    success: string;
-    error?: undefined;
-}
+type AddMemberResponse =
+    | {
+          error: string
+          success?: undefined
+      }
+    | {
+          success: string
+          error?: undefined
+      }
 
 export default function AddMemberForm({ positions }: AddMemberFormProps) {
     const [fileUrl, setFileUrl] = useState<string | undefined>(undefined)
@@ -89,12 +90,12 @@ export default function AddMemberForm({ positions }: AddMemberFormProps) {
                     method: 'POST',
                     body: formData,
                 })
-                const res:AddMemberResponse = await data.json()
+                const res: AddMemberResponse = await data.json()
 
                 if (res.success) {
                     toast.success(res.success)
                     router.push('/members')
-                } 
+                }
                 if (res.error) {
                     toast.error(res.error)
                 }
@@ -105,17 +106,17 @@ export default function AddMemberForm({ positions }: AddMemberFormProps) {
     }
 
     return (
-        <div className="flex  gap-4 items-center">
+        <div className="">
             <Form {...form}>
                 <form
                     className="space-y-6"
                     onSubmit={form.handleSubmit(onSubmit)}
                     // action={addMember}
                 >
-                    <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-9">
                         {/* IMAGE UPLOAD */}
-                        <div className="flex gap-4 items-center">
-                            <div className="rounded-lg overflow-hidden relative w-32 h-32 border">
+                        <div className="flex flex-col sm:flex-row gap-4 items-center">
+                            <div className="rounded-lg overflow-hidden relative w-32 min-w-32 h-32 border">
                                 <Image
                                     className="object-cover"
                                     alt=""
@@ -128,7 +129,7 @@ export default function AddMemberForm({ positions }: AddMemberFormProps) {
                                 control={form.control}
                                 name="picture"
                                 render={({ field: { onChange }, ...field }) => (
-                                    <FormItem>
+                                    <FormItem className='flex flex-col items-center sm:items-start'>
                                         <FormLabel>Picture</FormLabel>
                                         {/* File Upload */}
                                         <FormControl>
@@ -183,42 +184,44 @@ export default function AddMemberForm({ positions }: AddMemberFormProps) {
                             />
                         </div>
                         {/* Image upload end */}
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Name</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            disabled={isPending}
-                                            placeholder="Bambang "
-                                            type="name"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            disabled={isPending}
-                                            placeholder="Bambang@example.com"
-                                            type="email"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                        <div className="grid grid-cols-1 gap-5">
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Name</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                disabled={isPending}
+                                                placeholder="Bambang "
+                                                type="name"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                disabled={isPending}
+                                                placeholder="Bambang@example.com"
+                                                type="email"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                         <FormField
                             control={form.control}
                             name="positionId"
@@ -264,6 +267,45 @@ export default function AddMemberForm({ positions }: AddMemberFormProps) {
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="education"
+                            render={({ field }) => (
+                                <MultiInput
+                                    currentValue={form.watch('education')}
+                                    setValue={(input) =>
+                                        form.setValue('education', input)
+                                    }
+                                    {...field}
+                                />
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="organization"
+                            render={({ field }) => (
+                                <MultiInput
+                                    currentValue={form.watch('organization')}
+                                    setValue={(input) =>
+                                        form.setValue('organization', input)
+                                    }
+                                    {...field}
+                                />
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="practices"
+                            render={({ field }) => (
+                                <MultiInput
+                                    currentValue={form.watch('practices')}
+                                    setValue={(input) =>
+                                        form.setValue('practices', input)
+                                    }
+                                    {...field}
+                                />
                             )}
                         />
                         {/* <FormField

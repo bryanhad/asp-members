@@ -25,12 +25,14 @@ const buttonVariants = cva(
                 'outline-y-only': 'border-y border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
             },
             rounded: {
+                full: 'rounded-full',
                 md: 'rounded-md',
                 onlyRightMd: 'rounded-r-md',
                 noRounded: '',
             },
             size: {
                 default: 'h-9 px-4 py-2',
+                xxs: 'h-5 w-5',
                 xs: 'h-8 px-3 text-xs',
                 sm: 'h-8 px-3 text-sm font-light',
                 lg: 'h-10 px-8',

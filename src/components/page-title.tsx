@@ -16,7 +16,12 @@ export default function PageTitle({ className }: PageTitleProps) {
         ? `Add ${pathname.split('/')[1].slice(0, -1)}`
         : pathname.split('/')[1]
     return (
-        <h1 className={cn('font-bold text-4xl capitalize', className)}>
+        <h1
+            className={cn(
+                'font-bold text-2xl sm:text-3xl max-sm:text-center md:text-4xl capitalize',
+                className
+            )}
+        >
             {title}
         </h1>
     )
