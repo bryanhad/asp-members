@@ -16,15 +16,15 @@ export const metadata: Metadata = {
             {
                 media: '(prefers-color-scheme: light)',
                 url: '/favicon.ico',
-                href: '/favicon.ico'
+                href: '/favicon.ico',
             },
             {
                 media: '(prefers-color-scheme: dark)',
                 url: '/favicon.ico',
-                href: '/favicon.ico'
-            }
-        ]
-    }
+                href: '/favicon.ico',
+            },
+        ],
+    },
 }
 
 export default function RootLayout({
@@ -40,13 +40,11 @@ export default function RootLayout({
                     defaultTheme="system"
                     enableSystem
                     disableTransitionOnChange
-                    storageKey='asp-theme'
+                    storageKey="asp-theme"
                 >
                     <Toaster />
-                    <main className="flex-[1] flex flex-col">
-                        {children}
-                    </main>
-                    <Footer/>
+                    <main className="flex-[1] flex flex-col">{children}</main>
+                    <Footer />
                 </ThemeProvider>
             </body>
         </html>

@@ -7,18 +7,6 @@ cloudinary.config({
     secure: true,
 })
 
-type UploadResult = {
-    asset_id: string
-    public_id: string
-    width: number
-    height: number
-    format: string
-    created_at: string
-    tags: string[]
-    bytes: number
-    secure_url: string
-}
-
 export const uploadImage = async (buffer: Uint8Array) => {
     const res = (await new Promise((resolve, reject) => {
         cloudinary.uploader

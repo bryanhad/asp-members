@@ -67,10 +67,29 @@ export const PositionsSchema = z.object({
         .min(4, { message: 'Position name must be atleast 4 characters long' }),
 })
 
+const MAX_IMAGE_SIZE = 500_880 // 5 MB
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/jpg']
+
+// Form Schema Validation
+export const uploadImageSchema = z
+    .custom<FileList>((val) => val instanceof FileList, 'Required')
+    .refine((files) => files.length > 0, `Required`)
+    .refine((files) => files.length <= 1, `Can only select 1 image.`)
+    .refine((files) => {
+        if (files[0] && files[0].type) {
+            return ALLOWED_IMAGE_TYPES.includes(files[0].type)
+        }
+    }, 'Only these types are allowed .jpg, .jpeg, and .png')
+    .refine((files) => {
+        if (files[0] && files[0].size) {
+            return files[0].size <= MAX_IMAGE_SIZE
+        }
+    }, `File size should be less than 5 MB.`)
+
 export const AddMemberSchema = z.object({
     name: z.string().min(4, { message: 'Minimum 4 characters required' }),
     email: z.string().email({ message: 'Email is required' }),
-    picture: z.string().min(1, { message: 'Picture is required' }),
+    picture: uploadImageSchema,
     description: z.optional(
         z.string().min(10, { message: 'Minimum 10 characters required' })
     ),
@@ -80,25 +99,12 @@ export const AddMemberSchema = z.object({
     positionId: z
         .string()
         .min(4, { message: 'Please select one of the positions' }),
+    // joinedSince: z.optional(z.string()),
 })
 
-const MAX_IMAGE_SIZE = 500_880 // 5 MB
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/jpg']
-
-// Form Schema Validation
-export const uploadImageSchema = z.object({
-    picture: z
-        .custom<FileList>((val) => val instanceof FileList, 'Required')
-        .refine((files) => files.length > 0, `Required`)
-        .refine((files) => files.length <= 1, `Can only select 1 image.`)
-        .refine((files) => {
-            if (files[0] && files[0].type) {
-                return ALLOWED_IMAGE_TYPES.includes(files[0].type)
-            }
-        }, 'Only these types are allowed .jpg, .jpeg, and .png')
-        .refine((files) => {
-            if (files[0] && files[0].size) {
-                return files[0].size <= MAX_IMAGE_SIZE
-            }
-        }, `File size should be less than 5 MB.`),
+export const AddMemberSchemaBackend = AddMemberSchema.extend({
+    picture: z.custom<File>(
+        (val) => val instanceof File,
+        'Picture must be a file type'
+    ),
 })

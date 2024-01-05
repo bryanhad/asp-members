@@ -45,8 +45,7 @@ export const fetchFilteredPositions = async (
         })
         return positions
     } catch (err) {
-        console.error('Database Error:', err)
-        throw new Error('Failed to fetch positions')
+        return null
     }
 }
 
@@ -67,7 +66,15 @@ export async function fetchPositionsPageAmount(query: string) {
         const totalPages = Math.ceil(Number(_all) / ITEMS_PER_PAGE)
         return totalPages
     } catch (error) {
-        console.error('Database Error:', error)
-        throw new Error('Failed to fetch total pages number of Positions.')
+        return null
+    }
+}
+
+export async function getAllPositions() {
+    try {
+        const positions = await db.position.findMany()
+        return positions
+    } catch (err) {
+        return null
     }
 }

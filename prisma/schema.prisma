@@ -58,7 +58,7 @@ model Member {
   positionId   String
   position     Position @relation(fields: [positionId], references: [id])
 
-  joinedSince DateTime?
+  // joinedSince DateTime?
 }
 
 model Position {
