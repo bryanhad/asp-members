@@ -41,24 +41,22 @@ export default function SideBar() {
         >
             {links.map((link) => (
                 <div key={link.name} className="flex flex-col">
-                    <Button
-                        size="sm"
-                        variant="looksOnly"
-                        className="justify-start font-semibold"
-                    >
+                    <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
                         {link.name}
-                    </Button>
+                    </h2>
+                    <div className="space-y-1">
                     {link.nestedLinks.map((item) => (
                         <Button
                             key={item.name}
-                            variant="link"
+                            variant={pathname === item.href ? 'secondary' : 'ghost'}
                             size="sm"
-                            className={cn("justify-start ml-2", {'font-normal text-foreground': pathname === item.href})}
+                            className={cn(" w-full justify-start", {'font-normal text-foreground': pathname === item.href})}
                             asChild
                         >
                             <Link href={item.href}>{item.name}</Link>
                         </Button>
                     ))}
+                    </div>
                 </div>
             ))}
         </div>
