@@ -4,6 +4,7 @@ import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
 import { cn } from '@/lib/utils'
 import { ThemeProvider } from '@/components/theme-provider'
+import { Footer } from '@/components/footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -39,11 +40,13 @@ export default function RootLayout({
                     defaultTheme="system"
                     enableSystem
                     disableTransitionOnChange
+                    storageKey='asp-theme'
                 >
                     <Toaster />
                     <main className="flex-[1] flex flex-col">
                         {children}
                     </main>
+                    <Footer/>
                 </ThemeProvider>
             </body>
         </html>

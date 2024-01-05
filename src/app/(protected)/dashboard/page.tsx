@@ -1,6 +1,6 @@
 export default function DashboardPage() {
   return (
-    <div>
+    <div className="min-h-screen">
       DashboardPage
     </div>
   )
