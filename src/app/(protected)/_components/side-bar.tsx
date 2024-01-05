@@ -34,7 +34,7 @@ export default function SideBar() {
         },
     ]
     return (
-        <div
+        <aside
             className={cn(
                 'absolute left-0 top-0 h-full lg:flex w-[250px] p-6 flex-col gap-4 bg-background hidden border-r-border border-r'
             )}
@@ -45,20 +45,27 @@ export default function SideBar() {
                         {link.name}
                     </h2>
                     <div className="space-y-1">
-                    {link.nestedLinks.map((item) => (
-                        <Button
-                            key={item.name}
-                            variant={pathname === item.href ? 'secondary' : 'ghost'}
-                            size="sm"
-                            className={cn(" w-full justify-start", {'font-normal text-foreground': pathname === item.href})}
-                            asChild
-                        >
-                            <Link href={item.href}>{item.name}</Link>
-                        </Button>
-                    ))}
+                        {link.nestedLinks.map((item) => (
+                            <Button
+                                key={item.name}
+                                variant={
+                                    pathname === item.href
+                                        ? 'secondary'
+                                        : 'ghost'
+                                }
+                                size="sm"
+                                className={cn(' w-full justify-start', {
+                                    'font-normal text-foreground':
+                                        pathname === item.href,
+                                })}
+                                asChild
+                            >
+                                <Link href={item.href}>{item.name}</Link>
+                            </Button>
+                        ))}
                     </div>
                 </div>
             ))}
-        </div>
+        </aside>
     )
 }

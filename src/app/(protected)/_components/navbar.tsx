@@ -9,6 +9,7 @@ import { ThemeToggleButton } from '@/components/theme-toggle-button'
 import { useScrollTop } from '@/hooks/use-scroll-top'
 import { cn } from '@/lib/utils'
 import { Logo } from '@/components/logo'
+import { UserButtonn } from './user-button'
 
 export const Navbar = () => {
     const scrolled = useScrollTop()
@@ -28,7 +29,8 @@ export const Navbar = () => {
                 <div className="flex gap-4 items-center">
                     <BurgerMenu />
                     <ThemeToggleButton />
-                    <UserButton />
+                    {/* <UserButton /> */}
+                    <UserButtonn/>
                 </div>
             </div>
         </nav>
