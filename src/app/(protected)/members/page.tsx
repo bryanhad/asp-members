@@ -24,9 +24,8 @@ export default async function MembersPage({ searchParams }: MembersPageProps) {
 
     return (
         <div className="space-y-4">
-            <p>Memberspage</p>
-            <Button asChild>
-                <Link href="/members/add">Add Member</Link>
+            <Button asChild >
+                <Link href="/members/add">Add New Member</Link>
             </Button>
             <DataTable columns={columns} data={data} />
         </div>
