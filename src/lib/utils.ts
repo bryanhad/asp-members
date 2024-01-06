@@ -37,3 +37,9 @@ export function generatePagination(currentPage: number, totalPages: number) {
       totalPages,
   ]
 }
+
+export const getCloudinaryPublicImageId = (url: string) => {
+  const splitArr = url.split('/')
+  const publicImageId = splitArr[splitArr.length-1].split('.')[0]
+  return publicImageId
+}

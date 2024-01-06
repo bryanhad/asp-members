@@ -79,7 +79,6 @@ export default function EditMemberForm({
                 if (res.success) {
                     toast.success(res.success)
                     router.push('/members')
-
                 }
                 if (res.error) {
                     toast.error(res.error)

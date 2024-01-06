@@ -2,6 +2,7 @@
 import { getMemberById } from '@/data/member'
 import { db } from '@/lib/db'
 import { deleteImage } from '@/lib/image-upload'
+import { getCloudinaryPublicImageId } from '@/lib/utils'
 import { revalidatePath } from 'next/cache'
 
 export const deleteMember = async (id: string) => {
@@ -10,8 +11,7 @@ export const deleteMember = async (id: string) => {
         return { error: `Member doesn't exist!` }
     }
 
-    const splitArr = tobeDeletedMember.picture.split('/')
-    const publicImageId = splitArr[splitArr.length-1].split('.')[0]
+    const publicImageId = getCloudinaryPublicImageId(tobeDeletedMember.picture)
 
     await db.member.delete({
         where: { id },

@@ -16,9 +16,5 @@ export default async function EditMemberPage({
         throw new Error('bruh')
     }
 
-  return (
-    <div>
-      <EditMemberForm positions={positions} member={member}/>
-    </div>
-  )
+    return <EditMemberForm positions={positions} member={member} />
 }

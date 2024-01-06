@@ -1,4 +1,5 @@
 import { db } from '@/lib/db'
+import { unstable_noStore as noStore } from 'next/cache'
 
 export const getMemberByEmail = async (email: string) => {
     try {
@@ -9,6 +10,7 @@ export const getMemberByEmail = async (email: string) => {
     }
 }
 export const getMemberById = async (id: string) => {
+    noStore()
     try {
         const member = await db.member.findUnique({
             where: { id },

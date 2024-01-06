@@ -27,6 +27,27 @@ export const uploadImage = async (buffer: Uint8Array) => {
     return res
 }
 
+export const updateImage = async (buffer: Uint8Array, publicImgId:string) => {
+    const res = (await new Promise((resolve, reject) => {
+        cloudinary.uploader
+            .upload_stream(
+                {
+                    tags: ['member-picture'],
+                    public_id: publicImgId
+                },
+                (err, res) => {
+                    if (err || !res) {
+                        reject(err)
+                        return
+                    }
+                    resolve(res)
+                }
+            )
+            .end(buffer)
+    })) as UploadApiResponse
+    return res
+}
+
 export const deleteImage = async (publicImgId:string) => {
     await cloudinary.uploader.destroy(publicImgId)
 } 

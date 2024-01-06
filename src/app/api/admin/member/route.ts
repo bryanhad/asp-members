@@ -1,9 +1,11 @@
 import { getMemberByEmail, getMemberById } from '@/data/member'
 import { currentRole } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { uploadImage } from '@/lib/image-upload'
+import { updateImage, uploadImage } from '@/lib/image-upload'
+import { getCloudinaryPublicImageId } from '@/lib/utils'
 import { AddMemberSchemaBackend, EditMemberSchemaBackend } from '@/schemas'
 import { UserRole } from '@prisma/client'
+import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
@@ -70,7 +72,6 @@ export async function PUT(req: NextRequest) {
         return new NextResponse(null, { status: 403 })
     }
 
-    const url = new URL(req.url)
     const formData = await req.formData()
 
     const validatedFields = EditMemberSchemaBackend.safeParse({
@@ -112,7 +113,8 @@ export async function PUT(req: NextRequest) {
         const arrayBuffer = await validatedFields.data.picture.arrayBuffer()
         const buffer = new Uint8Array(arrayBuffer)
 
-        const { secure_url } = await uploadImage(buffer)
+        const publicImageId = getCloudinaryPublicImageId(existingMember.picture)
+        const { secure_url } = await updateImage(buffer, publicImageId)
         picture = secure_url
     }
 
@@ -125,6 +127,8 @@ export async function PUT(req: NextRequest) {
             picture,
         },
     })
+
+    revalidatePath('/members')
 
     return NextResponse.json(
         {
