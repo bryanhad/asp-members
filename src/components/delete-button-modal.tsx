@@ -1,6 +1,5 @@
 'use client'
 
-import { FiTrash } from 'react-icons/fi'
 import {
     Dialog,
     DialogClose,
@@ -27,6 +26,7 @@ type DeleteButtonProps = {
               error?: undefined
           }
     >
+    children:React.ReactNode
 }
 const font = Poppins({
     subsets: ['latin'],
@@ -36,6 +36,7 @@ const font = Poppins({
 export default function DeleteButtonModal({
     label,
     onConfirm,
+    children
 }: DeleteButtonProps) {
     const [open, setOpen] = useState(false)
 
@@ -60,12 +61,10 @@ export default function DeleteButtonModal({
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild onClick={() => setOpen(true)}>
-                <Button variant="ghost" size='sm' className='dark:text-red-600 text-red-500'>
-                    <FiTrash />
-                </Button>
+                {children}
             </DialogTrigger>
             <DialogContent className="p-0 w-auto bg-transparent border-none">
-                <Card className="w-[400px] shadow-md">
+                <Card className=" shadow-md">
                     <CardHeader>
                         <div className="w-full flex flex-col gap-y-4 items-center justify-center">
                             <h1

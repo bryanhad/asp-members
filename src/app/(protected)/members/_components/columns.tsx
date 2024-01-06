@@ -16,6 +16,8 @@ import { Member, Position } from '@prisma/client'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { FaUser } from 'react-icons/fa'
 import Link from 'next/link'
+import DeleteButtonModal from '@/components/delete-button-modal'
+import { deleteMember } from '@/actions/member'
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -101,11 +103,21 @@ export const columns: ColumnDef<FetchedMember>[] = [
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
-                            <p className="w-full">Edit</p>
+                            <Link
+                                href={`/members/${member.id}/edit`}
+                                className="w-full"
+                            >
+                                <p>Edit</p>
+                            </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <p className="w-full">Delete</p>
-                        </DropdownMenuItem>
+                        <DeleteButtonModal
+                            onConfirm={() => deleteMember(member.id)}
+                            label={`Member '${member.name}' will be deleted permanently.`}
+                        >
+                            <p className="w-full text-destructive font-semibold cursor-pointer p-1 rounded-md hover:bg-secondary duration-200">
+                                delete
+                            </p>
+                        </DeleteButtonModal>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )

@@ -1,15 +1,20 @@
 'use server'
-import { uploadImageSchema } from '@/schemas'
-import * as z from 'zod'
+import { getMemberById } from '@/data/member'
+import { db } from '@/lib/db'
+import { revalidatePath } from 'next/cache'
 
-export const addMember = async (formData: FormData) => {
-    const picture = formData.get('picture') as File
-    // const validatedFields = uploadImageSchema.safeParse(values)
+export const deleteMember = async (id: string) => {
+    const tobeDeletedMember = await getMemberById(id)
+    if (!tobeDeletedMember) {
+        return { error: `Member doesn't exist!` }
+    }
 
-    // if (!validatedFields.success) {
-    //     return { error: 'Invalid fields!' }
-    // }
+    await db.member.delete({
+        where: { id },
+    })
 
-    // const { picture } = validatedFields.data
-    console.log(picture)
+    revalidatePath('/members')
+    return {
+        success: `Member '${tobeDeletedMember.name}' successfuly deleted!`,
+    }
 }

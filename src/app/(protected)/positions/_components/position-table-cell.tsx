@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { PiPencilSimpleLine } from 'react-icons/pi'
 import EditingForm from './editing-form'
 import { cn } from '@/lib/utils'
+import { FiTrash } from 'react-icons/fi'
 
 type PositionTableCellProps = {
     position: {
@@ -49,7 +50,15 @@ export default function PositionTableCell({
                         <DeleteButtonModal
                             onConfirm={() => deletePosition(position.id)}
                             label={`Position '${position.name}' will be deleted permanently.`}
-                        />
+                        >
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="dark:text-red-600 text-red-500"
+                            >
+                                <FiTrash />
+                            </Button>
+                        </DeleteButtonModal>
                     </div>
                     <div className="flex sm:flex-col items-center gap-3 sm:gap-1">
                         <p className="text-secondary-foreground/20 text-sm">
