@@ -16,7 +16,7 @@ export default function MemberView({ member }: AddMemberFormProps) {
             <div className="flex max-sm:justify-center items-center mb-4 gap-5">
                 <h2 className="text-xl ">{member.name}</h2>
                 <Button asChild variant={'ghost'}>
-                    <Link href={`/members/${member.id}/edit`} >
+                    <Link href={`/members/${member.id}/edit`}>
                         <PiPencilSimpleLine />
                     </Link>
                 </Button>
@@ -34,10 +34,7 @@ export default function MemberView({ member }: AddMemberFormProps) {
                     </div>
                 </div>
 
-                <TextShowCase
-                    label="Description"
-                    text={member.description || ''}
-                />
+                <TextShowCase label="Description" text={member.description} />
                 <TextShowCase label="Email" text={member.email} />
 
                 <TextShowCase label="Position" text={member.position.name} />
@@ -54,7 +51,7 @@ export default function MemberView({ member }: AddMemberFormProps) {
 }
 
 type TextShowCaseProps = {
-    text: string
+    text: string | null
     label: string
 }
 
@@ -63,7 +60,13 @@ function TextShowCase({ text, label }: TextShowCaseProps) {
         <div className="border rounded-md text-sm">
             <p className="py-2 px-3">{label}</p>
             <hr />
-            <p className="py-2 px-3">{text}</p>
+            {text ? (
+                <p className="py-2 px-3">{text}</p>
+            ) : (
+                <p className="px-3 py-2 text-muted-foreground italic">
+                    not added
+                </p>
+            )}
         </div>
     )
 }
@@ -86,7 +89,9 @@ function ListShowCase({ list, label }: ListShowCaseProps) {
                     ))}
                 </ul>
             ) : (
-                <p>not defined</p>
+                <p className="px-3 py-2 text-muted-foreground italic">
+                    not added
+                </p>
             )}
         </div>
     )

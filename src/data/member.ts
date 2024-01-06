@@ -12,6 +12,16 @@ export const getMemberById = async (id: string) => {
     try {
         const member = await db.member.findUnique({
             where: { id },
+        })
+        return member
+    } catch (err) {
+        return null
+    }
+}
+export const getMemberByIdWithPosition = async (id: string) => {
+    try {
+        const member = await db.member.findUnique({
+            where: { id },
             include: { position: true },
         })
         return member

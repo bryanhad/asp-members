@@ -86,9 +86,17 @@ export const uploadImageSchema = z
         }
     }, `File size should be less than 5 MB.`)
 
+const MemberNameSchema = z
+    .string()
+    .min(4, { message: 'Minimum 4 characters required' })
+const MemberEmailSchema = z.string().email({ message: 'Email is required' })
+const MemberPositionSchema = z
+    .string()
+    .min(4, { message: 'Please select one of the positions' })
+
 export const AddMemberSchema = z.object({
-    name: z.string().min(4, { message: 'Minimum 4 characters required' }),
-    email: z.string().email({ message: 'Email is required' }),
+    name: MemberNameSchema,
+    email: MemberEmailSchema,
     picture: uploadImageSchema,
     description: z.optional(
         z.string().min(10, { message: 'Minimum 10 characters required' })
@@ -96,9 +104,7 @@ export const AddMemberSchema = z.object({
     education: z.optional(z.array(z.string())),
     organization: z.optional(z.array(z.string())),
     practices: z.optional(z.array(z.string())),
-    positionId: z
-        .string()
-        .min(4, { message: 'Please select one of the positions' }),
+    positionId: MemberPositionSchema,
     // joinedSince: z.optional(z.string()),
 })
 
@@ -106,5 +112,36 @@ export const AddMemberSchemaBackend = AddMemberSchema.extend({
     picture: z.custom<File>(
         (val) => val instanceof File,
         'Picture must be a file type'
+    ),
+})
+
+// export const EditMemberSchema = z.object({
+//     name: MemberNameSchema,
+//     email: EmailMemberSchema,
+//     picture: uploadImageSchema,
+//     description: z.optional(
+//         z.string().min(10, { message: 'Minimum 10 characters required' })
+//     ),
+//     education: z.optional(z.array(z.string())),
+//     organization: z.optional(z.array(z.string())),
+//     practices: z.optional(z.array(z.string())),
+//     positionId: PositionMemberSchema
+//     // joinedSince: z.optional(z.string()),
+// })
+
+export const EditMemberSchema = AddMemberSchema.extend({
+    picture: z.optional(uploadImageSchema)
+})
+
+export const EditMemberSchemaBackend = EditMemberSchema.extend({
+    memberId: z.string(),
+    name: z.optional(MemberNameSchema),
+    email: z.optional(MemberEmailSchema),
+    positionId: z.optional(MemberPositionSchema),
+    picture: z.optional(
+        z.custom<File>(
+            (val) => val instanceof File,
+            'Picture must be a file type'
+        )
     ),
 })

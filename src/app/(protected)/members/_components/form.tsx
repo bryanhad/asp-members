@@ -1,21 +1,8 @@
 'use client'
 
-import { addMember } from '@/actions/member'
-import { Button } from '@/components/ui/button'
-import { AddMemberSchema } from '@/schemas'
-import { zodResolver } from '@hookform/resolvers/zod'
-// import { CldUploadButton } from 'next-cloudinary'
-// import { CldImage } from 'next-cloudinary'
-import { useState, useTransition } from 'react'
-import { useForm } from 'react-hook-form'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select'
-import * as z from 'zod'
+import { AddMemberSchema, EditMemberSchema } from '@/schemas'
+import MultiInput from '@/components/forms/multi-input'
+import LoadingButton from '@/components/loading-button'
 import {
     Form,
     FormControl,
@@ -24,85 +11,42 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form'
-import LoadingButton from '@/components/loading-button'
 import { Input } from '@/components/ui/input'
-import Image from 'next/image'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Position } from '@prisma/client'
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
-import MultiInput from '@/components/forms/multi-input'
-// import { DatePickerDemo } from '@/components/date-picker'
+import { Member, Position } from '@prisma/client'
+import Image from 'next/image'
+import { useState } from 'react'
+import { UseFormReturn } from 'react-hook-form'
+import * as z from 'zod'
 
-type AddMemberFormProps = {
+type MemberFormProps = {
+    member?: Member
     positions: Position[]
+    form: UseFormReturn<
+        z.infer<typeof EditMemberSchema | typeof AddMemberSchema>
+    >
+    onSubmit: (values: any) => Promise<void>
+    loading: boolean
 }
 
-type AddMemberResponse =
-    | {
-          error: string
-          success?: undefined
-      }
-    | {
-          success: string
-          error?: undefined
-      }
-
-export default function AddMemberForm({ positions }: AddMemberFormProps) {
+export default function MemberForm({
+    positions,
+    member,
+    form,
+    onSubmit,
+    loading,
+}: MemberFormProps) {
     const [fileUrl, setFileUrl] = useState<string | undefined>(undefined)
-    const router = useRouter()
 
-    const [isPending, startTransition] = useTransition()
-
-    const form = useForm<z.infer<typeof AddMemberSchema>>({
-        resolver: zodResolver(AddMemberSchema),
-        defaultValues: {
-            name: '',
-            email: '',
-            picture: undefined,
-            description: '',
-            positionId: '',
-            education: [],
-            organization: [],
-            practices: [],
-            // joinedSince: undefined,
-        },
-    })
-
-    const onSubmit = async (values: z.infer<typeof AddMemberSchema>) => {
-        const rawValues = {
-            ...values,
-            picture: values.picture[0],
-            education: JSON.stringify(values.education),
-            organization: JSON.stringify(values.organization),
-            practices: JSON.stringify(values.practices),
-            // joinedSince: JSON.stringify(values.joinedSince),
-        }
-        startTransition(async () => {
-            try {
-                const formData = new FormData()
-
-                Object.entries(rawValues).forEach(([key, value]) => {
-                    formData.append(key, value)
-                })
-
-                const data = await fetch('/api/admin/add-member', {
-                    method: 'POST',
-                    body: formData,
-                })
-                const res: AddMemberResponse = await data.json()
-
-                if (res.success) {
-                    toast.success(res.success)
-                    router.push('/members')
-                }
-                if (res.error) {
-                    toast.error(res.error)
-                }
-            } catch (err) {
-                console.log(err)
-            }
-        })
+    const onSubmitForm = async (values: any) => {
+        onSubmit(values)
     }
 
     return (
@@ -110,8 +54,7 @@ export default function AddMemberForm({ positions }: AddMemberFormProps) {
             <Form {...form}>
                 <form
                     className="space-y-6"
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    // action={addMember}
+                    onSubmit={form.handleSubmit(onSubmitForm)}
                 >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-9">
                         {/* IMAGE UPLOAD */}
@@ -120,7 +63,11 @@ export default function AddMemberForm({ positions }: AddMemberFormProps) {
                                 <Image
                                     className="object-cover"
                                     alt=""
-                                    src={fileUrl || '/noavatar.png'}
+                                    src={
+                                        fileUrl ||
+                                        member?.picture ||
+                                        '/noavatar.png'
+                                    }
                                     fill
                                     priority
                                 />
@@ -129,12 +76,12 @@ export default function AddMemberForm({ positions }: AddMemberFormProps) {
                                 control={form.control}
                                 name="picture"
                                 render={({ field: { onChange }, ...field }) => (
-                                    <FormItem className='flex flex-col items-center sm:items-start'>
+                                    <FormItem className="flex flex-col items-center sm:items-start">
                                         <FormLabel>Picture</FormLabel>
                                         {/* File Upload */}
                                         <FormControl>
                                             <Input
-                                                disabled={isPending}
+                                                disabled={loading}
                                                 type="file"
                                                 accept="image/*"
                                                 {...field}
@@ -194,7 +141,7 @@ export default function AddMemberForm({ positions }: AddMemberFormProps) {
                                         <FormControl>
                                             <Input
                                                 {...field}
-                                                disabled={isPending}
+                                                disabled={loading}
                                                 placeholder="Bambang "
                                                 type="name"
                                             />
@@ -212,7 +159,7 @@ export default function AddMemberForm({ positions }: AddMemberFormProps) {
                                         <FormControl>
                                             <Input
                                                 {...field}
-                                                disabled={isPending}
+                                                disabled={loading}
                                                 placeholder="Bambang@example.com"
                                                 type="email"
                                             />
@@ -229,8 +176,9 @@ export default function AddMemberForm({ positions }: AddMemberFormProps) {
                                 <FormItem>
                                     <FormLabel>Position</FormLabel>
                                     <Select
-                                        disabled={isPending}
+                                        disabled={loading}
                                         onValueChange={field.onChange}
+                                        defaultValue={field.value}
                                     >
                                         <FormControl>
                                             <SelectTrigger>
@@ -261,7 +209,7 @@ export default function AddMemberForm({ positions }: AddMemberFormProps) {
                                     <FormControl>
                                         <Textarea
                                             {...field}
-                                            disabled={isPending}
+                                            disabled={loading}
                                             placeholder="About this member.."
                                         />
                                     </FormControl>
@@ -318,7 +266,7 @@ export default function AddMemberForm({ positions }: AddMemberFormProps) {
                                         <>
                                             <Input
                                                 {...field}
-                                                disabled={isPending}
+                                                disabled={loading}
                                                 className="hidden"
                                             />
                                             <DatePickerDemo
@@ -331,7 +279,7 @@ export default function AddMemberForm({ positions }: AddMemberFormProps) {
                             )}
                         /> */}
                     </div>
-                    <LoadingButton isLoading={isPending} type="submit">
+                    <LoadingButton isLoading={loading} type="submit">
                         Upload Image
                     </LoadingButton>
                 </form>

@@ -1,4 +1,4 @@
-import { getMemberById } from '@/data/member'
+import { getMemberByIdWithPosition } from '@/data/member'
 import MemberView from '../_components/view'
 
 type ViewMemberPageProps = {
@@ -8,7 +8,7 @@ type ViewMemberPageProps = {
 export default async function ViewMemberPage({
     params: { id },
 }: ViewMemberPageProps) {
-    const member = await getMemberById(id)
+    const member = await getMemberByIdWithPosition(id)
     if (!member) throw Error('bruh')
 
     return (
