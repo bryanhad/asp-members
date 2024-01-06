@@ -27,4 +27,8 @@ export const uploadImage = async (buffer: Uint8Array) => {
     return res
 }
 
+export const deleteImage = async (publicImgId:string) => {
+    await cloudinary.uploader.destroy(publicImgId)
+} 
+
 export default cloudinary
