@@ -20,6 +20,29 @@ export const getMemberById = async (id: string) => {
         return null
     }
 }
+export const getMemberByIdWithPractices = async (id: string) => {
+    noStore()
+    try {
+        const member = await db.member.findUnique({
+            where: { id },
+            include: {
+                practices: {
+                    select: { practice: { select: { name: true } } },
+                },
+            },
+        })
+        if (!member) {
+            throw ('bruh')
+        }
+        const memberWithPractices = {
+            ...member,
+            practices: member.practices.map(el => el.practice.name)
+        }
+        return memberWithPractices
+    } catch (err) {
+        throw new Error('Failed to fetch Member')
+    }
+}
 export const getMemberByIdWithPosition = async (id: string) => {
     try {
         const member = await db.member.findUnique({
@@ -78,7 +101,7 @@ export async function fetchMembersPageAmount(
             },
         })
         const totalPages = Math.ceil(Number(_all) / itemsPerPage)
-        return {totalPages, count: _all}
+        return { totalPages, count: _all }
     } catch (error) {
         console.error('Database Error:', error)
         throw new Error('Failed to fetch total pages amount of Members.')

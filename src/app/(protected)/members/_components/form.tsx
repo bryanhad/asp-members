@@ -20,15 +20,17 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Member, Position } from '@prisma/client'
+import { Member, Position, Practice } from '@prisma/client'
 import Image from 'next/image'
 import { useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import * as z from 'zod'
+import MultiSelectInput from '@/components/forms/multi-select-input'
 
 type MemberFormProps = {
     member?: Member
     positions: Position[]
+    practices: Practice[]
     form: UseFormReturn<
         z.infer<typeof EditMemberSchema | typeof AddMemberSchema>
     >
@@ -42,6 +44,7 @@ export default function MemberForm({
     form,
     onSubmit,
     loading,
+    practices,
 }: MemberFormProps) {
     const [fileUrl, setFileUrl] = useState<string | undefined>(undefined)
 
@@ -185,7 +188,7 @@ export default function MemberForm({
                                                 <SelectValue placeholder="Select a position" />
                                             </SelectTrigger>
                                         </FormControl>
-                                        <SelectContent>
+                                        <SelectContent className="max-h-[200px]">
                                             {positions.map((position) => (
                                                 <SelectItem
                                                     key={position.id}
@@ -226,6 +229,7 @@ export default function MemberForm({
                                     setValue={(input) =>
                                         form.setValue('education', input)
                                     }
+                                    disabled={loading}
                                     {...field}
                                 />
                             )}
@@ -239,20 +243,24 @@ export default function MemberForm({
                                     setValue={(input) =>
                                         form.setValue('organization', input)
                                     }
+                                    disabled={loading}
                                     {...field}
                                 />
                             )}
                         />
+
                         <FormField
                             control={form.control}
                             name="practices"
                             render={({ field }) => (
-                                <MultiInput
+                                <MultiSelectInput
+                                    items={practices}
+                                    disabled={loading}
                                     currentValue={form.watch('practices')}
+                                    name="Practices"
                                     setValue={(input) =>
                                         form.setValue('practices', input)
                                     }
-                                    {...field}
                                 />
                             )}
                         />

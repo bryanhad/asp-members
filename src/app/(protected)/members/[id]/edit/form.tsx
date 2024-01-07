@@ -2,7 +2,7 @@
 
 import { EditMemberSchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Member, Position } from '@prisma/client'
+import { Member, Position, Practice } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
@@ -10,9 +10,12 @@ import { toast } from 'sonner'
 import * as z from 'zod'
 import MemberForm from '../../_components/form'
 
-type AddMemberFormProps = {
-    member: Member
+type EditMemberFormProps = {
+    member: {
+        practices: string[]
+    } & Member
     positions: Position[]
+    practices: Practice[]
 }
 
 type EditMemberResponse =
@@ -28,7 +31,8 @@ type EditMemberResponse =
 export default function EditMemberForm({
     positions,
     member,
-}: AddMemberFormProps) {
+    practices,
+}: EditMemberFormProps) {
     const router = useRouter()
 
     const [isPending, startTransition] = useTransition()
@@ -43,7 +47,7 @@ export default function EditMemberForm({
             positionId: member?.positionId || '',
             education: member?.education || [],
             organization: member?.organization || [],
-            practices: member?.practices || [],
+            practices: member.practices || [],
             // joinedSince: undefined,
         },
     })
@@ -94,6 +98,7 @@ export default function EditMemberForm({
             form={{ ...form }}
             positions={positions}
             member={member}
+            practices={practices}
             onSubmit={onSubmit}
             loading={isPending}
         />

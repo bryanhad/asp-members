@@ -40,25 +40,55 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: `Invalid fields!` }, { status: 400 })
     }
 
-    const existingMember = await getMemberByEmail(validatedFields.data.email)
-    if (existingMember) {
+    try {
+        const existingMember = await getMemberByEmail(
+            validatedFields.data.email
+        )
+        if (existingMember) {
+            return NextResponse.json(
+                { error: `Member's email must be unique!` },
+                { status: 409 }
+            )
+        }
+
+        const arrayBuffer = await validatedFields.data.picture.arrayBuffer()
+        const buffer = new Uint8Array(arrayBuffer)
+
+        const { secure_url } = await uploadImage(buffer)
+
+        console.log(validatedFields.data.practices)
+
+        const newMember = await db.member.create({
+            data: {
+                ...validatedFields.data,
+                picture: secure_url,
+                practices: undefined,
+            },
+        })
+
+        if (
+            validatedFields.data.practices &&
+            validatedFields.data.practices.length >= 1
+        ) {
+            const newMemberPractices = validatedFields.data.practices.map(
+                (practice) => {
+                    return {
+                        memberId: newMember.id,
+                        practiceId: practice,
+                    }
+                }
+            )
+            await db.membersOnPractice.createMany({
+                data: newMemberPractices,
+            })
+        }
+    } catch (err) {
+        console.log(err)
         return NextResponse.json(
-            { error: `Member's email must be unique!` },
-            { status: 409 }
+            { error: `Something went wrong!` },
+            { status: 500 }
         )
     }
-
-    const arrayBuffer = await validatedFields.data.picture.arrayBuffer()
-    const buffer = new Uint8Array(arrayBuffer)
-
-    const { secure_url } = await uploadImage(buffer)
-
-    await db.member.create({
-        data: {
-            ...validatedFields.data,
-            picture: secure_url,
-        },
-    })
 
     return NextResponse.json(
         { success: `Successfully added ${validatedFields.data.name}!` },

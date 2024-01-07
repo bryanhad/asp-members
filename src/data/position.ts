@@ -28,6 +28,15 @@ export const getPositionByIdWithMemberCount = async (id: string) => {
     }
 }
 
+export const getAllPositions = async () => {
+    try {
+        const position = await db.position.findMany()
+        return position
+    } catch (err) {
+        throw new Error('Failed to fetch Positions.')
+    }
+}
+
 export const fetchFilteredPositions = async (
     query: string,
     currentPage: number,
@@ -77,7 +86,7 @@ export async function fetchPositionsPageAmount(
             },
         })
         const totalPages = Math.ceil(Number(_all) / itemsPerPage)
-        return {totalPages, count: _all}
+        return { totalPages, count: _all }
     } catch (error) {
         throw new Error('Failed to fetch total pages amount of Positions.')
     }

@@ -1,6 +1,7 @@
-import { getMemberById } from '@/data/member'
+import { getMemberById, getMemberByIdWithPractices } from '@/data/member'
 import { getAllPositions } from '@/data/position'
 import EditMemberForm from './form'
+import { getAllPractices } from '@/data/practice'
 
 type EditMemberPageProps = {
     params: { id: string }
@@ -9,12 +10,9 @@ type EditMemberPageProps = {
 export default async function EditMemberPage({
     params: { id },
 }: EditMemberPageProps) {
-    const member = await getMemberById(id)
+    const member = await getMemberByIdWithPractices(id)
     const positions = await getAllPositions()
+    const practices = await getAllPractices()
 
-    if (!member || !positions) {
-        throw new Error('bruh')
-    }
-
-    return <EditMemberForm positions={positions} member={member} />
+    return <EditMemberForm positions={positions} member={member} practices={practices} />
 }

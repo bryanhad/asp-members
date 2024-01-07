@@ -76,6 +76,7 @@ export default function MultiInput({
                             onKeyDown={handleEnter}
                         />
                         <button
+                            disabled={props.disabled}
                             onClick={handleClick}
                             className="rounded-r-lg bg-blue-600 px-6 text-white text-sm"
                             type="button"

@@ -28,6 +28,15 @@ export const getPracticeByIdWithMemberCount = async (id: string) => {
     }
 }
 
+export const getAllPractices = async () => {
+    try {
+        const practice = await db.practice.findMany()
+        return practice
+    } catch (err) {
+        throw new Error('Failed to fetch Practices.')
+    }
+}
+
 export const fetchFilteredPractices = async (
     query: string,
     currentPage: number,

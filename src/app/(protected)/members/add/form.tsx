@@ -2,7 +2,7 @@
 
 import { AddMemberSchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Member, Position } from '@prisma/client'
+import { Position, Practice } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
@@ -11,8 +11,8 @@ import * as z from 'zod'
 import MemberForm from '../_components/form'
 
 type AddMemberFormProps = {
-    member?: Member
     positions: Position[]
+    practices: Practice[]
 }
 
 type AddMemberResponse =
@@ -27,7 +27,7 @@ type AddMemberResponse =
 
 export default function AddMemberForm({
     positions,
-    member,
+    practices,
 }: AddMemberFormProps) {
     const router = useRouter()
 
@@ -36,14 +36,14 @@ export default function AddMemberForm({
     const form = useForm<z.infer<typeof AddMemberSchema>>({
         resolver: zodResolver(AddMemberSchema),
         defaultValues: {
-            name: member?.name || '',
-            email: member?.email || '',
+            name: '',
+            email: '',
             picture: undefined,
-            description: member?.description || undefined,
-            positionId: member?.positionId || '',
-            education: member?.education || [],
-            organization: member?.organization || [],
-            practices: member?.practices || [],
+            description: undefined,
+            positionId: '',
+            education: [],
+            organization: [],
+            practices: [],
             // joinedSince: undefined,
         },
     })
@@ -91,9 +91,9 @@ export default function AddMemberForm({
         <MemberForm
             form={{ ...form }}
             positions={positions}
-            member={member}
             onSubmit={onSubmit}
             loading={isPending}
+            practices={practices}
         />
     )
 }
