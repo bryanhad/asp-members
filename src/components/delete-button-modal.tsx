@@ -2,7 +2,6 @@
 
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogTrigger,
 } from '@/components/ui/dialog'
@@ -14,19 +13,32 @@ import LoadingButton from './loading-button'
 import { useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
+type ActionReturn =
+    | {
+          error: string
+          success: undefined
+          prismaError: undefined
+      }
+    | {
+          success: string
+          error: undefined
+          prismaError: undefined
+      }
+    | {
+          prismaError: {
+              title: string
+              description: string
+              canProceed: boolean
+          }
+          success: undefined
+          error: undefined
+      }
+
 type DeleteButtonProps = {
-    label: React.ReactNode
-    onConfirm: () => Promise<
-        | {
-              error: string
-              success?: undefined
-          }
-        | {
-              success: string
-              error?: undefined
-          }
-    >
-    children:React.ReactNode
+    description: string
+    onConfirm: () => Promise<ActionReturn>
+    onProceed?: () => Promise<ActionReturn>
+    children: React.ReactNode
 }
 const font = Poppins({
     subsets: ['latin'],
@@ -34,28 +46,53 @@ const font = Poppins({
 })
 
 export default function DeleteButtonModal({
-    label,
+    description,
     onConfirm,
-    children
+    onProceed,
+    children,
 }: DeleteButtonProps) {
+    const [title, setTitle] = useState('Are You Sure?')
+    const [desc, setDesc] = useState(description)
     const [open, setOpen] = useState(false)
+    const [prismaError, setPrismaError] = useState(false)
 
     const [isPending, startTransition] = useTransition()
 
     async function onClick() {
         startTransition(async () => {
-            const data = await onConfirm()
-            if (data.error) {
-                toast.error(data.error)
-                setOpen(false)
-            }
-            if (data.success) {
-                toast.success(data.success)
-                setOpen(false)
+            let data
+            if (prismaError && onProceed) {
+                data = await onProceed()
+                if (data.error) {
+                    toast.error(data.error)
+                    setOpen(false)
+                }
+                if (data.success) {
+                    toast.success(data.success)
+                    setOpen(false)
+                }
+            } else {
+                data = await onConfirm()
+                if (data.error) {
+                    toast.error(data.error)
+                    setOpen(false)
+                }
+                if (data.success) {
+                    toast.success(data.success)
+                    setOpen(false)
+                }
+                if (data.prismaError) {
+                    setTitle(data.prismaError.title)
+                    setDesc(data.prismaError.description)
+                    setPrismaError(true)
+                }
             }
         })
-        await onConfirm()
+    }
+    function handleCloseModal() {
         setOpen(false)
+        setTitle('Are You Sure?')
+        setDesc(description)
     }
 
     return (
@@ -73,35 +110,32 @@ export default function DeleteButtonModal({
                                     font.className
                                 )}
                             >
-                                Are You Sure?
+                                {title}
                             </h1>
                             <p className="text-muted-foreground text-sm">
-                                {label}
+                                {desc}
                             </p>
                         </div>
                     </CardHeader>
                     <CardContent className="flex justify-center">
-                        <DialogClose asChild>
-                            <LoadingButton
-                                isLoading={isPending}
-                                className="w-[70%]"
-                                onClick={onClick}
-                                variant="destructive"
-                            >
-                                YES
-                            </LoadingButton>
-                        </DialogClose>
+                        <LoadingButton
+                            isLoading={isPending}
+                            className="w-[70%]"
+                            onClick={onClick}
+                            variant="destructive"
+                        >
+                            {prismaError ? 'PROCEED' : 'YES'}
+                        </LoadingButton>
                     </CardContent>
                     <CardFooter>
-                        <DialogClose asChild>
-                            <Button
-                                variant={'link'}
-                                className="font-normal w-full"
-                                size={'sm'}
-                            >
-                                cancel
-                            </Button>
-                        </DialogClose>
+                        <Button
+                            onClick={handleCloseModal}
+                            variant={'link'}
+                            className="font-normal w-full"
+                            size={'sm'}
+                        >
+                            cancel
+                        </Button>
                     </CardFooter>
                 </Card>
             </DialogContent>

@@ -56,7 +56,7 @@ model Member {
   organization String[]
   practices    String[]
   positionId   String
-  position     Position @relation(fields: [positionId], references: [id])
+  position     Position @relation(fields: [positionId], references: [id], onDelete: Cascade)
 
   // joinedSince DateTime?
 }
@@ -64,5 +64,5 @@ model Member {
 model Position {
   id      String   @id @default(cuid())
   name    String   @unique
-  members Member[]
+  members Member[] 
 }

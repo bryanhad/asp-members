@@ -1,7 +1,12 @@
 'use server'
-import { getPositionById, getPositionByName } from '@/data/position'
+import {
+    getPositionById,
+    getPositionByIdWithMemberCount,
+    getPositionByName,
+} from '@/data/position'
 import { db } from '@/lib/db'
 import { PositionsSchema } from '@/schemas'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { revalidatePath } from 'next/cache'
 import * as z from 'zod'
 
@@ -53,15 +58,29 @@ export const editPosition = async (
     return { success: `Position '${name}' successfuly edited!` }
 }
 
-export const deletePosition = async (id: string) => {
-    const tobeDeletedPosition = await getPositionById(id)
+export const deletePosition = async (id: string, proceed = false) => {
+    const tobeDeletedPosition = await getPositionByIdWithMemberCount(id)
     if (!tobeDeletedPosition) {
         return { error: `Position doesn't exist!` }
     }
+    if (tobeDeletedPosition._count.members > 0 && !proceed) {
+        return {
+            prismaError: {
+                title: `There are still members that has '${tobeDeletedPosition.name}' position.`,
+                description:
+                    'Deleting this would also delete all members that has this position.',
+                canProceed: true,
+            },
+        }
+    }
 
-    await db.position.delete({
-        where: { id },
-    })
+    try {
+        await db.position.delete({
+            where: { id },
+        })
+    } catch (err) {
+        return { error: `An unknown error occurred.` }
+    }
 
     revalidatePath('/positions')
     return {

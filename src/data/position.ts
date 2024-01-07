@@ -16,6 +16,17 @@ export const getPositionById = async (id: string) => {
         return null
     }
 }
+export const getPositionByIdWithMemberCount = async (id: string) => {
+    try {
+        const position = await db.position.findUnique({
+            where: { id },
+            include: { _count: { select: { members: true } } },
+        })
+        return position
+    } catch (err) {
+        return null
+    }
+}
 
 const ITEMS_PER_PAGE = 4
 export const fetchFilteredPositions = async (

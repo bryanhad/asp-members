@@ -25,6 +25,8 @@ export default function PositionTableCell({
 }: PositionTableCellProps) {
     const [isEditing, setIsEditing] = useState(false)
 
+
+
     return (
         <div
             className={cn(
@@ -49,7 +51,8 @@ export default function PositionTableCell({
                         </Button>
                         <DeleteButtonModal
                             onConfirm={() => deletePosition(position.id)}
-                            label={`Position '${position.name}' will be deleted permanently.`}
+                            description={`Position '${position.name}' will be deleted permanently.`}
+                            onProceed={() => deletePosition(position.id, true)}
                         >
                             <Button
                                 variant="ghost"

@@ -15,8 +15,8 @@ export default async function PositionsTable({
     currentPage,
 }: PositionsTableProps) {
     const positions = await fetchFilteredPositions(query, currentPage)
-
     const totalPages = await fetchPositionsPageAmount(query)
+
 
     return (
         <>

@@ -38,8 +38,13 @@ export default function AddForm() {
         startTransition(async () => {
             const data = await addPosition(values)
 
-            setError(data?.error)
-            setSuccess(data?.success)
+            if (data.error) {
+                setError(data.error)
+            }
+            if (data.success) {
+                setSuccess(data.success)
+                form.reset()
+            }
             setTimeout(() => {
                 setSuccess('')
             }, 3000)
