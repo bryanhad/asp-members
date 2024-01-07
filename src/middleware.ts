@@ -16,7 +16,7 @@ const { auth } = NextAuth(authConfig) // so isntead of getting the auth from the
 const allowedOrigins =
     process.env.NODE_ENV === 'production'
         ? ['https://mydomain.com', 'https://www.mydomain.com']
-        : ['http://localhost:3000']
+        : ['http://localhost:3000', 'http://localhost:3001']
 
 export default auth((req) => {
     const { nextUrl } = req
