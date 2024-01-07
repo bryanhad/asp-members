@@ -1,9 +1,9 @@
-import { RiLoader4Line } from 'react-icons/ri'
+import { Spinner } from '@/components/spinner'
 
-export default function loading() {
-  return (
-    <div className="flex justify-center items-center flex-[1] pb-20">
-      <RiLoader4Line className="text-black/30 animate-spin" size={100}/>
-    </div>
-  )
+export default function Loading() {
+    return (
+        <div className="flex flex-[1] justify-center items-center pb-20">
+            <Spinner size="xl" />
+        </div>
+    )
 }

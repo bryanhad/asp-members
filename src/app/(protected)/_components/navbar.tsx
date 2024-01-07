@@ -1,14 +1,11 @@
 'use client'
 
-import { UserButton } from '@/components/auth/user-button'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { BurgerMenu } from './burger-menu'
+import { Logo } from '@/components/logo'
 import { ThemeToggleButton } from '@/components/theme-toggle-button'
 import { useScrollTop } from '@/hooks/use-scroll-top'
 import { cn } from '@/lib/utils'
-import { Logo } from '@/components/logo'
+import Link from 'next/link'
+import { BurgerMenu } from './burger-menu'
 import { UserButtonn } from './user-button'
 
 export const Navbar = () => {

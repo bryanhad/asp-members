@@ -18,11 +18,12 @@ export default async function ProtectedLayout({
         <SessionProvider session={session}>
             <div className="h-full w-full flex flex-col gap-y-10">
                 <Navbar />
-                <OuterContainer className="relative mt-[60px] ">
+                <OuterContainer className="relative mt-[60px] flex flex-col">
                     <SideBar />
-                    <div className="lg:ml-12 mt-6">
-                        <PageTitle className='mb-6'/>
-                        {children}</div>
+                    <div className="lg:ml-12 mt-6 flex flex-col flex-[1]">
+                        <PageTitle className="mb-6" />
+                        {children}
+                    </div>
                 </OuterContainer>
             </div>
         </SessionProvider>

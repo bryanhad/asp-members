@@ -26,6 +26,7 @@ export default function SideBar() {
                 { name: 'Members', href: '/members' },
                 { name: 'Blogs', href: '/blogs' },
                 { name: 'Positions', href: '/positions' },
+                { name: 'Practices', href: '/practices' },
             ],
         },
         {
