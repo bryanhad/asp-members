@@ -1,12 +1,10 @@
 'use server'
 import {
-    getPositionById,
     getPositionByIdWithMemberCount,
-    getPositionByName,
+    getPositionByName
 } from '@/data/position'
 import { db } from '@/lib/db'
 import { PositionsSchema } from '@/schemas'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { revalidatePath } from 'next/cache'
 import * as z from 'zod'
 

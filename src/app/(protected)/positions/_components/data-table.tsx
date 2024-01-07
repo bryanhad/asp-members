@@ -26,20 +26,15 @@ import {
     TableRow,
 } from '@/components/ui/table'
 import { useState } from 'react'
-import DataTableSearch from '@/components/table/data-table-search'
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
-    totalPages: number
-    totalData:number
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
-    totalData,
-    totalPages
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -73,7 +68,20 @@ export function DataTable<TData, TValue>({
     return (
         <div>
             <div className="flex items-center py-4">
-<DataTableSearch placeholder='Filter by name' />
+                <Input
+                    placeholder="Filter by name..."
+                    value={
+                        (table
+                            .getColumn('name')
+                            ?.getFilterValue() as string) ?? ''
+                    }
+                    onChange={(event) =>
+                        table
+                            .getColumn('name')
+                            ?.setFilterValue(event.target.value)
+                    }
+                    className="max-w-sm"
+                />
                 <DataTableViewOptions table={table} />
             </div>
             <div className="rounded-md border">
@@ -129,7 +137,7 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <DataTablePagination table={table} totalData={totalData} totalPages={totalPages} />
+            <DataTablePagination table={table} />
         </div>
     )
 }

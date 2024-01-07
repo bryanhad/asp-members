@@ -18,7 +18,7 @@ export default async function MembersPage({ searchParams }: MembersPageProps) {
     const currentPage = Number(searchParams?.page) || 1
     const tableSize = Number(searchParams?.size) || 5
 
-    const totalPages = await fetchMembersPageAmount(query, tableSize)
+    const {totalPages, count} = await fetchMembersPageAmount(query, tableSize)
 
     const data = await fetchFilteredMembers(query, currentPage, tableSize)
 
@@ -27,7 +27,7 @@ export default async function MembersPage({ searchParams }: MembersPageProps) {
             <Button asChild >
                 <Link href="/members/add">Add New Member</Link>
             </Button>
-            <DataTable columns={columns} data={data} />
+            <DataTable columns={columns} data={data} totalPages={totalPages} totalData={count} />
         </div>
     )
 }

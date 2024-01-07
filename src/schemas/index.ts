@@ -67,6 +67,12 @@ export const PositionsSchema = z.object({
         .min(4, { message: 'Position name must be atleast 4 characters long' }),
 })
 
+export const PracticesSchema = z.object({
+    name: z
+        .string()
+        .min(4, { message: 'Practice name must be atleast 4 characters long' }),
+})
+
 const MAX_IMAGE_SIZE = 500_880 // 5 MB
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/jpg']
 
@@ -114,20 +120,6 @@ export const AddMemberSchemaBackend = AddMemberSchema.extend({
         'Picture must be a file type'
     ),
 })
-
-// export const EditMemberSchema = z.object({
-//     name: MemberNameSchema,
-//     email: EmailMemberSchema,
-//     picture: uploadImageSchema,
-//     description: z.optional(
-//         z.string().min(10, { message: 'Minimum 10 characters required' })
-//     ),
-//     education: z.optional(z.array(z.string())),
-//     organization: z.optional(z.array(z.string())),
-//     practices: z.optional(z.array(z.string())),
-//     positionId: PositionMemberSchema
-//     // joinedSince: z.optional(z.string()),
-// })
 
 export const EditMemberSchema = AddMemberSchema.extend({
     picture: z.optional(uploadImageSchema)

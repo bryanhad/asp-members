@@ -1,6 +1,9 @@
 'use client'
 
-import { addPosition } from '@/actions/positions'
+import { addPractice } from '@/actions/practices'
+import { FormError } from '@/components/form-error'
+import { FormSuccess } from '@/components/form-success'
+import { SingleLineInput } from '@/components/forms/single-line-input'
 import {
     Form,
     FormControl,
@@ -9,21 +12,18 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form'
-import { PositionsSchema } from '@/schemas'
+import { PracticesSchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { FormError } from '@/components/form-error'
-import { FormSuccess } from '@/components/form-success'
-import {SingleLineInput} from '@/components/forms/single-line-input'
 
 export default function AddForm() {
     const [error, setError] = useState<string | undefined>()
     const [success, setSuccess] = useState<string | undefined>()
 
-    const form = useForm<z.infer<typeof PositionsSchema>>({
-        resolver: zodResolver(PositionsSchema),
+    const form = useForm<z.infer<typeof PracticesSchema>>({
+        resolver: zodResolver(PracticesSchema),
         defaultValues: {
             name: '',
         },
@@ -31,12 +31,12 @@ export default function AddForm() {
 
     const [isPending, startTransition] = useTransition()
 
-    async function onSubmit(values: z.infer<typeof PositionsSchema>) {
+    async function onSubmit(values: z.infer<typeof PracticesSchema>) {
         setError('')
         setSuccess('')
 
         startTransition(async () => {
-            const data = await addPosition(values)
+            const data = await addPractice(values)
 
             if (data.error) {
                 setError(data.error)
@@ -60,11 +60,11 @@ export default function AddForm() {
                         name="name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Add new position</FormLabel>
+                                <FormLabel>Add new practice</FormLabel>
                                 <FormControl>
                                     <SingleLineInput
-                                        buttonText="Add Position"
-                                        placeholder="Obe"
+                                        buttonText="Add Practice"
+                                        placeholder="Hukum Rimba"
                                         isLoading={isPending}
                                         {...field}
                                     />

@@ -1,68 +1,46 @@
 'use client'
 
-import { deleteMember } from '@/actions/member'
-import DeleteButtonModal from '@/components/delete-button-modal'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { ColumnDef } from '@tanstack/react-table'
+import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Member, Position } from '@prisma/client'
-import { ColumnDef } from '@tanstack/react-table'
-import { MoreHorizontal } from 'lucide-react'
-import Link from 'next/link'
+import { DataTableColumnHeader } from '@/components/table/data-table-column-header'
+import { Position } from '@prisma/client'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { FaUser } from 'react-icons/fa'
+import Link from 'next/link'
+import DeleteButtonModal from '@/components/delete-button-modal'
+import { deleteMember } from '@/actions/member'
 
-export type FetchedMember = Member & { position: Position }
+// This type is used to define the shape of our data.
+// You can use a Zod schema here if you want.
+type FetchedPosition = {
+    _count: {
+        members: number
+    }
+} & Position
 
-export const columns: ColumnDef<FetchedMember>[] = [
+export const columns: ColumnDef<FetchedPosition>[] = [
     {
-        accessorKey: 'member',
-        header: 'Member',
-        cell: ({ row }) => {
-            const member = row.original //get the full row data
-
-            return (
-                <div className="flex items-center gap-2">
-                    <Avatar className="h-8 w-8">
-                        <AvatarImage src={member.picture} />
-                        <AvatarFallback className="bg-secondary">
-                            <FaUser className="text-muted-foreground/30" />
-                        </AvatarFallback>
-                    </Avatar>
-                    <p>{member.name}</p>
-                </div>
-            )
-        },
+        accessorKey: 'name',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Position" />
+        ),
     },
     {
-        accessorKey: 'email',
-        header: 'Email',
-    },
-    {
-        accessorKey: 'positionId',
-        header: 'Position',
+        accessorKey: 'count',
+        header: 'Member Count',
         cell: ({ row }) => {
-            const member = row.original //get the full row data
+            const position = row.original //get the full row data
 
-            return <div>{member.position.name}</div>
-        },
-    },
-    {
-        accessorKey: 'amount',
-        header: () => <div className="text-right">Amount</div>,
-        cell: ({ row }) => {
-            const amount = parseFloat(row.getValue('amount'))
-            const formatted = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-            }).format(amount)
-
-            return <div className="text-right font-medium">{formatted}</div>
+            return <div>{position._count.members}</div>
         },
     },
     {

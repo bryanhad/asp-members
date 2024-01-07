@@ -16,6 +16,16 @@ import { toast } from 'sonner'
 type ActionReturn =
     | {
           error: string
+          success?: undefined
+      }
+    | {
+          success?: string
+          error?: undefined
+      }
+
+type RelationActionReturn =
+    | {
+          error: string
           success: undefined
           prismaError: undefined
       }
@@ -36,8 +46,8 @@ type ActionReturn =
 
 type DeleteButtonProps = {
     description: string
-    onConfirm: () => Promise<ActionReturn>
-    onProceed?: () => Promise<ActionReturn>
+    onConfirm: () => Promise<ActionReturn | RelationActionReturn>
+    onProceed?: () => Promise<RelationActionReturn>
     children: React.ReactNode
 }
 const font = Poppins({
@@ -76,7 +86,7 @@ export default function DeleteButtonModal({
                 if (data.error) {
                     toast.error(data.error)
                     setOpen(false)
-                }
+                } 
                 if (data.success) {
                     toast.success(data.success)
                     setOpen(false)

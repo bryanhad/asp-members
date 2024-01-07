@@ -79,7 +79,7 @@ export async function fetchMembersPageAmount(
             },
         })
         const totalPages = Math.ceil(Number(_all) / itemsPerPage)
-        return totalPages
+        return {totalPages, count: _all}
     } catch (error) {
         console.error('Database Error:', error)
         throw new Error('Failed to fetch total pages amount of Members.')

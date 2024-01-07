@@ -2,23 +2,36 @@ import { cn } from '@/lib/utils'
 import LoadingButton from '../loading-button'
 import { Button } from '../ui/button'
 import { Input, InputProps } from '../ui/input'
+import React from 'react'
 
-type SingleLineInputProps = {
+export interface SingleLineInputProps
+    extends React.InputHTMLAttributes<HTMLInputElement>, InputProps
+ {
     isLoading: boolean
     buttonText: string
     cancelButtonText?: string
     onCancelClicked?: () => void
-} & React.InputHTMLAttributes<HTMLInputElement> &
-    InputProps
+}
 
-export default function SingleLineInput({
+// interface SingleLineInputProps extends  {
+//     isLoading: boolean
+//     buttonText: string
+//     cancelButtonText?: string
+//     onCancelClicked?: () => void
+// } & React.InputHTMLAttributes<HTMLInputElement> &
+//     InputProps
+
+    
+
+const SingleLineInput = React.forwardRef<HTMLInputElement, SingleLineInputProps>(
+    ({
     isLoading,
     cancelButtonText,
     onCancelClicked,
     buttonText,
     className,
     ...props
-}: SingleLineInputProps) {
+}, ref)  => {
     return (
         <div
             className={cn(
@@ -28,6 +41,7 @@ export default function SingleLineInput({
         >
             <Input
                 {...props}
+                ref={ref}
                 variant="onlyRoundLeft"
                 className="ring-0"
                 disabled={isLoading}
@@ -59,3 +73,6 @@ export default function SingleLineInput({
         </div>
     )
 }
+)
+SingleLineInput.displayName = 'SingleLineInput'
+export {SingleLineInput}

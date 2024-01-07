@@ -4,6 +4,7 @@ import {
 } from '@/data/position'
 import TablePagination from '../../../../components/table/table-pagination'
 import PositionTableCell from './position-table-cell'
+import { DataTablePagination } from '@/components/table/data-table-pagination'
 
 type PositionsTableProps = {
     query: string
@@ -25,6 +26,7 @@ export default async function PositionsTable({
                     <PositionTableCell position={position} key={position.id} />
                 ))}
             </div>
+            <DataTablePagination />
             <TablePagination totalPages={totalPages} />
         </>
     )

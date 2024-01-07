@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from "clsx"
+import { ReadonlyURLSearchParams } from "next/navigation"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -42,4 +43,22 @@ export const getCloudinaryPublicImageId = (url: string) => {
   const splitArr = url.split('/')
   const publicImageId = splitArr[splitArr.length-1].split('.')[0]
   return publicImageId
+}
+
+export const createPageURL = (
+  pathname:string,
+  searchParams:ReadonlyURLSearchParams,
+  pageNumber: number | string,
+  pageSize?: number | string,
+  order?: string
+) => {
+  const params = new URLSearchParams(searchParams)
+  params.set('page', pageNumber.toString())
+  if (pageSize) {
+      params.set('size', pageSize.toString())
+  }
+  if (order) {
+      params.set('order', order)
+  }
+  return `${pathname}?${params.toString()}`
 }
