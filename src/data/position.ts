@@ -28,19 +28,19 @@ export const getPositionByIdWithMemberCount = async (id: string) => {
     }
 }
 
-const ITEMS_PER_PAGE = 4
 export const fetchFilteredPositions = async (
     query: string,
-    currentPage: number
+    currentPage: number,
+    itemsPerPage: number
 ) => {
     // noStore()
 
-    const offset = (currentPage - 1) * ITEMS_PER_PAGE
+    const offset = (currentPage - 1) * itemsPerPage
 
     try {
         const positions = await db.position.findMany({
             skip: offset,
-            take: ITEMS_PER_PAGE,
+            take: itemsPerPage,
             where: {
                 name: {
                     contains: query,
@@ -56,12 +56,14 @@ export const fetchFilteredPositions = async (
         })
         return positions
     } catch (err) {
-        return null
+        throw new Error('Failed to fetch Positions.')
     }
 }
 
-export async function fetchPositionsPageAmount(query: string) {
-    // noStore()
+export async function fetchPositionsPageAmount(
+    query: string,
+    itemsPerPage: number
+) {
     try {
         const { _all } = await db.position.count({
             where: {
@@ -74,18 +76,9 @@ export async function fetchPositionsPageAmount(query: string) {
                 _all: true,
             },
         })
-        const totalPages = Math.ceil(Number(_all) / ITEMS_PER_PAGE)
-        return totalPages
+        const totalPages = Math.ceil(Number(_all) / itemsPerPage)
+        return {totalPages, count: _all}
     } catch (error) {
-        return null
-    }
-}
-
-export async function getAllPositions() {
-    try {
-        const positions = await db.position.findMany()
-        return positions
-    } catch (err) {
-        return null
+        throw new Error('Failed to fetch total pages amount of Positions.')
     }
 }

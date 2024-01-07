@@ -1,8 +1,8 @@
 'use client'
 
-import { editPosition } from '@/actions/positions'
+import { editPractice } from '@/actions/practices'
 import {SingleLineInput} from '@/components/forms/single-line-input'
-import { PositionsSchema } from '@/schemas'
+import { PracticesSchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
@@ -18,25 +18,25 @@ import {
 } from '@/components/ui/form'
 type EditingFormProps = {
     closeForm: () => void
-    position: {
+    practice: {
         name: string
         id: string
     }
 }
 
-export default function EditingForm({ closeForm, position }: EditingFormProps) {
-    const form = useForm<z.infer<typeof PositionsSchema>>({
-        resolver: zodResolver(PositionsSchema),
+export default function EditingForm({ closeForm, practice }: EditingFormProps) {
+    const form = useForm<z.infer<typeof PracticesSchema>>({
+        resolver: zodResolver(PracticesSchema),
         defaultValues: {
-            name: position.name,
+            name: practice.name,
         },
     })
 
     const [isPending, startTransition] = useTransition()
 
-    async function onSubmit(values: z.infer<typeof PositionsSchema>) {
+    async function onSubmit(values: z.infer<typeof PracticesSchema>) {
         startTransition(async () => {
-            const data = await editPosition(values, position.id)
+            const data = await editPractice(values, practice.id)
             if (data.error) {
                 toast.error(data.error)
             }

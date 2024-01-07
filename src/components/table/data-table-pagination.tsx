@@ -55,9 +55,9 @@ export function DataTablePagination<TData>({
                 </div>
             )}
             <div className="flex flex-col-reverse gap-3 md:flex-row items-center justify-between flex-[1] space-x-6 lg:space-x-8">
-                <div className="flex items-center space-x-2 flex-col md:flex-row gap-3">
-                    <p className="text-sm font-medium">Rows per page</p>
-                    {table && (
+                {table && (
+                    <div className="flex items-center space-x-2 flex-col md:flex-row gap-3">
+                        <p className="text-sm font-medium">Rows per page</p>
                         <Select
                             onValueChange={(value) => {
                                 table.setPageSize(Number(value))
@@ -82,8 +82,8 @@ export function DataTablePagination<TData>({
                                 ))}
                             </SelectContent>
                         </Select>
-                    )}
-                </div>
+                    </div>
+                )}
                 <div className="md:flex hidden w-[100px] items-center justify-center text-sm font-medium">
                     Page {currentPage} of {totalPages}
                 </div>

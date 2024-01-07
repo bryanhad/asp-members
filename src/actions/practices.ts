@@ -30,6 +30,33 @@ export const addPractice = async (values: z.infer<typeof PracticesSchema>) => {
     return { success: `Practice '${name}' successfuly added!` }
 }
 
+export const editPractice = async (
+    values: z.infer<typeof PracticesSchema>,
+    id: string
+) => {
+    const validatedFields = PracticesSchema.safeParse(values)
+
+    if (!validatedFields.success) {
+        return { error: 'Invalid fields!' }
+    }
+
+    const { name } = validatedFields.data
+
+    const practiceExists = await getPracticeByName(name)
+    if (practiceExists) {
+        return { error: `Practice '${name}' already exists!` }
+    }
+
+    await db.practice.update({
+        where: { id },
+        data: { name },
+    })
+
+    revalidatePath('/practices')
+    return { success: `Practice '${name}' successfuly edited!` }
+}
+
+
 export const deletePractice = async (id: string, proceed = false) => {
     const tobeDeletedPractice = await getPracticeByIdWithMemberCount(id)
     if (!tobeDeletedPractice) {

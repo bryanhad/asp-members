@@ -5,17 +5,19 @@ type PositionPageProps = {
     searchParams?: {
         q?: string
         page?: string
+        size?:string
     }
 }
 
 export default async function PositionsPage({ searchParams }: PositionPageProps) {
     const query = searchParams?.q || ''
     const currentPage = Number(searchParams?.page) || 1
+    const tableSize = Number(searchParams?.size) || 5
 
     return (
         <div className="space-y-4">
             <AddForm />
-            <PositionsTable query={query} currentPage={currentPage} />
+            <PositionsTable size={tableSize} query={query} currentPage={currentPage} />
         </div>
     )
 }

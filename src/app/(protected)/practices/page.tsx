@@ -1,21 +1,22 @@
 import AddForm from './_components/add-form'
-import PositionsTable from './_components/positions-table'
+import PracticesTable from './_components/practices-table'
 
-type PositionPageProps = {
+type PracticePageProps = {
     searchParams?: {
         q?: string
         page?: string
+        size?:string
     }
 }
-
-export default async function PositionsPage({ searchParams }: PositionPageProps) {
+export default async function PracticesPage({ searchParams }: PracticePageProps) {
     const query = searchParams?.q || ''
     const currentPage = Number(searchParams?.page) || 1
+    const tableSize = Number(searchParams?.size) || 5
 
     return (
         <div className="space-y-4">
             <AddForm />
-            {/* <PositionsTable query={query} currentPage={currentPage} /> */}
+            <PracticesTable size={tableSize} query={query} currentPage={currentPage} />
         </div>
     )
 }

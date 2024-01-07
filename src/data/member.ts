@@ -65,7 +65,6 @@ export async function fetchMembersPageAmount(
     query: string,
     itemsPerPage: number
 ) {
-    // noStore()
     try {
         const { _all } = await db.member.count({
             where: {

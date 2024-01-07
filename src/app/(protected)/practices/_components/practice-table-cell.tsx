@@ -5,6 +5,7 @@ import DeleteButtonModal from '@/components/delete-button-modal'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { PiPencilSimpleLine } from 'react-icons/pi'
+import EditingForm from './editing-form'
 import { cn } from '@/lib/utils'
 import { FiTrash } from 'react-icons/fi'
 
@@ -24,6 +25,8 @@ export default function PracticeTableCell({
 }: PracticeTableCellProps) {
     const [isEditing, setIsEditing] = useState(false)
 
+
+
     return (
         <div
             className={cn(
@@ -31,11 +34,10 @@ export default function PracticeTableCell({
             )}
         >
             {isEditing ? (
-                <p>Mestinya ngedit nih</p>
-                // <EditingForm
-                //     closeForm={() => setIsEditing(false)}
-                //     practice={practice}
-                // />
+                <EditingForm
+                    closeForm={() => setIsEditing(false)}
+                    practice={practice}
+                />
             ) : (
                 <>
                     <div className="flex items-center gap-2 flex-[1]">
