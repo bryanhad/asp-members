@@ -11,9 +11,11 @@ export const getPracticeByName = async (name: string) => {
 export const getPracticeById = async (id: string) => {
     try {
         const practice = await db.practice.findUnique({ where: { id } })
+        if (!practice) throw Error('bruh')
         return practice
     } catch (err) {
-        return null
+        throw new Error('Failed to fetch Practice')
+
     }
 }
 export const getPracticeByIdWithMemberCount = async (id: string) => {

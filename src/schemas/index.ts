@@ -67,11 +67,25 @@ export const PositionsSchema = z.object({
         .min(4, { message: 'Position name must be atleast 4 characters long' }),
 })
 
-export const PracticesSchema = z.object({
+export const AddPracticeSchema = z.object({
     name: z
         .string()
         .min(4, { message: 'Practice name must be atleast 4 characters long' }),
-    content: z.string().min(1, {message: 'Please write a description for this practice'})
+    content: z
+        .string()
+        .min(1, { message: 'Please write a description for this practice' }),
+})
+export const EditPracticeSchema = z.object({
+    name: 
+        z.string().min(4, {
+            message: 'Practice name must be atleast 4 characters long',
+        }
+    ),
+    content: z.optional(
+        z
+            .string()
+            .min(1, { message: 'Please write a description for this practice' })
+    ),
 })
 
 const MAX_IMAGE_SIZE = 500_880 // 5 MB
@@ -123,7 +137,7 @@ export const AddMemberSchemaBackend = AddMemberSchema.extend({
 })
 
 export const EditMemberSchema = AddMemberSchema.extend({
-    picture: z.optional(uploadImageSchema)
+    picture: z.optional(uploadImageSchema),
 })
 
 export const EditMemberSchemaBackend = EditMemberSchema.extend({

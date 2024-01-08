@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button'
-import AddForm from './_components/add-form'
 import PracticesTable from './_components/practices-table'
 import Link from 'next/link'
 
@@ -22,7 +21,6 @@ export default function PracticesPage({ searchParams }: PracticePageProps) {
                     Add New Practice
                 </Link>
             </Button>
-            {/* <AddForm /> */}
             <PracticesTable size={tableSize} query={query} currentPage={currentPage} />
         </div>
     )

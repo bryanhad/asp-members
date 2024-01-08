@@ -1,15 +1,16 @@
 'use server'
 import {
+    getPracticeById,
     getPracticeByIdWithMemberCount,
     getPracticeByName
 } from '@/data/practice'
 import { db } from '@/lib/db'
-import { PracticesSchema } from '@/schemas'
+import { EditPracticeSchema, AddPracticeSchema } from '@/schemas'
 import { revalidatePath } from 'next/cache'
 import * as z from 'zod'
 
-export const addPractice = async (values: z.infer<typeof PracticesSchema>) => {
-    const validatedFields = PracticesSchema.safeParse(values)
+export const addPractice = async (values: z.infer<typeof AddPracticeSchema>) => {
+    const validatedFields = AddPracticeSchema.safeParse(values)
 
     if (!validatedFields.success) {
         return { error: 'Invalid fields!' }
@@ -31,10 +32,11 @@ export const addPractice = async (values: z.infer<typeof PracticesSchema>) => {
 }
 
 export const editPractice = async (
-    values: z.infer<typeof PracticesSchema>,
-    id: string
+    values: z.infer<typeof EditPracticeSchema>,
+    id: string,
+    nameFieldIsDirty:boolean | undefined
 ) => {
-    const validatedFields = PracticesSchema.safeParse(values)
+    const validatedFields = EditPracticeSchema.safeParse(values)
 
     if (!validatedFields.success) {
         return { error: 'Invalid fields!' }
@@ -43,9 +45,7 @@ export const editPractice = async (
     const { name, content } = validatedFields.data
 
     const practiceExists = await getPracticeByName(name)
-    if (practiceExists) {
-        return { error: `Practice '${name}' already exists!` }
-    }
+    if (practiceExists && nameFieldIsDirty) return {error: `Practice '${name}' already exists!`}
 
     await db.practice.update({
         where: { id },
