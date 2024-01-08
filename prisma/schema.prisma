@@ -70,6 +70,7 @@ model Position {
 model Practice {
   id      String              @id @default(cuid())
   name    String              @unique
+  content String 
   members MembersOnPractice[]
 }
 

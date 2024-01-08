@@ -15,7 +15,7 @@ export const addPractice = async (values: z.infer<typeof PracticesSchema>) => {
         return { error: 'Invalid fields!' }
     }
 
-    const { name } = validatedFields.data
+    const { name, content } = validatedFields.data
 
     const practiceExists = await getPracticeByName(name)
     if (practiceExists) {
@@ -23,7 +23,7 @@ export const addPractice = async (values: z.infer<typeof PracticesSchema>) => {
     }
 
     await db.practice.create({
-        data: { name },
+        data: { name, content},
     })
 
     revalidatePath('/practices')
@@ -40,7 +40,7 @@ export const editPractice = async (
         return { error: 'Invalid fields!' }
     }
 
-    const { name } = validatedFields.data
+    const { name, content } = validatedFields.data
 
     const practiceExists = await getPracticeByName(name)
     if (practiceExists) {
@@ -49,7 +49,7 @@ export const editPractice = async (
 
     await db.practice.update({
         where: { id },
-        data: { name },
+        data: { name, content },
     })
 
     revalidatePath('/practices')

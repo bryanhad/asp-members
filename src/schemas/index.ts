@@ -71,6 +71,7 @@ export const PracticesSchema = z.object({
     name: z
         .string()
         .min(4, { message: 'Practice name must be atleast 4 characters long' }),
+    content: z.string().min(1, {message: 'Please write a description for this practice'})
 })
 
 const MAX_IMAGE_SIZE = 500_880 // 5 MB
