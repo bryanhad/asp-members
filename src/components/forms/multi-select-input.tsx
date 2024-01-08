@@ -28,16 +28,18 @@ export default function MultiSelectInput({
     name,
 }: MultiSelectInputProps) {
     const ref = useRef<HTMLInputElement>(null)
+    console.log(currentValue)
 
     function handleEnter(input: string) {
         if (currentValue) {
+            console.log(currentValue)
             if (currentValue.includes(input)) return
             setValue([...currentValue, input])
         }
     }
 
     function handleDelete(id: string) {
-        if (currentValue) {
+        if (Array.isArray(currentValue)) {
             setValue([...currentValue.filter((value) => value !== id)])
         }
     }

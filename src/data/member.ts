@@ -32,11 +32,11 @@ export const getMemberByIdWithPractices = async (id: string) => {
             },
         })
         if (!member) {
-            throw ('bruh')
+            throw 'bruh'
         }
         const memberWithPractices = {
             ...member,
-            practices: member.practices.map(el => el.practice.name)
+            practices: member.practices.map((el) => el.practice.name),
         }
         return memberWithPractices
     } catch (err) {
@@ -52,6 +52,25 @@ export const getMemberByIdWithPosition = async (id: string) => {
         return member
     } catch (err) {
         return null
+    }
+}
+export const getMemberByIdWithPositionAndPractices = async (id: string) => {
+    try {
+        const member = await db.member.findUnique({
+            where: { id },
+            include: {
+                position: true,
+                practices: { select: { practice:true } },
+            },
+        })
+        if (!member) {
+            throw 'bruh'
+        }
+
+        const memberPractices = member.practices.map((el) => el.practice)
+        return { ...member, practices: memberPractices }
+    } catch (err) {
+        throw new Error('Failed to fetch Member')
     }
 }
 

@@ -12,7 +12,7 @@ import MemberForm from '../../_components/form'
 
 type EditMemberFormProps = {
     member: {
-        practices: string[]
+        practices: Practice[]
     } & Member
     positions: Position[]
     practices: Practice[]
@@ -47,7 +47,7 @@ export default function EditMemberForm({
             positionId: member?.positionId || '',
             education: member?.education || [],
             organization: member?.organization || [],
-            practices: member.practices || [],
+            practices: member.practices.map(el => el.id) || [],
             // joinedSince: undefined,
         },
     })
