@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
                 practices: undefined,
             },
         })
-
+        // ADD MEMBER'S PRACTICES IN CONJUNC TABLE
         if (
             validatedFields.data.practices &&
             validatedFields.data.practices.length >= 1
@@ -82,6 +82,11 @@ export async function POST(req: NextRequest) {
                 data: newMemberPractices,
             })
         }
+
+        return NextResponse.json(
+            { success: `Successfully added ${validatedFields.data.name}!` },
+            { status: 200 }
+        )
     } catch (err) {
         console.log(err)
         return NextResponse.json(
@@ -89,12 +94,8 @@ export async function POST(req: NextRequest) {
             { status: 500 }
         )
     }
-
-    return NextResponse.json(
-        { success: `Successfully added ${validatedFields.data.name}!` },
-        { status: 200 }
-    )
 }
+
 export async function PUT(req: NextRequest) {
     const role = await currentRole()
 
@@ -128,44 +129,86 @@ export async function PUT(req: NextRequest) {
         return NextResponse.json({ error: `Invalid fields!` }, { status: 400 })
     }
 
-    const existingMember = await getMemberById(validatedFields.data.memberId)
-    if (!existingMember) {
+    try {
+        const existingMember = await getMemberById(
+            validatedFields.data.memberId
+        )
+        if (!existingMember) {
+            return NextResponse.json(
+                { error: `Member not found!` },
+                { status: 404 }
+            )
+        }
+
+        const updateData = {
+            ...validatedFields.data,
+            memberId: undefined,
+        }
+        let picture: string | undefined
+
+        if (validatedFields.data.picture) {
+            const arrayBuffer = await validatedFields.data.picture.arrayBuffer()
+            const buffer = new Uint8Array(arrayBuffer)
+
+            const publicImageId = getCloudinaryPublicImageId(
+                existingMember.picture
+            )
+            const { secure_url } = await updateImage(buffer, publicImageId)
+            picture = secure_url
+        }
+
+        await db.member.update({
+            where: {
+                id: existingMember.id,
+            },
+            data: {
+                ...updateData,
+                practices: undefined,
+                picture,
+            },
+        })
+        // UPDATE PRACTICES IN CONJUNC TABLE
+
+        if (updateData.practices) {
+            const memberHasPractices = await db.membersOnPractice.findFirst({
+                where: { memberId: existingMember.id },
+            })
+
+            if (updateData.practices.length >= 1 && memberHasPractices) {
+                await db.membersOnPractice.deleteMany({
+                    where: {
+                        memberId: memberHasPractices.memberId,
+                    },
+                })
+
+                const newMemberPractices = updateData.practices.map(
+                    (practiceId) => {
+                        return {
+                            memberId: memberHasPractices.memberId,
+                            practiceId,
+                        }
+                    }
+                )
+                await db.membersOnPractice.createMany({
+                    data: newMemberPractices,
+                })
+            }
+        }
+        revalidatePath('/members')
+
         return NextResponse.json(
-            { error: `Member not found!` },
-            { status: 404 }
+            {
+                success: `Successfully updated ${
+                    validatedFields.data.name || existingMember.name
+                }!`,
+            },
+            { status: 200 }
+        )
+    } catch (err) {
+        console.log(err)
+        return NextResponse.json(
+            { error: `Something went wrong!` },
+            { status: 500 }
         )
     }
-
-    const updateData = { ...validatedFields.data, memberId: undefined }
-    let picture: string | undefined
-
-    if (validatedFields.data.picture) {
-        const arrayBuffer = await validatedFields.data.picture.arrayBuffer()
-        const buffer = new Uint8Array(arrayBuffer)
-
-        const publicImageId = getCloudinaryPublicImageId(existingMember.picture)
-        const { secure_url } = await updateImage(buffer, publicImageId)
-        picture = secure_url
-    }
-
-    await db.member.update({
-        where: {
-            id: existingMember.id,
-        },
-        data: {
-            ...updateData,
-            picture,
-        },
-    })
-
-    revalidatePath('/members')
-
-    return NextResponse.json(
-        {
-            success: `Successfully updated ${
-                validatedFields.data.name || existingMember.name
-            }!`,
-        },
-        { status: 200 }
-    )
 }
