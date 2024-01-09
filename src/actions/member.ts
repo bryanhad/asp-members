@@ -32,7 +32,7 @@ export const addMember = async (formData: FormData) => {
         practices: JSON.parse(
             (formData.get('practices') as string | null) || '[]'
         ),
-        joinedSince: joinedSince ? new Date(joinedSince) : undefined
+        joinedSince: joinedSince ? new Date(joinedSince) : undefined,
     })
 
     if (!validatedFields.success) {
@@ -202,13 +202,17 @@ export const deleteMember = async (id: string) => {
 
     const publicImageId = getCloudinaryPublicImageId(tobeDeletedMember.picture)
 
-    await db.member.delete({
-        where: { id },
-    })
-    await deleteImage(publicImageId)
+    try {
+        await db.member.delete({
+            where: { id },
+        })
+        await deleteImage(publicImageId)
 
-    revalidatePath('/members')
-    return {
-        success: `Member '${tobeDeletedMember.name}' successfuly deleted!`,
+        revalidatePath('/members')
+        return {
+            success: `Member '${tobeDeletedMember.name}' successfuly deleted!`,
+        }
+    } catch (err) {
+        return { error: `Something went wrong!` }
     }
 }

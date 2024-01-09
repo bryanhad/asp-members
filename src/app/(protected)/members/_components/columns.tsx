@@ -9,7 +9,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuSeparator,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Member, Position } from '@prisma/client'
 import { ColumnDef } from '@tanstack/react-table'
@@ -53,16 +53,26 @@ export const columns: ColumnDef<FetchedMember>[] = [
         },
     },
     {
-        accessorKey: 'amount',
-        header: () => <div className="text-right">Amount</div>,
+        accessorKey: 'joinedSince',
+        header: () => <div className="text-right">Joined Since</div>,
         cell: ({ row }) => {
-            const amount = parseFloat(row.getValue('amount'))
-            const formatted = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-            }).format(amount)
+            const date = row.getValue('joinedSince') as Date | null
 
-            return <div className="text-right font-medium">{formatted}</div>
+            return (
+                <div className="text-right font-medium">
+                    {date ? (
+                        date.toLocaleString('id-ID', {
+                            year: 'numeric',
+                            month: 'numeric',
+                            day: 'numeric',
+                        })
+                    ) : (
+                        <span className="italic text-muted-foreground/60">
+                            unknown
+                        </span>
+                    )}
+                </div>
+            )
         },
     },
     {
