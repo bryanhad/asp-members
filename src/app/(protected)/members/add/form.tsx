@@ -86,6 +86,7 @@ export default function AddMemberForm({
             onSubmit={onSubmit}
             loading={isPending}
             practices={practices}
+            buttonText='Submit'
         />
     )
 }

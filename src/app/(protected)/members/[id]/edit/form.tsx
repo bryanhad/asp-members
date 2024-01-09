@@ -98,6 +98,7 @@ export default function EditMemberForm({
             practices={practices}
             onSubmit={onSubmit}
             loading={isPending}
+            buttonText='Edit Member'
         />
     )
 }

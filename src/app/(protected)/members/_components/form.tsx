@@ -1,7 +1,7 @@
 'use client'
 
-import { AddMemberSchema, EditMemberSchema } from '@/schemas'
 import MultiInput from '@/components/forms/multi-input'
+import MultiSelectInput from '@/components/forms/multi-select-input'
 import LoadingButton from '@/components/loading-button'
 import {
     Form,
@@ -23,9 +23,6 @@ import { Textarea } from '@/components/ui/textarea'
 import { Member, Position, Practice } from '@prisma/client'
 import Image from 'next/image'
 import { useState } from 'react'
-import { UseFormReturn } from 'react-hook-form'
-import * as z from 'zod'
-import MultiSelectInput from '@/components/forms/multi-select-input'
 
 type MemberFormProps = {
     member?: Member
@@ -34,6 +31,7 @@ type MemberFormProps = {
     form: any
     onSubmit: (values: any) => Promise<void>
     loading: boolean
+    buttonText: string
 }
 
 export default function MemberForm({
@@ -43,6 +41,7 @@ export default function MemberForm({
     onSubmit,
     loading,
     practices,
+    buttonText,
 }: MemberFormProps) {
     const [fileUrl, setFileUrl] = useState<string | undefined>(undefined)
 
@@ -286,7 +285,7 @@ export default function MemberForm({
                         /> */}
                     </div>
                     <LoadingButton isLoading={loading} type="submit">
-                        Upload Image
+                        {buttonText}
                     </LoadingButton>
                 </form>
             </Form>
