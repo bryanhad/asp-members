@@ -93,6 +93,8 @@ export const editMember = async (formData: FormData) => {
         return { error: 'Unauthorized' }
     }
 
+    const joinedSince = formData.get('joinedSince') as string | null
+
     const validatedFields = EditMemberSchemaBackend.safeParse({
         memberId: formData.get('memberId'),
         picture: (formData.get('picture') as File | null) || undefined,
@@ -109,10 +111,11 @@ export const editMember = async (formData: FormData) => {
         practices: JSON.parse(
             (formData.get('practices') as string | null) || '[]'
         ),
-        // joinedSince:  formData.get('joinedSince'),
+        joinedSince:  joinedSince ? new Date(joinedSince) : undefined,
     })
 
     if (!validatedFields.success) {
+        console.log(validatedFields.error)
         return { error: 'Invalid Fields!' }
     }
 

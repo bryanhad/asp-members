@@ -49,7 +49,7 @@ export default function EditMemberForm({
             education: member?.education || [],
             organization: member?.organization || [],
             practices: member.practices.map((el) => el.id) || [],
-            // joinedSince: undefined,
+            joinedSince: member.joinedSince || undefined,
         },
     })
 
@@ -64,6 +64,8 @@ export default function EditMemberForm({
                     if (value && value !== member[key]) {
                         if (key === 'picture' && values.picture) {
                             input = values.picture[0]
+                        } else if (value instanceof Date) {
+                            input = value.toString()
                         } else {
                             input =
                                 typeof value === 'string'
@@ -98,7 +100,7 @@ export default function EditMemberForm({
             practices={practices}
             onSubmit={onSubmit}
             loading={isPending}
-            buttonText='Edit Member'
+            buttonText="Edit Member"
         />
     )
 }
