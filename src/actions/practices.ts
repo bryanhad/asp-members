@@ -1,16 +1,22 @@
 'use server'
 import {
+    getPracticeById,
     getPracticeByIdWithMemberCount,
     getPracticeByName,
 } from '@/data/practice'
 import { db } from '@/lib/db'
-import { uploadImage } from '@/lib/image-upload'
-import { AddPracticeSchemaBackend, EditPracticeSchema } from '@/schemas'
+import { updateImage, uploadImage } from '@/lib/image-upload'
+import { getCloudinaryPublicImageId } from '@/lib/utils'
+import {
+    AddPracticeSchemaBackend,
+    EditMemberSchema,
+    EditPracticeSchema,
+    EditPracticeSchemaBackend,
+} from '@/schemas'
 import { revalidatePath } from 'next/cache'
 import * as z from 'zod'
 
-export const addPractice = async (formData: FormData
-) => {
+export const addPractice = async (formData: FormData) => {
     const validatedFields = AddPracticeSchemaBackend.safeParse({
         icon: formData.get('icon') as File,
         name: formData.get('name'),
@@ -22,7 +28,7 @@ export const addPractice = async (formData: FormData
         return { error: 'Invalid fields!' }
     }
 
-    const { name, content, icon} = validatedFields.data
+    const { name, content, icon } = validatedFields.data
 
     try {
         const practiceExists = await getPracticeByName(name)
@@ -46,26 +52,50 @@ export const addPractice = async (formData: FormData
 }
 
 export const editPractice = async (
-    values: z.infer<typeof EditPracticeSchema>,
+    formData: FormData,
     id: string,
     nameFieldIsDirty: boolean | undefined
 ) => {
-    const validatedFields = EditPracticeSchema.safeParse(values)
+    const validatedFields = EditPracticeSchemaBackend.safeParse({
+        icon: (formData.get('icon') as File | null) || undefined,
+        name: formData.get('name'),
+        content: formData.get('content'),
+    })
 
     if (!validatedFields.success) {
+        console.log(validatedFields.error)
         return { error: 'Invalid fields!' }
     }
 
-    const { name, content } = validatedFields.data
+    const { name, content, icon } = validatedFields.data
 
     try {
+        const existingPractice = await getPracticeById(id)
+
+        let iconUrl: string | undefined
+
+        if (icon) {
+            const arrayBuffer = await icon.arrayBuffer()
+            const buffer = new Uint8Array(arrayBuffer)
+
+            const publicImageId = getCloudinaryPublicImageId(
+                existingPractice.icon
+            )
+            const { secure_url } = await updateImage(
+                buffer,
+                'practice',
+                publicImageId
+            )
+            iconUrl = secure_url
+        }
+
         const practiceExists = await getPracticeByName(name)
         if (practiceExists && nameFieldIsDirty)
             return { error: `Practice '${name}' already exists!` }
 
         await db.practice.update({
             where: { id },
-            data: { name, content },
+            data: { name, content, icon: iconUrl },
         })
 
         revalidatePath('/practices')

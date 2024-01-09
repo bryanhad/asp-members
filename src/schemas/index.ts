@@ -151,3 +151,11 @@ export const AddPracticeSchemaBackend = AddPracticeSchema.extend({
 export const EditPracticeSchema = AddPracticeSchema.extend({
     icon: z.optional(uploadImageSchema)
 })
+export const EditPracticeSchemaBackend = AddPracticeSchema.extend({
+    icon:  z.optional(
+        z.custom<File>(
+            (val) => val instanceof File,
+            'Icon must be a file type'
+        )
+    ),
+})

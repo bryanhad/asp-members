@@ -1,5 +1,3 @@
-'use client'
-
 import { Button } from '@/components/ui/button'
 import { dateToString } from '@/lib/utils'
 import { Member, Position, Practice } from '@prisma/client'

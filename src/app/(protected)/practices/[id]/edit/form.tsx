@@ -1,7 +1,7 @@
 'use client'
 
 import { editPractice } from '@/actions/practices'
-import { EditMemberSchema, EditPracticeSchema } from '@/schemas'
+import { EditPracticeSchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Practice } from '@prisma/client'
 import { useRouter } from 'next/navigation'
@@ -25,15 +25,33 @@ export default function EditPracticeForm({ practice }: EditPracticeFormProps) {
         defaultValues: {
             name: practice.name,
             content: practice.content,
+            icon: undefined,
         },
     })
 
-    const onSubmit = async (values: z.infer<typeof EditMemberSchema>) => {
+    const onSubmit = async (values: z.infer<typeof EditPracticeSchema>) => {
+        const formData = new FormData()
+
+        Object.entries(values).forEach(([key, value]) => {
+            if (value) {
+                let input: File | string
+                if (key === 'icon' && values.icon) {
+                    input = values.icon[0]
+                } else {
+                    input =
+                        typeof value === 'string'
+                            ? value
+                            : JSON.stringify(value)
+                }
+                formData.append(key, input)
+            }
+        })
+
         const nameFieldIsDirty = form.formState.dirtyFields.name
         startTransition(async () => {
             try {
                 const data = await editPractice(
-                    values,
+                    formData,
                     practice.id,
                     nameFieldIsDirty
                 )
@@ -56,6 +74,7 @@ export default function EditPracticeForm({ practice }: EditPracticeFormProps) {
             onSubmit={onSubmit}
             loading={isPending}
             buttonText="Edit Practice"
+            iconUrl={practice.icon}
         />
     )
 }
