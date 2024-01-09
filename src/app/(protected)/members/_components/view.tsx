@@ -1,13 +1,14 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { dateToString } from '@/lib/utils'
 import { Member, Position, Practice } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
 import { PiPencilSimpleLine } from 'react-icons/pi'
 
 type AddMemberFormProps = {
-    member: Member & { position: Position } & {practices: Practice[]}
+    member: Member & { position: Position } & { practices: Practice[] }
 }
 
 export default function MemberView({ member }: AddMemberFormProps) {
@@ -38,13 +39,24 @@ export default function MemberView({ member }: AddMemberFormProps) {
                 <TextShowCase label="Email" text={member.email} />
 
                 <TextShowCase label="Position" text={member.position.name} />
+                <TextShowCase
+                    label="Joined Since"
+                    text={
+                        member.joinedSince
+                            ? dateToString(member.joinedSince)
+                            : null
+                    }
+                />
 
                 <ListShowCase list={member.education} label="Education" />
                 <ListShowCase
                     list={member.organization}
                     label="Organizations"
                 />
-                <ListShowCase list={member.practices.map(el => el.name)} label="Practice" />
+                <ListShowCase
+                    list={member.practices.map((el) => el.name)}
+                    label="Practices"
+                />
             </div>
         </div>
     )

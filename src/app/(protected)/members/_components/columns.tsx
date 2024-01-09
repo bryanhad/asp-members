@@ -11,6 +11,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { dateToString } from '@/lib/utils'
 import { Member, Position } from '@prisma/client'
 import { ColumnDef } from '@tanstack/react-table'
 import { MoreHorizontal } from 'lucide-react'
@@ -61,11 +62,7 @@ export const columns: ColumnDef<FetchedMember>[] = [
             return (
                 <div className="text-right font-medium">
                     {date ? (
-                        date.toLocaleString('id-ID', {
-                            year: 'numeric',
-                            month: 'numeric',
-                            day: 'numeric',
-                        })
+                        dateToString(date)
                     ) : (
                         <span className="italic text-muted-foreground/60">
                             unknown

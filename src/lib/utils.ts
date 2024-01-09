@@ -62,3 +62,11 @@ export const createPageURL = (
     }
     return `${pathname}?${params.toString()}`
 }
+
+export const dateToString = (date: Date) => {
+    return date.toLocaleString('id-ID', {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+    })
+}
