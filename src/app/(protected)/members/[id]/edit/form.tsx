@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import * as z from 'zod'
 import MemberForm from '../../_components/form'
+import { editMember } from '@/actions/member'
 
 type EditMemberFormProps = {
     member: {
@@ -47,7 +48,7 @@ export default function EditMemberForm({
             positionId: member?.positionId || '',
             education: member?.education || [],
             organization: member?.organization || [],
-            practices: member.practices.map(el => el.id) || [],
+            practices: member.practices.map((el) => el.id) || [],
             // joinedSince: undefined,
         },
     })
@@ -74,18 +75,14 @@ export default function EditMemberForm({
                 })
                 formData.append('memberId', member.id)
 
-                const data = await fetch(`/api/admin/member`, {
-                    method: 'PUT',
-                    body: formData,
-                })
-                const res: EditMemberResponse = await data.json()
+                const { error, success } = await editMember(formData)
 
-                if (res.success) {
-                    toast.success(res.success)
+                if (success) {
+                    toast.success(success)
                     router.push('/members')
                 }
-                if (res.error) {
-                    toast.error(res.error)
+                if (error) {
+                    toast.error(error)
                 }
             } catch (err) {
                 console.log(err)
