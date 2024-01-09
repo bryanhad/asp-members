@@ -126,7 +126,7 @@ export const AddMemberSchema = z.object({
     organization: z.optional(z.array(z.string())),
     practices: z.optional(z.array(z.string())),
     positionId: MemberPositionSchema,
-    // joinedSince: z.optional(z.string()),
+    joinedSince: z.optional(z.date()),
 })
 
 export const AddMemberSchemaBackend = AddMemberSchema.extend({

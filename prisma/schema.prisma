@@ -58,7 +58,7 @@ model Member {
   position     Position            @relation(fields: [positionId], references: [id], onDelete: Cascade)
   practices    MembersOnPractice[]
 
-  // joinedSince DateTime?
+  joinedSince DateTime?
 }
 
 model Position {

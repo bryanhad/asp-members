@@ -15,6 +15,8 @@ export const addMember = async (formData: FormData) => {
         return { error: 'Unauthorized' }
     }
 
+    const joinedSince = formData.get('joinedSince') as string | null
+
     const validatedFields = AddMemberSchemaBackend.safeParse({
         picture: formData.get('picture') as File,
         name: formData.get('name'),
@@ -30,6 +32,7 @@ export const addMember = async (formData: FormData) => {
         practices: JSON.parse(
             (formData.get('practices') as string | null) || '[]'
         ),
+        joinedSince: joinedSince ? new Date(joinedSince) : undefined
     })
 
     if (!validatedFields.success) {

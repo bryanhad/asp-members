@@ -1,5 +1,6 @@
 'use client'
 
+import { DatePicker } from '@/components/date-picker'
 import MultiInput from '@/components/forms/multi-input'
 import MultiSelectInput from '@/components/forms/multi-select-input'
 import LoadingButton from '@/components/loading-button'
@@ -261,28 +262,22 @@ export default function MemberForm({
                                 />
                             )}
                         />
-                        {/* <FormField
+                        <FormField
                             control={form.control}
                             name="joinedSince"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="flex flex-col">
                                     <FormLabel>Joined Since</FormLabel>
                                     <FormControl>
-                                        <>
-                                            <Input
-                                                {...field}
-                                                disabled={loading}
-                                                className="hidden"
-                                            />
-                                            <DatePickerDemo
-                                                onDateSelect={field.onChange}
-                                            />
-                                        </>
+                                        <DatePicker
+                                            onDateSelect={field.onChange}
+                                            selectedDate={field.value}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
-                        /> */}
+                        />
                     </div>
                     <LoadingButton isLoading={loading} type="submit">
                         {buttonText}

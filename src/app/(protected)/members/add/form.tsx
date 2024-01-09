@@ -45,6 +45,7 @@ export default function AddMemberForm({
             education: [],
             organization: [],
             practices: [],
+            joinedSince: undefined,
         },
     })
 
@@ -57,6 +58,8 @@ export default function AddMemberForm({
                 if (value !== undefined) {
                     if (key === 'picture' && values.picture) {
                         input = values.picture[0]
+                    } else if (value instanceof Date) {
+                        input = value.toString()
                     } else {
                         input =
                             typeof value === 'string'
@@ -86,7 +89,7 @@ export default function AddMemberForm({
             onSubmit={onSubmit}
             loading={isPending}
             practices={practices}
-            buttonText='Submit'
+            buttonText="Submit"
         />
     )
 }
