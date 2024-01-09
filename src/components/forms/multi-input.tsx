@@ -93,7 +93,7 @@ export default function MultiInput({
                             key={i}
                             onClick={() => handleDelete(el)}
                             className={cn(
-                                'flex max-w-max cursor-pointer select-none items-center gap-2 rounded-full border border-focus py-1 pl-2 pr-4 dark:border-focus-dark',
+                                'flex cursor-pointer select-none items-center gap-2 rounded-full border border-focus py-1 pl-2 pr-4 dark:border-focus-dark text-wrap',
                                 buttonVariants({
                                     variant: 'ghost',
                                     size: 'sm',
@@ -102,7 +102,7 @@ export default function MultiInput({
                             )}
                         >
                             <FiTrash />
-                            {el}
+                            <p className="line-clamp-1">{el}</p>
                         </li>
                     ))}
                 </ul>

@@ -85,7 +85,9 @@ export default function MultiSelectInput({
                             )}
                         >
                             <FiTrash />
-                            {items.find((el) => el.id === id)?.name}
+                            <p className="line-clamp-1">
+                                {items.find((el) => el.id === id)?.name}
+                            </p>
                         </li>
                     ))}
                 </ul>
