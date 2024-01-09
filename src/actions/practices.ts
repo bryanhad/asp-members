@@ -4,20 +4,25 @@ import {
     getPracticeByName,
 } from '@/data/practice'
 import { db } from '@/lib/db'
-import { EditPracticeSchema, AddPracticeSchema } from '@/schemas'
+import { uploadImage } from '@/lib/image-upload'
+import { AddPracticeSchemaBackend, EditPracticeSchema } from '@/schemas'
 import { revalidatePath } from 'next/cache'
 import * as z from 'zod'
 
-export const addPractice = async (
-    values: z.infer<typeof AddPracticeSchema>
+export const addPractice = async (formData: FormData
 ) => {
-    const validatedFields = AddPracticeSchema.safeParse(values)
+    const validatedFields = AddPracticeSchemaBackend.safeParse({
+        icon: formData.get('icon') as File,
+        name: formData.get('name'),
+        content: formData.get('content'),
+    })
 
     if (!validatedFields.success) {
+        console.log(validatedFields.error)
         return { error: 'Invalid fields!' }
     }
 
-    const { name, content } = validatedFields.data
+    const { name, content, icon} = validatedFields.data
 
     try {
         const practiceExists = await getPracticeByName(name)
@@ -25,8 +30,12 @@ export const addPractice = async (
             return { error: `Practice '${name}' already exists!` }
         }
 
+        const arrayBuffer = await icon.arrayBuffer()
+        const buffer = new Uint8Array(arrayBuffer)
+        const { secure_url } = await uploadImage(buffer, 'practice')
+
         await db.practice.create({
-            data: { name, content },
+            data: { name, content, icon: secure_url },
         })
 
         revalidatePath('/practices')

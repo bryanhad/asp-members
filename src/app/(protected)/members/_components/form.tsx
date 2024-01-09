@@ -26,7 +26,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 type MemberFormProps = {
-    member?: Member
+    memberPicture?: string
     positions: Position[]
     practices: Practice[]
     form: any
@@ -37,7 +37,7 @@ type MemberFormProps = {
 
 export default function MemberForm({
     positions,
-    member,
+    memberPicture,
     form,
     onSubmit,
     loading,
@@ -66,7 +66,7 @@ export default function MemberForm({
                                     alt=""
                                     src={
                                         fileUrl ||
-                                        member?.picture ||
+                                        memberPicture ||
                                         '/noavatar.png'
                                     }
                                     fill

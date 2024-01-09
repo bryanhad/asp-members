@@ -96,7 +96,7 @@ export default function EditMemberForm({
         <MemberForm
             form={{ ...form }}
             positions={positions}
-            member={member}
+            memberPicture={member.picture}
             practices={practices}
             onSubmit={onSubmit}
             loading={isPending}

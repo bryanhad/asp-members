@@ -67,27 +67,6 @@ export const PositionsSchema = z.object({
         .min(4, { message: 'Position name must be atleast 4 characters long' }),
 })
 
-export const AddPracticeSchema = z.object({
-    name: z
-        .string()
-        .min(4, { message: 'Practice name must be atleast 4 characters long' }),
-    content: z
-        .string()
-        .min(1, { message: 'Please write a description for this practice' }),
-})
-export const EditPracticeSchema = z.object({
-    name: 
-        z.string().min(4, {
-            message: 'Practice name must be atleast 4 characters long',
-        }
-    ),
-    content: z.optional(
-        z
-            .string()
-            .min(1, { message: 'Please write a description for this practice' })
-    ),
-})
-
 const MAX_IMAGE_SIZE = 500_880 // 5 MB
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/jpg']
 
@@ -151,4 +130,24 @@ export const EditMemberSchemaBackend = EditMemberSchema.extend({
             'Picture must be a file type'
         )
     ),
+})
+
+export const AddPracticeSchema = z.object({
+    name: z
+        .string()
+        .min(4, { message: 'Practice name must be atleast 4 characters long' }),
+    icon: uploadImageSchema,
+    content: z
+        .string()
+        .min(1, { message: 'Please write a description for this practice' }),
+})
+export const AddPracticeSchemaBackend = AddPracticeSchema.extend({
+    icon: z.custom<File>(
+        (val) => val instanceof File,
+        'Picture must be a file type'
+    ),
+})
+
+export const EditPracticeSchema = AddPracticeSchema.extend({
+    icon: z.optional(uploadImageSchema)
 })

@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import * as z from 'zod'
 import { PracticeForm } from '../_components/form'
+import { CookingPot } from 'lucide-react'
 
 export default function AddPracticeForm() {
     const router = useRouter()
@@ -20,18 +21,33 @@ export default function AddPracticeForm() {
         defaultValues: {
             name: '',
             content: '',
+            icon: undefined,
         },
     })
 
     const onSubmit = async (values: z.infer<typeof AddPracticeSchema>) => {
-        startTransition(async () => {
-            const data = await addPractice(values)
-            if (data.success) {
-                router.push('/practices')
-                toast.success(data.success)
+        const formData = new FormData()
+
+        Object.entries(values).forEach(([key, value]) => {
+            let input: File | string
+            if (key === 'icon' && values.icon) {
+                input = values.icon[0]
+            } else {
+                input =
+                    typeof value === 'string' ? value : JSON.stringify(value)
             }
-            if (data.error) {
-                toast.error(data.error)
+            formData.append(key, input)
+        })
+
+        startTransition(async () => {
+            const { error, success } = await addPractice(formData)
+
+            if (success) {
+                router.push('/practices')
+                toast.success(success)
+            }
+            if (error) {
+                toast.error(error)
             }
         })
     }
