@@ -31,9 +31,7 @@ type MemberFormProps = {
     member?: Member
     positions: Position[]
     practices: Practice[]
-    form: UseFormReturn<
-        z.infer<typeof EditMemberSchema | typeof AddMemberSchema>
-    >
+    form: any
     onSubmit: (values: any) => Promise<void>
     loading: boolean
 }
