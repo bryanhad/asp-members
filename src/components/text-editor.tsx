@@ -23,7 +23,7 @@ export default function TextEditor ({
     async function handleUpload(file: File) {
         const formData = new FormData()
         formData.append('file', file)
-        const url = await uploadImageToCloudinary(formData)
+        const url = await uploadImageToCloudinary(formData, 'practice-content')
         return url
     }
 

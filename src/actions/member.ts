@@ -209,7 +209,7 @@ export const deleteMember = async (id: string) => {
         await db.member.delete({
             where: { id },
         })
-        await deleteImage(publicImageId)
+        await deleteImage(publicImageId, 'member')
 
         revalidatePath('/members')
         return {

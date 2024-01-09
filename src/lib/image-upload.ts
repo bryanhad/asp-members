@@ -48,9 +48,8 @@ export const updateImage = async (buffer: Uint8Array, folder:string, publicImgId
     return res
 }
 
-export const deleteImage = async (publicImgId:string) => {
-    await cloudinary.uploader.destroy(publicImgId, {
-    })
+export const deleteImage = async (publicImgId:string, folder:string) => {
+    await cloudinary.uploader.destroy(`${folder}/${publicImgId}`)
 } 
 
 export default cloudinary
