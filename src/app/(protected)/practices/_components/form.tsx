@@ -17,9 +17,7 @@ import { UseFormReturn } from 'react-hook-form'
 import * as z from 'zod'
 
 type PracticeFormProps = {
-    form: UseFormReturn<
-        z.infer<typeof EditPracticeSchema | typeof AddPracticeSchema>
-    >
+    form: any
     onSubmit: (values: any) => Promise<void>
     loading: boolean
     buttonText: string

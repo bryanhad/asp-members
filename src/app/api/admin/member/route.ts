@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
         const arrayBuffer = await validatedFields.data.picture.arrayBuffer()
         const buffer = new Uint8Array(arrayBuffer)
 
-        const { secure_url } = await uploadImage(buffer)
+        const { secure_url } = await uploadImage(buffer, 'member')
 
         console.log(validatedFields.data.practices)
 
@@ -153,7 +153,7 @@ export async function PUT(req: NextRequest) {
             const publicImageId = getCloudinaryPublicImageId(
                 existingMember.picture
             )
-            const { secure_url } = await updateImage(buffer, publicImageId)
+            const { secure_url } = await updateImage(buffer, 'member', publicImageId)
             picture = secure_url
         }
 

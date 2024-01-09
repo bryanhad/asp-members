@@ -1,7 +1,7 @@
 'use client'
 
 import { addPractice } from '@/actions/practices'
-import { AddMemberSchema, AddPracticeSchema } from '@/schemas'
+import { AddPracticeSchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
@@ -9,16 +9,6 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import * as z from 'zod'
 import { PracticeForm } from '../_components/form'
-
-type AddMemberResponse =
-    | {
-          error: string
-          success?: undefined
-      }
-    | {
-          success: string
-          error?: undefined
-      }
 
 export default function AddPracticeForm() {
     const router = useRouter()
@@ -33,19 +23,15 @@ export default function AddPracticeForm() {
         },
     })
 
-    const onSubmit = async (values: z.infer<typeof AddMemberSchema>) => {
+    const onSubmit = async (values: z.infer<typeof AddPracticeSchema>) => {
         startTransition(async () => {
-            try {
-                const data = await addPractice(values)
-                if (data.success) {
-                    router.push('/practices')
-                    toast.success(data.success)
-                }
-                if (data.error) {
-                    toast.error(data.error)
-                }
-            } catch (err) {
-                console.log(err)
+            const data = await addPractice(values)
+            if (data.success) {
+                router.push('/practices')
+                toast.success(data.success)
+            }
+            if (data.error) {
+                toast.error(data.error)
             }
         })
     }
@@ -55,7 +41,7 @@ export default function AddPracticeForm() {
             form={{ ...form }}
             onSubmit={onSubmit}
             loading={isPending}
-            buttonText='Add Practice'
+            buttonText="Add Practice"
         />
     )
 }

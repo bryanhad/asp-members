@@ -7,12 +7,12 @@ cloudinary.config({
     secure: true,
 })
 
-export const uploadImage = async (buffer: Uint8Array) => {
+export const uploadImage = async (buffer: Uint8Array, folder:string) => {
     const res = (await new Promise((resolve, reject) => {
         cloudinary.uploader
             .upload_stream(
                 {
-                    tags: ['member-picture'],
+                    folder,
                 },
                 (err, res) => {
                     if (err || !res) {
@@ -27,12 +27,12 @@ export const uploadImage = async (buffer: Uint8Array) => {
     return res
 }
 
-export const updateImage = async (buffer: Uint8Array, publicImgId:string) => {
+export const updateImage = async (buffer: Uint8Array, folder:string, publicImgId:string) => {
     const res = (await new Promise((resolve, reject) => {
         cloudinary.uploader
             .upload_stream(
                 {
-                    tags: ['member-picture'],
+                    folder,
                     public_id: publicImgId
                 },
                 (err, res) => {
@@ -49,7 +49,8 @@ export const updateImage = async (buffer: Uint8Array, publicImgId:string) => {
 }
 
 export const deleteImage = async (publicImgId:string) => {
-    await cloudinary.uploader.destroy(publicImgId)
+    await cloudinary.uploader.destroy(publicImgId, {
+    })
 } 
 
 export default cloudinary

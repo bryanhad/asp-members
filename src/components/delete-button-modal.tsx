@@ -2,6 +2,7 @@
 
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogTrigger,
 } from '@/components/ui/dialog'
@@ -10,7 +11,7 @@ import { Button } from './ui/button'
 import { Poppins } from 'next/font/google'
 import { cn } from '@/lib/utils'
 import LoadingButton from './loading-button'
-import { useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
 type ActionReturn =
@@ -46,7 +47,7 @@ type RelationActionReturn =
 
 type DeleteButtonProps = {
     description: string
-    onConfirm: () => Promise<ActionReturn | RelationActionReturn>
+    onConfirm: () => Promise<RelationActionReturn>
     onProceed?: () => Promise<RelationActionReturn>
     children: React.ReactNode
 }
@@ -70,40 +71,41 @@ export default function DeleteButtonModal({
 
     async function onClick() {
         startTransition(async () => {
-            let data
             if (prismaError && onProceed) {
-                data = await onProceed()
-                if (data.error) {
-                    toast.error(data.error)
+                const { error, success } = await onProceed()
+                if (error) {
+                    toast.error(error)
                     setOpen(false)
                 }
-                if (data.success) {
-                    toast.success(data.success)
+                if (success) {
+                    toast.success(success)
                     setOpen(false)
                 }
             } else {
-                data = await onConfirm()
-                if (data.error) {
-                    toast.error(data.error)
-                    setOpen(false)
-                } 
-                if (data.success) {
-                    toast.success(data.success)
+                const { error, prismaError, success } = await onConfirm()
+                if (error) {
+                    toast.error(error)
                     setOpen(false)
                 }
-                if (data.prismaError) {
-                    setTitle(data.prismaError.title)
-                    setDesc(data.prismaError.description)
+                if (success) {
+                    toast.success(success)
+                    setOpen(false)
+                }
+                if (prismaError) {
+                    setTitle(prismaError.title)
+                    setDesc(prismaError.description)
                     setPrismaError(true)
                 }
             }
         })
     }
-    function handleCloseModal() {
-        setOpen(false)
-        setTitle('Are You Sure?')
-        setDesc(description)
-    }
+    useEffect(() => {
+        if (!open) {
+            setOpen(false)
+            setTitle('Are You Sure?')
+            setDesc(description)
+        }
+    }, [open, description])
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -138,14 +140,15 @@ export default function DeleteButtonModal({
                         </LoadingButton>
                     </CardContent>
                     <CardFooter>
-                        <Button
-                            onClick={handleCloseModal}
-                            variant={'link'}
-                            className="font-normal w-full"
-                            size={'sm'}
-                        >
-                            cancel
-                        </Button>
+                        <DialogClose asChild>
+                            <Button
+                                variant={'link'}
+                                className="font-normal w-full"
+                                size={'sm'}
+                            >
+                                cancel
+                            </Button>
+                        </DialogClose>
                     </CardFooter>
                 </Card>
             </DialogContent>
