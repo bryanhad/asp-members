@@ -49,9 +49,9 @@ export const PracticeForm = ({
                 >
                     <div className="space-y-4">
                         <div className="flex flex-col sm:flex-row gap-4 items-center">
-                            <div className="rounded-lg overflow-hidden relative w-32 min-w-32 h-32 border">
+                            <div className="rounded-lg overflow-hidden relative w-32 min-w-32 h-32 border bg-white">
                                 <Image
-                                    className="object-cover"
+                                    className="object-cover p-2"
                                     alt=""
                                     src={fileUrl || iconUrl || '/noimage.png'}
                                     fill

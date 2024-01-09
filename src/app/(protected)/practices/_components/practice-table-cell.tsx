@@ -7,16 +7,17 @@ import { PiPencilSimpleLine } from 'react-icons/pi'
 import { cn } from '@/lib/utils'
 import { FiTrash } from 'react-icons/fi'
 import Link from 'next/link'
+import Image from 'next/image'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Practice } from '@prisma/client'
+import { FaImage } from 'react-icons/fa'
 
 type PracticeTableCellProps = {
     practice: {
         _count: {
             members: number
         }
-    } & {
-        id: string
-        name: string
-    }
+    } & Practice
 }
 
 export default function PracticeTableCell({
@@ -29,7 +30,17 @@ export default function PracticeTableCell({
             )}
         >
             <div className="flex items-center gap-2 flex-[1]">
-                <p className="flex-[1]">{practice.name}</p>
+                <div className="flex-[1]">
+                    <div className="flex items-center gap-2">
+                        <Avatar className="h-8 w-8 rounded-sm">
+                            <AvatarImage src={practice.icon} className='bg-white p-[2px]'/>
+                            <AvatarFallback className="bg-secondary">
+                                <FaImage className="text-muted-foreground/30" />
+                            </AvatarFallback>
+                        </Avatar>
+                        <p>{practice.name}</p>
+                    </div>
+                </div>
                 <Button asChild variant="ghost" size="sm">
                     <Link href={`/practices/${practice.id}/edit`}>
                         <PiPencilSimpleLine />
