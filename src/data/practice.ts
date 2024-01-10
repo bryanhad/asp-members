@@ -15,8 +15,12 @@ export const getPracticeById = async (id: string) => {
         return practice
     } catch (err) {
         throw new Error('Failed to fetch Practice')
-
     }
+}
+export const getPracticeBySlug = async (slug: string) => {
+    const practice = await db.practice.findUnique({ where: { slug } })
+
+    return practice
 }
 export const getPracticeByIdWithMemberCount = async (id: string) => {
     try {
@@ -88,7 +92,7 @@ export async function fetchPracticesPageAmount(
             },
         })
         const totalPages = Math.ceil(Number(_all) / itemsPerPage)
-        return {totalPages, count: _all}
+        return { totalPages, count: _all }
     } catch (error) {
         throw new Error('Failed to fetch total pages amount of Practices.')
     }
