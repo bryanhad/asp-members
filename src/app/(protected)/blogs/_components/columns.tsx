@@ -18,8 +18,8 @@ import Link from 'next/link'
 import { FaUser } from 'react-icons/fa'
 
 export type FetchedBlog = Blog & {
-    author: Pick<User, 'name' | 'profilePic'>
-} & { category: Practice }
+    author: Pick<User, 'name' | 'profilePic' | 'id'>
+} & { category: Pick<Practice, 'name' | 'id'> }
 
 export const columns: ColumnDef<FetchedBlog>[] = [
     {
@@ -44,6 +44,15 @@ export const columns: ColumnDef<FetchedBlog>[] = [
     {
         accessorKey: 'category',
         header: 'Category',
+        cell: ({ row }) => {
+            const category = row.getValue('category') as Pick<Practice, 'name' | 'id'>
+
+            return (
+                <p>
+                    {category.name}
+                </p>
+            )
+        },
     },
     {
         accessorKey: 'author',
