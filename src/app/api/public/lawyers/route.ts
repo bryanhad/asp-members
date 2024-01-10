@@ -7,8 +7,9 @@ export async function GET(req: Request) {
     const url = new URL(req.url)
 
     const nameQuery = url.searchParams.get('name') || ''
+    const positionQuery = url.searchParams.get('position') || ''
 
-    const res = await getAllFilteredMembers(nameQuery)
+    const res = await getAllFilteredMembers(nameQuery, positionQuery)
 
     const data = res.map(member => {
         const position = member.position.name

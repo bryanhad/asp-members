@@ -41,7 +41,7 @@ export default function AddMemberForm({
             email: '',
             picture: undefined,
             description: undefined,
-            positionId: '',
+            positionSlug: '',
             education: [],
             organization: [],
             practices: [],

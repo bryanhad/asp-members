@@ -45,7 +45,7 @@ export default function EditMemberForm({
             email: member?.email || '',
             picture: undefined,
             description: member?.description || undefined,
-            positionId: member?.positionId || '',
+            positionSlug: member?.positionSlug || '',
             education: member?.education || [],
             organization: member?.organization || [],
             practices: member.practices.map((el) => el.id) || [],

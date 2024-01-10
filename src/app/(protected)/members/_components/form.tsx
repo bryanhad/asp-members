@@ -172,7 +172,7 @@ export default function MemberForm({
                         </div>
                         <FormField
                             control={form.control}
-                            name="positionId"
+                            name="positionSlug"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Position</FormLabel>
@@ -189,8 +189,8 @@ export default function MemberForm({
                                         <SelectContent className="max-h-[200px]">
                                             {positions.map((position) => (
                                                 <SelectItem
-                                                    key={position.id}
-                                                    value={position.id}
+                                                    key={position.slug}
+                                                    value={position.slug}
                                                 >
                                                     {position.name}
                                                 </SelectItem>

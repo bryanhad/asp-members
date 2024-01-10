@@ -153,7 +153,7 @@ export async function fetchMembersPageAmount(
     }
 }
 
-export async function getAllFilteredMembers(nameQuery: string) {
+export async function getAllFilteredMembers(nameQuery: string, positionQuery:string) {
     noStore()
     try {
         const members = await db.member.findMany({
@@ -162,6 +162,9 @@ export async function getAllFilteredMembers(nameQuery: string) {
                     contains: nameQuery,
                     mode: 'insensitive',
                 },
+                positionSlug: {
+                    contains: positionQuery
+                }
             },
             include: {
                 position: {select: {name:true}},

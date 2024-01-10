@@ -22,7 +22,7 @@ export const addMember = async (formData: FormData) => {
         name: formData.get('name'),
         email: formData.get('email'),
         description: formData.get('description') || undefined,
-        positionId: formData.get('positionId'),
+        positionSlug: formData.get('positionSlug'),
         education: JSON.parse(
             (formData.get('education') as string | null) || '[]'
         ),
@@ -39,7 +39,8 @@ export const addMember = async (formData: FormData) => {
         console.log(validatedFields.error)
         return { error: `Invalid fields!` }
     }
-
+    
+    console.log(validatedFields.data.positionSlug)
     try {
         const existingMember = await getMemberByEmail(
             validatedFields.data.email
@@ -104,7 +105,7 @@ export const editMember = async (formData: FormData) => {
         name: formData.get('name') || undefined,
         email: formData.get('email') || undefined,
         description: formData.get('description') || undefined,
-        positionId: formData.get('positionId') || undefined,
+        positionSlug: formData.get('positionSlug') || undefined,
         education: JSON.parse(
             (formData.get('education') as string | null) || '[]'
         ),

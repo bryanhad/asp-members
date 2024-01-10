@@ -104,7 +104,7 @@ export const AddMemberSchema = z.object({
     education: z.optional(z.array(z.string())),
     organization: z.optional(z.array(z.string())),
     practices: z.optional(z.array(z.string())),
-    positionId: MemberPositionSchema,
+    positionSlug: MemberPositionSchema,
     joinedSince: z.optional(z.date()),
 })
 
@@ -123,7 +123,7 @@ export const EditMemberSchemaBackend = EditMemberSchema.extend({
     memberId: z.string(),
     name: z.optional(MemberNameSchema),
     email: z.optional(MemberEmailSchema),
-    positionId: z.optional(MemberPositionSchema),
+    positionSlug: z.optional(MemberPositionSchema),
     picture: z.optional(
         z.custom<File>(
             (val) => val instanceof File,

@@ -55,8 +55,8 @@ model Member {
   description  String?
   education    String[]
   organization String[]
-  positionId   String
-  position     Position            @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  positionSlug String
+  position     Position            @relation(fields: [positionSlug], references: [slug], onDelete: Cascade)
   practices    MembersOnPractice[]
 
   joinedSince DateTime?
