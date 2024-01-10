@@ -9,7 +9,6 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import * as z from 'zod'
 import { PracticeForm } from '../_components/form'
-import { CookingPot } from 'lucide-react'
 
 export default function AddPracticeForm() {
     const router = useRouter()
@@ -22,6 +21,7 @@ export default function AddPracticeForm() {
             name: '',
             content: '',
             icon: undefined,
+            picture: undefined,
         },
     })
 
@@ -32,6 +32,8 @@ export default function AddPracticeForm() {
             let input: File | string
             if (key === 'icon' && values.icon) {
                 input = values.icon[0]
+            } else if (key === 'picture' && values.picture) {
+                input = values.picture[0]
             } else {
                 input =
                     typeof value === 'string' ? value : JSON.stringify(value)

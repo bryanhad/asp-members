@@ -137,6 +137,7 @@ export const AddPracticeSchema = z.object({
         .string()
         .min(4, { message: 'Practice name must be atleast 4 characters long' }),
     icon: uploadImageSchema,
+    picture: uploadImageSchema,
     content: z
         .string()
         .min(1, { message: 'Please write a description for this practice' }),
@@ -144,18 +145,26 @@ export const AddPracticeSchema = z.object({
 export const AddPracticeSchemaBackend = AddPracticeSchema.extend({
     icon: z.custom<File>(
         (val) => val instanceof File,
+        'Icon must be a file type'
+    ),
+    picture: z.custom<File>(
+        (val) => val instanceof File,
         'Picture must be a file type'
     ),
 })
 
 export const EditPracticeSchema = AddPracticeSchema.extend({
-    icon: z.optional(uploadImageSchema)
+    icon: z.optional(uploadImageSchema),
+    picture: z.optional(uploadImageSchema),
 })
 export const EditPracticeSchemaBackend = AddPracticeSchema.extend({
-    icon:  z.optional(
+    icon: z.optional(
+        z.custom<File>((val) => val instanceof File, 'Icon must be a file type')
+    ),
+    picture: z.optional(
         z.custom<File>(
             (val) => val instanceof File,
-            'Icon must be a file type'
+            'Picture must be a file type'
         )
     ),
 })

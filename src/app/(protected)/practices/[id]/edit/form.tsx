@@ -26,6 +26,7 @@ export default function EditPracticeForm({ practice }: EditPracticeFormProps) {
             name: practice.name,
             content: practice.content,
             icon: undefined,
+            picture: undefined
         },
     })
 
@@ -37,6 +38,8 @@ export default function EditPracticeForm({ practice }: EditPracticeFormProps) {
                 let input: File | string
                 if (key === 'icon' && values.icon) {
                     input = values.icon[0]
+                } else if (key === 'picture' && values.picture) {
+                    input = values.picture[0]
                 } else {
                     input =
                         typeof value === 'string'
@@ -75,6 +78,7 @@ export default function EditPracticeForm({ practice }: EditPracticeFormProps) {
             loading={isPending}
             buttonText="Edit Practice"
             iconUrl={practice.icon}
+            pictureUrl={practice.picture}
         />
     )
 }

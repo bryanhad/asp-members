@@ -13,6 +13,7 @@ import { revalidatePath } from 'next/cache'
 export const addPractice = async (formData: FormData) => {
     const validatedFields = AddPracticeSchemaBackend.safeParse({
         icon: formData.get('icon') as File,
+        picture: formData.get('picture') as File,
         name: formData.get('name'),
         content: formData.get('content'),
     })
@@ -22,7 +23,7 @@ export const addPractice = async (formData: FormData) => {
         return { error: 'Invalid fields!' }
     }
 
-    const { name, content, icon } = validatedFields.data
+    const { name, content, icon, picture } = validatedFields.data
 
     try {
         const practiceExists = await getPracticeByName(name)
@@ -30,14 +31,23 @@ export const addPractice = async (formData: FormData) => {
             return { error: `Practice '${name}' already exists!` }
         }
 
-        const arrayBuffer = await icon.arrayBuffer()
-        const buffer = new Uint8Array(arrayBuffer)
-        const { secure_url } = await uploadImage(buffer, 'practice')
+        const [iconArrayBuffer, pictureArrayBuffer] = await Promise.all([
+            icon.arrayBuffer(),
+            picture.arrayBuffer(),
+        ])
+        const iconBuffer = new Uint8Array(iconArrayBuffer)
+        const pictureBuffer = new Uint8Array(pictureArrayBuffer)
+
+        const [{ secure_url: iconUrl }, { secure_url: pictureUrl }] =
+            await Promise.all([
+                uploadImage(iconBuffer, 'practice/icon'),
+                uploadImage(pictureBuffer, 'practice/picture'),
+            ])
 
         const slug = generateSlug(validatedFields.data.name)
 
         await db.practice.create({
-            data: { name, content, icon: secure_url, slug },
+            data: { name, content, icon: iconUrl, picture: pictureUrl, slug },
         })
 
         revalidatePath('/practices')
@@ -54,6 +64,7 @@ export const editPractice = async (
 ) => {
     const validatedFields = EditPracticeSchemaBackend.safeParse({
         icon: (formData.get('icon') as File | null) || undefined,
+        picture: (formData.get('picture') as File | null) || undefined,
         name: formData.get('name'),
         content: formData.get('content'),
     })
@@ -63,10 +74,16 @@ export const editPractice = async (
         return { error: 'Invalid fields!' }
     }
 
-    const { name, content, icon } = validatedFields.data
+    const { name, content, icon, picture } = validatedFields.data
 
     try {
+        const practiceExists = await getPracticeByName(name)
+        if (practiceExists && nameFieldIsDirty)
+            return { error: `Practice '${name}' already exists!` }
+
         const existingPractice = await getPracticeById(id)
+
+        // HANDLE EDIT ICON
 
         let iconUrl: string | undefined
 
@@ -79,15 +96,30 @@ export const editPractice = async (
             )
             const { secure_url } = await updateImage(
                 buffer,
-                'practice',
+                'practice/icon',
                 publicImageId
             )
             iconUrl = secure_url
         }
 
-        const practiceExists = await getPracticeByName(name)
-        if (practiceExists && nameFieldIsDirty)
-            return { error: `Practice '${name}' already exists!` }
+        // HANDLE EDIT PICTURE
+
+        let pictureUrl: string | undefined
+
+        if (picture) {
+            const arrayBuffer = await picture.arrayBuffer()
+            const buffer = new Uint8Array(arrayBuffer)
+
+            const publicImageId = getCloudinaryPublicImageId(
+                existingPractice.picture
+            )
+            const { secure_url } = await updateImage(
+                buffer,
+                'practice/picture',
+                publicImageId
+            )
+            pictureUrl = secure_url
+        }
 
         let slug: string | undefined
         if (validatedFields.data.name) {
@@ -96,7 +128,7 @@ export const editPractice = async (
 
         await db.practice.update({
             where: { id },
-            data: { name, content, icon: iconUrl, slug },
+            data: { name, content, icon: iconUrl, slug, picture: pictureUrl },
         })
 
         revalidatePath('/practices')

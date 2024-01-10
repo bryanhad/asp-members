@@ -23,6 +23,7 @@ type PracticeFormProps = {
     loading: boolean
     buttonText: string
     iconUrl?: string
+    pictureUrl?: string
 }
 
 export const PracticeForm = ({
@@ -31,8 +32,10 @@ export const PracticeForm = ({
     form,
     loading,
     iconUrl,
+    pictureUrl
 }: PracticeFormProps) => {
-    const [fileUrl, setFileUrl] = useState<string | undefined>(undefined)
+    const [iconFileUrl, setIconFileUrl] = useState<string | undefined>(undefined)
+    const [pictureProfileUrl, setPictureProfileUrl] = useState<string | undefined>(undefined)
 
     //dynamic import so that blocknote editor would be imported on the client side!
     const TextEditor = useMemo(
@@ -48,12 +51,15 @@ export const PracticeForm = ({
                     onSubmit={form.handleSubmit(onSubmit)}
                 >
                     <div className="space-y-4">
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+
+                        {/* ICON */}
                         <div className="flex flex-col sm:flex-row gap-4 items-center">
                             <div className="rounded-lg overflow-hidden relative w-32 min-w-32 h-32 border bg-white">
                                 <Image
                                     className="object-cover p-2"
                                     alt=""
-                                    src={fileUrl || iconUrl || '/noimage.png'}
+                                    src={iconFileUrl || iconUrl || '/noimage.png'}
                                     fill
                                     priority
                                 />
@@ -99,14 +105,14 @@ export const PracticeForm = ({
                                                             URL.createObjectURL(
                                                                 files[0]
                                                             )
-                                                        setFileUrl(url)
+                                                        setIconFileUrl(url)
                                                     } else {
-                                                        if (fileUrl) {
+                                                        if (iconFileUrl) {
                                                             URL.revokeObjectURL(
-                                                                fileUrl
+                                                                iconFileUrl
                                                             )
                                                         }
-                                                        setFileUrl(undefined)
+                                                        setIconFileUrl(undefined)
                                                     }
                                                 }}
                                             />
@@ -116,6 +122,79 @@ export const PracticeForm = ({
                                 )}
                             />
                         </div>
+                        {/* ICON END */}
+                        {/* PICTURE */}
+                        <div className="flex flex-col sm:flex-row gap-4 items-center">
+                            <div className="rounded-lg overflow-hidden relative w-32 min-w-32 h-32 border bg-primary/50">
+                                <Image
+                                    className="object-cover"
+                                    alt=""
+                                    src={pictureProfileUrl || pictureUrl || '/noimage.png'}
+                                    fill
+                                    priority
+                                />
+                            </div>
+                            <FormField
+                                control={form.control}
+                                name="picture"
+                                render={({ field: { onChange }, ...field }) => (
+                                    <FormItem className="flex flex-col items-center sm:items-start">
+                                        <FormLabel>Picture</FormLabel>
+                                        {/* File Upload */}
+                                        <FormControl>
+                                            <Input
+                                                disabled={loading}
+                                                type="file"
+                                                accept="image/*"
+                                                {...field}
+                                                onChange={(event) => {
+                                                    const files =
+                                                        event.target.files
+
+                                                    if (!files) return
+
+                                                    // Triggered when user uploaded a new file
+                                                    // FileList is immutable, so we need to create a new one
+                                                    const dataTransfer =
+                                                        new DataTransfer()
+
+                                                    // Add newly uploaded images
+                                                    Array.from(files).forEach(
+                                                        (image) =>
+                                                            dataTransfer.items.add(
+                                                                image
+                                                            )
+                                                    )
+
+                                                    // Validate and update uploaded file
+                                                    const newFiles =
+                                                        dataTransfer.files
+                                                    onChange(newFiles)
+                                                    if (files[0]) {
+                                                        const url =
+                                                            URL.createObjectURL(
+                                                                files[0]
+                                                            )
+                                                        setPictureProfileUrl(url)
+                                                    } else {
+                                                        if (pictureProfileUrl) {
+                                                            URL.revokeObjectURL(
+                                                                pictureProfileUrl
+                                                            )
+                                                        }
+                                                        setPictureProfileUrl(undefined)
+                                                    }
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        {/* PICTURE END */}
+                        </div>
+
                         <FormField
                             control={form.control}
                             name="name"
