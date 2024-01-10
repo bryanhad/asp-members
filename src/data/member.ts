@@ -25,6 +25,21 @@ export const getMemberBySlug = async (slug: string) => {
     try {
         const member = await db.member.findUnique({
             where: { slug },
+            include: {
+                position: {select: {name:true}},
+                practices: {
+                    select: {
+                        practice: {
+                            select: {
+                                id: true,
+                                icon: true,
+                                name: true,
+                                slug: true,
+                            },
+                        },
+                    },
+                },
+            }
         })
         return member
     } catch (err) {
@@ -138,18 +153,18 @@ export async function fetchMembersPageAmount(
     }
 }
 
-export async function getAllFilteredMembers(query: string) {
+export async function getAllFilteredMembers(nameQuery: string) {
     noStore()
     try {
         const members = await db.member.findMany({
             where: {
                 name: {
-                    contains: query,
+                    contains: nameQuery,
                     mode: 'insensitive',
                 },
             },
             include: {
-                position: true,
+                position: {select: {name:true}},
                 practices: {
                     select: {
                         practice: {

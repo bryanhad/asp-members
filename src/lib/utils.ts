@@ -1,3 +1,4 @@
+import { Member, Position, Practice } from '@prisma/client'
 import { type ClassValue, clsx } from 'clsx'
 import { ReadonlyURLSearchParams } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'

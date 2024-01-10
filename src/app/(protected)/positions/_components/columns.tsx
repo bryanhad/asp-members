@@ -1,23 +1,20 @@
 'use client'
 
-import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
+import { deleteMember } from '@/actions/member'
+import DeleteButtonModal from '@/components/delete-button-modal'
+import { DataTableColumnHeader } from '@/components/table/data-table-column-header'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { DataTableColumnHeader } from '@/components/table/data-table-column-header'
 import { Position } from '@prisma/client'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { FaUser } from 'react-icons/fa'
+import { ColumnDef } from '@tanstack/react-table'
+import { MoreHorizontal } from 'lucide-react'
 import Link from 'next/link'
-import DeleteButtonModal from '@/components/delete-button-modal'
-import { deleteMember } from '@/actions/member'
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.

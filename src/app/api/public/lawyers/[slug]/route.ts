@@ -9,9 +9,9 @@ export async function GET(
 ) {
     const origin = req.headers.get('origin')
 
-    const member = await getMemberBySlug(params.slug)
+    const lawyer = await getMemberBySlug(params.slug)
 
-    if (!member) {
+    if (!lawyer) {
         return new NextResponse(JSON.stringify({ error: 'Member not found' }), {
             status: 404,
             headers: {
@@ -21,7 +21,10 @@ export async function GET(
         })
     }
 
-    return new NextResponse(JSON.stringify(member), {
+        const position = lawyer.position.name
+        const practices = lawyer.practices.map(el => el.practice)
+
+    return new NextResponse(JSON.stringify({...lawyer, position, practices}), {
         status: 200,
         headers: {
             'Access-Control-Allow-Origin': origin || '*',
