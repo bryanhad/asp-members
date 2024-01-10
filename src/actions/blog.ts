@@ -1,10 +1,10 @@
 'use server'
 
-import { getBlogByTitle } from '@/data/blog'
+import { getBlogById, getBlogByTitle } from '@/data/blog'
 import { currentUser } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { uploadImage } from '@/lib/image-upload'
-import { generateSlug } from '@/lib/utils'
+import { deleteImage, uploadImage } from '@/lib/image-upload'
+import { generateSlug, getCloudinaryPublicImageId } from '@/lib/utils'
 import { AddBlogSchemaBackend } from '@/schemas'
 import { revalidatePath } from 'next/cache'
 
@@ -54,6 +54,29 @@ export const addBlog = async (formData: FormData) => {
         }
     } catch (err) {
         console.log(err)
+        return { error: `Something went wrong!` }
+    }
+}
+
+export const deleteBlog = async (id: string) => {
+    const tobeDeletedBlog = await getBlogById(id)
+    if (!tobeDeletedBlog) {
+        return { error: `Blog doesn't exist!` }
+    }
+
+    const publicImageId = getCloudinaryPublicImageId(tobeDeletedBlog.picture)
+
+    try {
+        await db.blog.delete({
+            where: { id },
+        })
+        await deleteImage(publicImageId, 'blog/thumbnail')
+
+        revalidatePath('/blogs')
+        return {
+            success: `Blog '${tobeDeletedBlog.title}' successfuly deleted!`,
+        }
+    } catch (err) {
         return { error: `Something went wrong!` }
     }
 }
