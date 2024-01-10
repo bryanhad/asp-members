@@ -1,8 +1,6 @@
 import { getAllPositions } from '@/data/position'
-import React from 'react'
-import AddMemberForm from './form'
-import { AddMemberSchema } from '@/schemas'
 import { getAllPractices } from '@/data/practice'
+import AddMemberForm from './form'
 
 export default async function AddMemberPage() {
     const positions = await getAllPositions()

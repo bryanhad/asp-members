@@ -40,7 +40,6 @@ export const addMember = async (formData: FormData) => {
         return { error: `Invalid fields!` }
     }
     
-    console.log(validatedFields.data.positionSlug)
     try {
         const existingMember = await getMemberByEmail(
             validatedFields.data.email
