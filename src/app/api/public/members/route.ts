@@ -1,4 +1,4 @@
-import { fetchFilteredMembers } from '@/data/member'
+import { fetchFilteredMembers, getAllFilteredMembers } from '@/data/member'
 import { NextResponse } from 'next/server'
 
 
@@ -7,10 +7,8 @@ export async function GET(req: Request) {
     const url = new URL(req.url)
 
     const query = url.searchParams.get('q') || ''
-    const page = Number(url.searchParams.get('page') || 1)
-    const size = Number(url.searchParams.get('size') || 6)
 
-    const res = await fetchFilteredMembers(query, page, size)
+    const res = await getAllFilteredMembers(query)
 
     return new NextResponse(JSON.stringify(res), {
         headers: {

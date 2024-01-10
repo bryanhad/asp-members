@@ -71,7 +71,7 @@ export const getMemberByIdWithPositionAndPractices = async (id: string) => {
             where: { id },
             include: {
                 position: true,
-                practices: { select: { practice:true } },
+                practices: { select: { practice: true } },
             },
         })
         if (!member) {
@@ -135,5 +135,39 @@ export async function fetchMembersPageAmount(
     } catch (error) {
         console.error('Database Error:', error)
         throw new Error('Failed to fetch total pages amount of Members.')
+    }
+}
+
+export async function getAllFilteredMembers(query: string) {
+    noStore()
+    try {
+        const members = await db.member.findMany({
+            where: {
+                name: {
+                    contains: query,
+                    mode: 'insensitive',
+                },
+            },
+            include: {
+                position: true,
+                practices: {
+                    select: {
+                        practice: {
+                            select: {
+                                id: true,
+                                icon: true,
+                                name: true,
+                                slug: true,
+                            },
+                        },
+                    },
+                },
+            },
+            orderBy: { id: 'desc' },
+        })
+        return members
+    } catch (err) {
+        console.error('Database Error:', err)
+        throw new Error('Failed to fetch members')
     }
 }
