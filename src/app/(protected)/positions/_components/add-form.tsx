@@ -44,10 +44,10 @@ export default function AddForm() {
             if (data.success) {
                 setSuccess(data.success)
                 form.reset()
+                setTimeout(() => {
+                    setSuccess('')
+                }, 3000)
             }
-            setTimeout(() => {
-                setSuccess('')
-            }, 3000)
         })
     }
 

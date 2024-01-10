@@ -22,6 +22,24 @@ export const NewPasswordSchema = z.object({
     password: z.string().min(6, { message: 'Minimum 6 characters required' }),
 })
 
+const MAX_IMAGE_SIZE = 500_880 // 5 MB
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/jpg']
+
+export const uploadImageSchema = z
+    .custom<FileList>((val) => val instanceof FileList, 'Required')
+    .refine((files) => files.length > 0, `Required`)
+    .refine((files) => files.length <= 1, `Can only select 1 image.`)
+    .refine((files) => {
+        if (files[0] && files[0].type) {
+            return ALLOWED_IMAGE_TYPES.includes(files[0].type)
+        }
+    }, 'Only these types are allowed .jpg, .jpeg, and .png')
+    .refine((files) => {
+        if (files[0] && files[0].size) {
+            return files[0].size <= MAX_IMAGE_SIZE
+        }
+    }, `File size should be less than 5 MB.`)
+
 export const SettingsSchema = z
     .object({
         name: z.optional(
@@ -35,6 +53,7 @@ export const SettingsSchema = z
         newPassword: z.optional(
             z.string().min(6, { message: 'Minimum 6 characters required' })
         ),
+        profilePic: z.optional(uploadImageSchema),
     })
     .refine(
         (data) => {
@@ -60,6 +79,25 @@ export const SettingsSchema = z
             path: ['password'],
         }
     )
+export const SettingsSchemaBackend = z.object({
+    name: z.optional(
+        z.string().min(5, { message: 'Minimum 5 characters required' })
+    ),
+    role: z.enum([UserRole.ADMIN, UserRole.USER]),
+    email: z.optional(z.string().email()),
+    password: z.optional(
+        z.string().min(6, { message: 'Minimum 6 characters required' })
+    ),
+    newPassword: z.optional(
+        z.string().min(6, { message: 'Minimum 6 characters required' })
+    ),
+    profilePic: z.optional(
+        z.custom<File>(
+            (val) => val instanceof File,
+            'Profile picture must be a file type'
+        )
+    ),
+})
 
 export const PositionsSchema = z.object({
     name: z
@@ -67,24 +105,7 @@ export const PositionsSchema = z.object({
         .min(4, { message: 'Position name must be atleast 4 characters long' }),
 })
 
-const MAX_IMAGE_SIZE = 500_880 // 5 MB
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/jpg']
-
 // Form Schema Validation
-export const uploadImageSchema = z
-    .custom<FileList>((val) => val instanceof FileList, 'Required')
-    .refine((files) => files.length > 0, `Required`)
-    .refine((files) => files.length <= 1, `Can only select 1 image.`)
-    .refine((files) => {
-        if (files[0] && files[0].type) {
-            return ALLOWED_IMAGE_TYPES.includes(files[0].type)
-        }
-    }, 'Only these types are allowed .jpg, .jpeg, and .png')
-    .refine((files) => {
-        if (files[0] && files[0].size) {
-            return files[0].size <= MAX_IMAGE_SIZE
-        }
-    }, `File size should be less than 5 MB.`)
 
 const MemberNameSchema = z
     .string()

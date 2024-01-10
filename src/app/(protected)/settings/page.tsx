@@ -1,27 +1,19 @@
 'use client'
 
 import { settingsAction } from '@/actions/settings'
-import { Button } from '@/components/ui/button'
+import { FormError } from '@/components/form-error'
+import { FormSuccess } from '@/components/form-success'
+import LoadingButton from '@/components/loading-button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { useState, useTransition } from 'react'
-import { useSession } from 'next-auth/react'
-import * as z from 'zod'
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
+    FormMessage
 } from '@/components/ui/form'
-import { useForm } from 'react-hook-form'
-import { SettingsSchema } from '@/schemas'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '@/components/ui/input'
-import { useCurrentUser } from '@/hooks/use-current-user'
-import { FormError } from '@/components/form-error'
-import { FormSuccess } from '@/components/form-success'
 import {
     Select,
     SelectContent,
@@ -29,12 +21,20 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
+import { useCurrentUser } from '@/hooks/use-current-user'
+import { SettingsSchema } from '@/schemas'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { UserRole } from '@prisma/client'
-import LoadingButton from '@/components/loading-button'
+import { useSession } from 'next-auth/react'
+import Image from 'next/image'
+import { useState, useTransition } from 'react'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
 
 export default function SettingsPage() {
     const user = useCurrentUser()
 
+    const [fileUrl, setFileUrl] = useState<string | undefined>(undefined)
     const [error, setError] = useState<string | undefined>()
     const [success, setSuccess] = useState<string | undefined>()
 
@@ -50,16 +50,34 @@ export default function SettingsPage() {
             password: undefined,
             newPassword: undefined,
             role: user?.role || undefined,
+            profilePic: undefined,
         },
     })
 
     const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
         setError('')
         setSuccess('')
-        
+
         startTransition(async () => {
+            const formData = new FormData()
+
+            Object.entries(values).forEach(([key, value]) => {
+                let input: File | string
+                if (value !== undefined) {
+                    if (key === 'profilePic' && values.profilePic) {
+                        input = values.profilePic[0]
+                    } else {
+                        input =
+                            typeof value === 'string'
+                                ? value
+                                : JSON.stringify(value)
+                    }
+                    formData.append(key, input)
+                }
+            })
+
             try {
-                const data = await settingsAction(values)
+                const data = await settingsAction(formData)
 
                 if (data.error) {
                     setError(data.error)
@@ -67,6 +85,9 @@ export default function SettingsPage() {
                 if (data.success) {
                     update()
                     setSuccess(data.success)
+                    setTimeout(() => {
+                        setSuccess('')
+                    }, 3000)
                 }
             } catch (err) {
                 setError('Something went wrong!')
@@ -75,9 +96,9 @@ export default function SettingsPage() {
     }
 
     return (
-        <Card className="w-[600px]">
+        <Card className="w-full">
             <CardHeader>
-                <p className="text-2xl font-semibold text-center">⚙ Settings</p>
+                <p className="text-2xl font-semibold text-center">⚙ Profile Settings</p>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
@@ -86,6 +107,88 @@ export default function SettingsPage() {
                         onSubmit={form.handleSubmit(onSubmit)}
                     >
                         <div className="space-y-4">
+                            {/* IMAGE UPLOAD */}
+                            <div className="flex flex-col sm:flex-row gap-4 items-center">
+                                <div className="rounded-lg overflow-hidden relative w-32 min-w-32 h-32 border">
+                                    <Image
+                                        className="object-cover"
+                                        alt=""
+                                        src={
+                                            fileUrl ||
+                                            user?.profilePic ||
+                                            '/noavatar.png'
+                                        }
+                                        fill
+                                        priority
+                                    />
+                                </div>
+                                <FormField
+                                    control={form.control}
+                                    name="profilePic"
+                                    render={({
+                                        field: { onChange },
+                                        ...field
+                                    }) => (
+                                        <FormItem className="flex flex-col items-center sm:items-start">
+                                            <FormLabel>
+                                                Profile Picture
+                                            </FormLabel>
+                                            {/* File Upload */}
+                                            <FormControl>
+                                                <Input
+                                                    disabled={isPending}
+                                                    type="file"
+                                                    accept="image/*"
+                                                    {...field}
+                                                    onChange={(event) => {
+                                                        const files =
+                                                            event.target.files
+
+                                                        if (!files) return
+
+                                                        // Triggered when user uploaded a new file
+                                                        // FileList is immutable, so we need to create a new one
+                                                        const dataTransfer =
+                                                            new DataTransfer()
+
+                                                        // Add newly uploaded images
+                                                        Array.from(
+                                                            files
+                                                        ).forEach((image) =>
+                                                            dataTransfer.items.add(
+                                                                image
+                                                            )
+                                                        )
+
+                                                        // Validate and update uploaded file
+                                                        const newFiles =
+                                                            dataTransfer.files
+                                                        onChange(newFiles)
+                                                        if (files[0]) {
+                                                            const url =
+                                                                URL.createObjectURL(
+                                                                    files[0]
+                                                                )
+                                                            setFileUrl(url)
+                                                        } else {
+                                                            if (fileUrl) {
+                                                                URL.revokeObjectURL(
+                                                                    fileUrl
+                                                                )
+                                                            }
+                                                            setFileUrl(
+                                                                undefined
+                                                            )
+                                                        }
+                                                    }}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            {/* Image upload end */}
                             <FormField
                                 control={form.control}
                                 name="name"
