@@ -15,8 +15,8 @@ import {
 } from '@tanstack/react-table'
 
 import { DataTablePagination } from '@/components/table/data-table-pagination'
+import DataTableSearch from '@/components/table/data-table-search'
 import { DataTableViewOptions } from '@/components/table/data-table-view-options'
-import { Input } from '@/components/ui/input'
 import {
     Table,
     TableBody,
@@ -26,20 +26,19 @@ import {
     TableRow,
 } from '@/components/ui/table'
 import { useState } from 'react'
-import DataTableSearch from '@/components/table/data-table-search'
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
     totalPages: number
-    totalData:number
+    totalData: number
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
     totalData,
-    totalPages
+    totalPages,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -73,7 +72,7 @@ export function DataTable<TData, TValue>({
     return (
         <div>
             <div className="flex items-center py-4">
-<DataTableSearch placeholder='Filter by name' />
+                <DataTableSearch placeholder="Filter by name..." />
                 <DataTableViewOptions table={table} />
             </div>
             <div className="rounded-md border">
@@ -129,7 +128,11 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <DataTablePagination table={table} totalData={totalData} totalPages={totalPages} />
+            <DataTablePagination
+                table={table}
+                totalData={totalData}
+                totalPages={totalPages}
+            />
         </div>
     )
 }

@@ -2,8 +2,8 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import React from 'react'
 import { columns } from './_components/columns'
-import { DataTable } from './_components/data-table'
 import { fetchFilteredMembers, fetchMembersPageAmount } from '@/data/member'
+import { DataTable } from '@/components/table/data-table'
 
 type MembersPageProps = {
     searchParams?: {
