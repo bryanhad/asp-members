@@ -104,6 +104,7 @@ export default function DeleteButtonModal({
             setOpen(false)
             setTitle('Are You Sure?')
             setDesc(description)
+            setPrismaError(false)
         }
     }, [open, description])
 

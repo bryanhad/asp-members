@@ -157,7 +157,7 @@ export const deletePractice = async (id: string, proceed = false) => {
         if (tobeDeletedPractice._count.blogs > 0 && !proceed) {
             return {
                 prismaError: {
-                    title: `There are still some blog that uses '${tobeDeletedPractice.name}' as it's category.`,
+                    title: `There are still blog(s) that uses '${tobeDeletedPractice.name}' as it's category.`,
                     description:
                         `Deleting this practice would also delete all blogs that have this practice as their category.`,
                     canProceed: true,
@@ -173,6 +173,7 @@ export const deletePractice = async (id: string, proceed = false) => {
             success: `Practice '${tobeDeletedPractice.name}' successfuly deleted!`,
         }
     } catch (err) {
+        console.log(err)
         return { error: `An unknown error occurred.` }
     }
 }
