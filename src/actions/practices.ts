@@ -1,7 +1,7 @@
 'use server'
 import {
     getPracticeById,
-    getPracticeByIdWithMemberCount,
+    getPracticeByIdWithMemberCountAndBlogCount,
     getPracticeByName,
 } from '@/data/practice'
 import { db } from '@/lib/db'
@@ -140,7 +140,7 @@ export const editPractice = async (
 
 export const deletePractice = async (id: string, proceed = false) => {
     try {
-        const tobeDeletedPractice = await getPracticeByIdWithMemberCount(id)
+        const tobeDeletedPractice = await getPracticeByIdWithMemberCountAndBlogCount(id)
         if (!tobeDeletedPractice) {
             return { error: `Practice doesn't exist!` }
         }
@@ -149,7 +149,17 @@ export const deletePractice = async (id: string, proceed = false) => {
                 prismaError: {
                     title: `There are still members that has '${tobeDeletedPractice.name}' practice.`,
                     description:
-                        'Deleting this would also delete all members that has this practice.',
+                        'Deleting this practice would also delete all members that has this practice.',
+                    canProceed: true,
+                },
+            }
+        }
+        if (tobeDeletedPractice._count.blogs > 0 && !proceed) {
+            return {
+                prismaError: {
+                    title: `There are still some blog that uses '${tobeDeletedPractice.name}' as it's category.`,
+                    description:
+                        `Deleting this practice would also delete all blogs that have this practice as their category.`,
                     canProceed: true,
                 },
             }

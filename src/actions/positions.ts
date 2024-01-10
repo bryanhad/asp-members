@@ -73,31 +73,30 @@ export const editPosition = async (
 }
 
 export const deletePosition = async (id: string, proceed = false) => {
-    const tobeDeletedPosition = await getPositionByIdWithMemberCount(id)
-    if (!tobeDeletedPosition) {
-        return { error: `Position doesn't exist!` }
-    }
-    if (tobeDeletedPosition._count.members > 0 && !proceed) {
-        return {
-            prismaError: {
-                title: `There are still members that has '${tobeDeletedPosition.name}' position.`,
-                description:
-                    'Deleting this would also delete all members that has this position.',
-                canProceed: true,
-            },
-        }
-    }
-
     try {
+        const tobeDeletedPosition = await getPositionByIdWithMemberCount(id)
+        if (!tobeDeletedPosition) {
+            return { error: `Position doesn't exist!` }
+        }
+        if (tobeDeletedPosition._count.members > 0 && !proceed) {
+            return {
+                prismaError: {
+                    title: `There are still members that has '${tobeDeletedPosition.name}' position.`,
+                    description:
+                        'Deleting this would also delete all members that has this position.',
+                    canProceed: true,
+                },
+            }
+        }
+
         await db.position.delete({
             where: { id },
         })
+        revalidatePath('/positions')
+        return {
+            success: `Position '${tobeDeletedPosition.name}' successfuly deleted!`,
+        }
     } catch (err) {
         return { error: `An unknown error occurred.` }
-    }
-
-    revalidatePath('/positions')
-    return {
-        success: `Position '${tobeDeletedPosition.name}' successfuly deleted!`,
     }
 }

@@ -26,7 +26,7 @@ export const getMemberBySlug = async (slug: string) => {
         const member = await db.member.findUnique({
             where: { slug },
             include: {
-                position: {select: {name:true}},
+                position: { select: { name: true } },
                 practices: {
                     select: {
                         practice: {
@@ -39,7 +39,7 @@ export const getMemberBySlug = async (slug: string) => {
                         },
                     },
                 },
-            }
+            },
         })
         return member
     } catch (err) {
@@ -69,6 +69,7 @@ export const getMemberByIdWithPractices = async (id: string) => {
         throw new Error('Failed to fetch Member')
     }
 }
+
 export const getMemberByIdWithPosition = async (id: string) => {
     try {
         const member = await db.member.findUnique({
@@ -153,7 +154,10 @@ export async function fetchMembersPageAmount(
     }
 }
 
-export async function getAllFilteredMembers(nameQuery: string, positionQuery:string) {
+export async function getAllFilteredMembers(
+    nameQuery: string,
+    positionQuery: string
+) {
     noStore()
     try {
         const members = await db.member.findMany({
@@ -163,11 +167,11 @@ export async function getAllFilteredMembers(nameQuery: string, positionQuery:str
                     mode: 'insensitive',
                 },
                 positionSlug: {
-                    contains: positionQuery
-                }
+                    contains: positionQuery,
+                },
             },
             include: {
-                position: {select: {name:true}},
+                position: { select: { name: true } },
                 practices: {
                     select: {
                         practice: {

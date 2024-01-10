@@ -22,11 +22,13 @@ export const getPracticeBySlug = async (slug: string) => {
 
     return practice
 }
-export const getPracticeByIdWithMemberCount = async (id: string) => {
+export const getPracticeByIdWithMemberCountAndBlogCount = async (
+    id: string
+) => {
     try {
         const practice = await db.practice.findUnique({
             where: { id },
-            include: { _count: { select: { members: true } } },
+            include: { _count: { select: { members: true, blogs: true } } },
         })
         return practice
     } catch (err) {
