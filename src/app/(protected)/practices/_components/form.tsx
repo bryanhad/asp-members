@@ -10,12 +10,9 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { AddPracticeSchema, EditPracticeSchema } from '@/schemas'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useMemo, useState } from 'react'
-import { UseFormReturn } from 'react-hook-form'
-import * as z from 'zod'
 
 type PracticeFormProps = {
     form: any

@@ -8,7 +8,7 @@ export async function GET(req: Request) {
         where: {
             name: {
                 mode: 'insensitive',
-                in: ['kepailitan', 'pkpu', 'hukum bisnis'],
+                in: ['kepailitan', 'pkpu', 'hukum perdata'],
             },
         },
     })
