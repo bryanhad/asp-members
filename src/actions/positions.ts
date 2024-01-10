@@ -1,9 +1,10 @@
 'use server'
 import {
     getPositionByIdWithMemberCount,
-    getPositionByName
+    getPositionByName,
 } from '@/data/position'
 import { db } from '@/lib/db'
+import { generateSlug } from '@/lib/utils'
 import { PositionsSchema } from '@/schemas'
 import { revalidatePath } from 'next/cache'
 import * as z from 'zod'
@@ -17,17 +18,23 @@ export const addPosition = async (values: z.infer<typeof PositionsSchema>) => {
 
     const { name } = validatedFields.data
 
-    const positionExists = await getPositionByName(name)
-    if (positionExists) {
-        return { error: `Position '${name}' already exists!` }
+    try {
+        const positionExists = await getPositionByName(name)
+        if (positionExists) {
+            return { error: `Position '${name}' already exists!` }
+        }
+
+        const slug = generateSlug(validatedFields.data.name)
+
+        await db.position.create({
+            data: { name, slug },
+        })
+
+        revalidatePath('/positions')
+        return { success: `Position '${name}' successfuly added!` }
+    } catch (error) {
+        return { error: `Something went wrong!` }
     }
-
-    await db.position.create({
-        data: { name },
-    })
-
-    revalidatePath('/positions')
-    return { success: `Position '${name}' successfuly added!` }
 }
 
 export const editPosition = async (
@@ -42,18 +49,27 @@ export const editPosition = async (
 
     const { name } = validatedFields.data
 
-    const positionExists = await getPositionByName(name)
-    if (positionExists) {
-        return { error: `Position '${name}' already exists!` }
+    try {
+        const positionExists = await getPositionByName(name)
+        if (positionExists) {
+            return { error: `Position '${name}' already exists!` }
+        }
+
+        let slug: string | undefined
+        if (validatedFields.data.name) {
+            slug = generateSlug(validatedFields.data.name)
+        }
+
+        await db.position.update({
+            where: { id },
+            data: { name, slug },
+        })
+
+        revalidatePath('/positions')
+        return { success: `Position '${name}' successfuly edited!` }
+    } catch (error) {
+        return { error: `Something went wrong!` }
     }
-
-    await db.position.update({
-        where: { id },
-        data: { name },
-    })
-
-    revalidatePath('/positions')
-    return { success: `Position '${name}' successfuly edited!` }
 }
 
 export const deletePosition = async (id: string, proceed = false) => {

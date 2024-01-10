@@ -64,6 +64,7 @@ model Member {
 
 model Position {
   id      String   @id @default(cuid())
+  slug    String   @unique
   name    String   @unique
   members Member[]
 }
