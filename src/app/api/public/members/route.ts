@@ -1,6 +1,5 @@
-import { NextResponse } from 'next/server'
-import { limiter } from '../../config/limiter'
 import { fetchFilteredMembers } from '@/data/member'
+import { NextResponse } from 'next/server'
 
 
 export async function GET(req: Request) {

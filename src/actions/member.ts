@@ -3,7 +3,7 @@ import { getMemberByEmail, getMemberById } from '@/data/member'
 import { currentRole } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { deleteImage, updateImage, uploadImage } from '@/lib/image-upload'
-import { getCloudinaryPublicImageId } from '@/lib/utils'
+import { generateSlug, getCloudinaryPublicImageId } from '@/lib/utils'
 import { AddMemberSchemaBackend, EditMemberSchemaBackend } from '@/schemas'
 import { UserRole } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
@@ -53,11 +53,14 @@ export const addMember = async (formData: FormData) => {
 
         const { secure_url } = await uploadImage(buffer, 'member')
 
+        const slug = generateSlug(validatedFields.data.name)
+
         const newMember = await db.member.create({
             data: {
                 ...validatedFields.data,
                 picture: secure_url,
                 practices: undefined,
+                slug,
             },
         })
         // ADD MEMBER'S PRACTICES IN CONJUNC TABLE
@@ -111,7 +114,7 @@ export const editMember = async (formData: FormData) => {
         practices: JSON.parse(
             (formData.get('practices') as string | null) || '[]'
         ),
-        joinedSince:  joinedSince ? new Date(joinedSince) : undefined,
+        joinedSince: joinedSince ? new Date(joinedSince) : undefined,
     })
 
     if (!validatedFields.success) {
@@ -147,6 +150,10 @@ export const editMember = async (formData: FormData) => {
             )
             picture = secure_url
         }
+        let slug: string | undefined
+        if (validatedFields.data.name) {
+            slug = generateSlug(validatedFields.data.name)
+        }
 
         await db.member.update({
             where: {
@@ -156,6 +163,7 @@ export const editMember = async (formData: FormData) => {
                 ...updateData,
                 practices: undefined,
                 picture,
+                slug,
             },
         })
         // UPDATE PRACTICES IN CONJUNC TABLE

@@ -46,7 +46,8 @@ model PasswordResetToken {
 }
 
 model Member {
-  id String @id @default(cuid())
+  id   String @id @default(cuid())
+  slug String @unique
 
   email        String              @unique
   name         String
@@ -69,6 +70,7 @@ model Position {
 
 model Practice {
   id      String              @id @default(cuid())
+  slug    String              @unique
   name    String              @unique
   icon    String
   content String

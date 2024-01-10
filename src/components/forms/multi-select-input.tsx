@@ -18,6 +18,7 @@ type MultiSelectInputProps = {
     items: { name: string; id: string }[]
     disabled: boolean
     name: string
+    placeholder:string
 }
 
 export default function MultiSelectInput({
@@ -26,10 +27,8 @@ export default function MultiSelectInput({
     items,
     disabled,
     name,
+    placeholder
 }: MultiSelectInputProps) {
-    const ref = useRef<HTMLInputElement>(null)
-    console.log(currentValue)
-
     function handleEnter(input: string) {
         if (currentValue) {
             console.log(currentValue)
@@ -55,7 +54,7 @@ export default function MultiSelectInput({
                         <Select disabled={disabled} onValueChange={handleEnter}>
                             <FormControl>
                                 <SelectTrigger id={name}>
-                                    <SelectValue placeholder="Select a position" />
+                                    <SelectValue placeholder={placeholder} />
                                 </SelectTrigger>
                             </FormControl>
                             <SelectContent className="max-h-[200px]">

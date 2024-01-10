@@ -20,6 +20,17 @@ export const getMemberById = async (id: string) => {
         return null
     }
 }
+export const getMemberBySlug = async (slug: string) => {
+    noStore()
+    try {
+        const member = await db.member.findUnique({
+            where: { slug },
+        })
+        return member
+    } catch (err) {
+        return null
+    }
+}
 export const getMemberByIdWithPractices = async (id: string) => {
     noStore()
     try {

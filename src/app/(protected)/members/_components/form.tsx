@@ -252,6 +252,7 @@ export default function MemberForm({
                             name="practices"
                             render={({ field }) => (
                                 <MultiSelectInput
+                                    placeholder={`Pick member's practices`}
                                     items={practices}
                                     disabled={loading}
                                     currentValue={form.watch('practices')}

@@ -6,15 +6,9 @@ import {
 } from '@/data/practice'
 import { db } from '@/lib/db'
 import { updateImage, uploadImage } from '@/lib/image-upload'
-import { getCloudinaryPublicImageId } from '@/lib/utils'
-import {
-    AddPracticeSchemaBackend,
-    EditMemberSchema,
-    EditPracticeSchema,
-    EditPracticeSchemaBackend,
-} from '@/schemas'
+import { generateSlug, getCloudinaryPublicImageId } from '@/lib/utils'
+import { AddPracticeSchemaBackend, EditPracticeSchemaBackend } from '@/schemas'
 import { revalidatePath } from 'next/cache'
-import * as z from 'zod'
 
 export const addPractice = async (formData: FormData) => {
     const validatedFields = AddPracticeSchemaBackend.safeParse({
@@ -40,8 +34,10 @@ export const addPractice = async (formData: FormData) => {
         const buffer = new Uint8Array(arrayBuffer)
         const { secure_url } = await uploadImage(buffer, 'practice')
 
+        const slug = generateSlug(validatedFields.data.name)
+
         await db.practice.create({
-            data: { name, content, icon: secure_url },
+            data: { name, content, icon: secure_url, slug },
         })
 
         revalidatePath('/practices')
@@ -93,9 +89,14 @@ export const editPractice = async (
         if (practiceExists && nameFieldIsDirty)
             return { error: `Practice '${name}' already exists!` }
 
+        let slug: string | undefined
+        if (validatedFields.data.name) {
+            slug = generateSlug(validatedFields.data.name)
+        }
+
         await db.practice.update({
             where: { id },
-            data: { name, content, icon: iconUrl },
+            data: { name, content, icon: iconUrl, slug },
         })
 
         revalidatePath('/practices')
