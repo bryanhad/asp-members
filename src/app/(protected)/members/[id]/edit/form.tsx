@@ -41,11 +41,11 @@ export default function EditMemberForm({
     const form = useForm<z.infer<typeof EditMemberSchema>>({
         resolver: zodResolver(EditMemberSchema),
         defaultValues: {
-            name: member?.name || '',
-            email: member?.email || '',
+            name: member.name,
+            email: member.email,
             picture: undefined,
             description: member?.description || undefined,
-            positionSlug: member?.positionSlug || '',
+            positionSlug: member.positionSlug,
             education: member?.education || [],
             organization: member?.organization || [],
             practices: member.practices.map((el) => el.id) || [],

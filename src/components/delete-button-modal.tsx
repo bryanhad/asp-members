@@ -115,7 +115,7 @@ export default function DeleteButtonModal({
             <DialogContent className="p-0 w-auto bg-transparent border-none">
                 <Card className=" shadow-md">
                     <CardHeader>
-                        <div className="w-full flex flex-col gap-y-4 items-center justify-center">
+                        <div className="w-full flex flex-col gap-y-4 items-center text-center justify-center">
                             <h1
                                 className={cn(
                                     'text-3xl font-semibold',
@@ -124,7 +124,7 @@ export default function DeleteButtonModal({
                             >
                                 {title}
                             </h1>
-                            <p className="text-muted-foreground text-sm">
+                            <p className="text-muted-foreground text-sm ">
                                 {desc}
                             </p>
                         </div>

@@ -104,7 +104,7 @@ export const columns: ColumnDef<FetchedBlog>[] = [
                         {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
                         <DropdownMenuItem>
                             <Link
-                                href={`/blogs/${blog.id}/edit`}
+                                href={`/blogs/${blog.slug}/edit`}
                                 className="w-full"
                             >
                                 <p>Edit</p>
@@ -112,7 +112,7 @@ export const columns: ColumnDef<FetchedBlog>[] = [
                         </DropdownMenuItem>
                         <DeleteButtonModal
                             onConfirm={() => deleteBlog(blog.id)}
-                            description={`Blog '${blog.name}' will be deleted permanently.`}
+                            description={`Blog '${blog.title}' will be deleted permanently.`}
                         >
                             <p className="w-full text-destructive font-semibold cursor-pointer p-1 rounded-md hover:bg-secondary duration-200">
                                 delete

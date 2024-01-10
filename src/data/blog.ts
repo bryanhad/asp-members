@@ -1,11 +1,21 @@
 import { db } from '@/lib/db'
 
+export async function getBlogBySlug(slug: string) {
+    try {
+        const blog = await db.blog.findUnique({ where: { slug } })
+        if (!blog) throw Error('bruh')
+        return blog
+    } catch (err) {
+        throw new Error('Failed to fetch Blog')
+    }
+}
 export async function getBlogById(id: string) {
     try {
         const blog = await db.blog.findUnique({ where: { id } })
+        if (!blog) throw Error('bruh')
         return blog
     } catch (err) {
-        return null
+        throw new Error('Failed to fetch Blog')
     }
 }
 export async function getBlogByTitle(title: string) {

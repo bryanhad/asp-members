@@ -173,14 +173,26 @@ export const AddBlogSchema = z.object({
     title: z.string().min(5, { message: 'Minimum 5 characters required' }),
     content: z.string().min(10, { message: 'Minimum 10 characters required' }),
     picture: uploadImageSchema,
-    categorySlug:  z
-    .string()
-    .min(4, { message: 'Please select one of the category' })
+    categorySlug: z
+        .string()
+        .min(4, { message: 'Please select one of the category' }),
 })
 
 export const AddBlogSchemaBackend = AddBlogSchema.extend({
     picture: z.custom<File>(
         (val) => val instanceof File,
         'Picture must be a file type'
+    ),
+})
+
+export const EditBlogSchema = AddBlogSchema.extend({
+    picture: z.optional(uploadImageSchema),
+})
+export const EditBlogSchemaBackend = AddBlogSchema.extend({
+    picture: z.optional(
+        z.custom<File>(
+            (val) => val instanceof File,
+            'Picture must be a file type'
+        )
     ),
 })
