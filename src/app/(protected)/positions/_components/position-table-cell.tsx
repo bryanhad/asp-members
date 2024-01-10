@@ -30,7 +30,7 @@ export default function PositionTableCell({
     return (
         <div
             className={cn(
-                'flex flex-col sm:flex-row items-center sm:h-[65px] justify-between p-2 sm:px-6 rounded-md border-border border-[1px] sm:gap-4'
+                'flex flex-col sm:flex-row items-center sm:h-[65px] justify-between py-2 px-4 sm:px-6 rounded-md border-border border-[1px] gap-2 sm:gap-4'
             )}
         >
             {isEditing ? (
@@ -40,7 +40,7 @@ export default function PositionTableCell({
                 />
             ) : (
                 <>
-                    <div className="flex items-center gap-2 flex-[1]">
+                    <div className="flex items-center gap-2 flex-[1] w-full">
                         <p className="flex-[1]">{position.name}</p>
                         <Button
                             variant="ghost"
