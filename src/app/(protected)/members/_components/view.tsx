@@ -22,7 +22,7 @@ export default function MemberView({ member }: AddMemberFormProps) {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-9">
                 <div className="flex flex-col sm:flex-row gap-4 items-center">
-                    <div className="rounded-lg overflow-hidden relative w-32 min-w-32 h-32 border">
+                    <div className="rounded-lg overflow-hidden relative w-64 min-w-64 h-72 border">
                         <Image
                             className="object-cover"
                             alt=""
@@ -33,7 +33,13 @@ export default function MemberView({ member }: AddMemberFormProps) {
                     </div>
                 </div>
 
-                <TextShowCase label="Description" text={member.description} />
+                <TextShowCase
+                    label="Description"
+                    text={member.description}
+                    description
+                />
+
+
                 <TextShowCase label="Email" text={member.email} />
 
                 <TextShowCase label="Position" text={member.position.name} />
@@ -63,15 +69,24 @@ export default function MemberView({ member }: AddMemberFormProps) {
 type TextShowCaseProps = {
     text: string | null
     label: string
+    description?: boolean
 }
 
-function TextShowCase({ text, label }: TextShowCaseProps) {
+function TextShowCase({ text, label, description }: TextShowCaseProps) {
     return (
         <div className="border rounded-md text-sm">
             <p className="py-2 px-3">{label}</p>
             <hr />
             {text ? (
-                <p className="py-2 px-3">{text}</p>
+                <div className="py-2 px-3 text-muted-foreground max-h-[250px] overflow-y-auto">
+                    {description ? (
+                        text
+                            .split('\r\n')
+                            .map((el) => <> {el ? <p>{el}</p> : <br />}</>)
+                    ) : (
+                        <p>{text}</p>
+                    )}
+                </div>
             ) : (
                 <p className="px-3 py-2 text-muted-foreground italic">
                     not added

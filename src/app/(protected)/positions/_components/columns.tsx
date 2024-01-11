@@ -2,14 +2,13 @@
 
 import { deleteMember } from '@/actions/member'
 import DeleteButtonModal from '@/components/delete-button-modal'
-import { DataTableColumnHeader } from '@/components/table/data-table-column-header'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuSeparator,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Position } from '@prisma/client'
 import { ColumnDef } from '@tanstack/react-table'
@@ -27,9 +26,7 @@ type FetchedPosition = {
 export const columns: ColumnDef<FetchedPosition>[] = [
     {
         accessorKey: 'name',
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Position" />
-        ),
+        header: 'Position',
     },
     {
         accessorKey: 'count',

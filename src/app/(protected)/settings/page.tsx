@@ -98,7 +98,7 @@ export default function SettingsPage() {
     return (
         <Card className="w-full">
             <CardHeader>
-                <p className="text-2xl font-semibold text-center">⚙ Profile Settings</p>
+                {/* <p className="text-2xl font-semibold text-center">⚙ Profile Settings</p> */}
             </CardHeader>
             <CardContent>
                 <Form {...form}>

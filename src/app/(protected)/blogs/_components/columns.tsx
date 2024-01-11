@@ -8,15 +8,14 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { dateToString } from '@/lib/utils'
-import { Blog, Position, Practice, User } from '@prisma/client'
+import { Blog, Practice, User } from '@prisma/client'
 import { ColumnDef } from '@tanstack/react-table'
 import { MoreHorizontal } from 'lucide-react'
 import Link from 'next/link'
-import { FaUser } from 'react-icons/fa'
+import { FaImage, FaUser } from 'react-icons/fa'
 
 export type FetchedBlog = Blog & {
     author: Pick<User, 'name' | 'profilePic' | 'id'>
@@ -31,10 +30,10 @@ export const columns: ColumnDef<FetchedBlog>[] = [
 
             return (
                 <div className="flex items-center gap-2">
-                    <Avatar className="h-8 w-8">
+                    <Avatar className="h-8 w-8 rounded-md">
                         <AvatarImage src={blog.picture} />
-                        <AvatarFallback className="bg-secondary">
-                            <FaUser className="text-muted-foreground/30" />
+                        <AvatarFallback className="bg-secondary rounded-md">
+                            <FaImage className="text-muted-foreground/30" />
                         </AvatarFallback>
                     </Avatar>
                     <p>{blog.title}</p>
