@@ -3,6 +3,7 @@ import NextAuth from 'next-auth'
 
 import {
     DEFAULT_LOGIN_REDIRECT,
+    adminRoutes,
     apiAuthPrefix,
     authRoutes,
     publicApiPrefix,
@@ -45,9 +46,14 @@ export default auth((req) => {
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
     const isAuthRoute = authRoutes.includes(nextUrl.pathname)
     const isPublicApiRoute = nextUrl.pathname.startsWith(publicApiPrefix)
+    const isAdminRoute = adminRoutes.some((route) => {
+        const matchingStart = nextUrl.pathname.startsWith(route.start)
+        const matchingEnd = nextUrl.pathname.endsWith(route.end)
+        return matchingStart && matchingEnd
+    })
 
     if (isApiAuthRoute) {
-        //basically don't this middleware won't do anything lol
+        //null means that this middleware won't do anything lol
         return null
     }
 
@@ -62,6 +68,12 @@ export default auth((req) => {
             //you need to pass the second param of the nextUrl, cuz then, it will create an absolute url of 'localhost:3000/blabla' instead of '/blabla'
         }
         return null
+    }
+
+    if (isAdminRoute) {
+        if (req.auth && req.auth.user.role !== 'ADMIN') {
+            return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
+        }
     }
 
     if (!isLoggedIn && !isPublicRoute) {

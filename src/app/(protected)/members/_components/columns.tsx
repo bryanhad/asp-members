@@ -1,6 +1,7 @@
 'use client'
 
 import { deleteMember } from '@/actions/member'
+import { OnlyShowToAdmin } from '@/components/auth/only-show-to-admin'
 import DeleteButtonModal from '@/components/delete-button-modal'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -99,23 +100,25 @@ export const columns: ColumnDef<FetchedMember>[] = [
                                 <p>View</p>
                             </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <Link
-                                href={`/members/${member.id}/edit`}
-                                className="w-full"
+                        <OnlyShowToAdmin>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>
+                                <Link
+                                    href={`/members/${member.id}/edit`}
+                                    className="w-full"
+                                >
+                                    <p>Edit</p>
+                                </Link>
+                            </DropdownMenuItem>
+                            <DeleteButtonModal
+                                onConfirm={() => deleteMember(member.id)}
+                                description={`Member '${member.name}' will be deleted permanently.`}
                             >
-                                <p>Edit</p>
-                            </Link>
-                        </DropdownMenuItem>
-                        <DeleteButtonModal
-                            onConfirm={() => deleteMember(member.id)}
-                            description={`Member '${member.name}' will be deleted permanently.`}
-                        >
-                            <p className="w-full text-destructive font-semibold cursor-pointer p-1 rounded-md hover:bg-secondary duration-200">
-                                delete
-                            </p>
-                        </DeleteButtonModal>
+                                <p className="w-full text-destructive font-semibold cursor-pointer p-1 rounded-md hover:bg-secondary duration-200">
+                                    delete
+                                </p>
+                            </DeleteButtonModal>
+                        </OnlyShowToAdmin>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )
