@@ -58,7 +58,7 @@ export function BurgerMenu() {
                         )
                     })}
                 </div>
-                <div className="flex-[1] flex items-end">
+                <div className="flex-[1] flex items-end pb-10">
                     <ThemeToggleButton />
                 </div>
                 {/* <DialogHeader>
