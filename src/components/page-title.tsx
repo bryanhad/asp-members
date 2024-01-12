@@ -10,11 +10,27 @@ type PageTitleProps = {
 export default function PageTitle({ className }: PageTitleProps) {
     const pathname = usePathname()
 
-    const isAddPage = pathname.split('/')[2] === 'add'
+    const pathnameArr = pathname.split('/')
 
-    const title = isAddPage
-        ? `Add ${pathname.split('/')[1].slice(0, -1)}`
-        : pathname.split('/')[1]
+    const isAddPage = pathnameArr[2] === 'add'
+    const isEditPage = pathnameArr[3] === 'edit'
+
+    const singularPageTitle = pathnameArr[1].slice(0, -1)
+
+    let title: string
+
+    switch (true) {
+        case isAddPage:
+            title = `Add ${singularPageTitle}`
+            break
+        case isEditPage:
+            title = `Edit ${singularPageTitle}`
+            break
+        default:
+            title = pathnameArr[1] || 'Dashboard'
+            break
+    }
+
     return (
         <h1
             className={cn(
