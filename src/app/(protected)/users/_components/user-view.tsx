@@ -23,19 +23,17 @@ export const UserView = ({
     currentPage,
 }: UserViewProps) => {
     return (
-        <div>
-            <section className="flex items-center gap-4">
+        <div >
+            <section className="flex items-center gap-4 flex-col sm:flex-row">
                 <Avatar className="h-28 w-28 rounded-full">
                     <AvatarImage src={user.profilePic || ''} />
                     <AvatarFallback className="bg-secondary rounded-md">
                         <FaUser className="text-5xl text-muted-foreground/30" />
                     </AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col gap-1 text-sm">
-                    <h1>Name: {user.name}</h1>
-                    <p>Email: {user.email}</p>
-                    <div className="flex gap-2 items-center">
-                        <p>Role:</p>
+                <div className="flex flex-col gap-1 text-sm items-center sm:items-start">
+                    <h1>{user.name}</h1>
+                    <p>{user.email}</p>
                         <Badge
                             variant={
                                 user.role === 'ADMIN' ? 'default' : 'outline'
@@ -43,20 +41,19 @@ export const UserView = ({
                         >
                             {user.role}
                         </Badge>
-                    </div>
                     {user.emailVerified && (
-                        <p>
+                        <p className='text-muted-foreground'>
                             Joined Since:{' '}
                             {dateToString(user.emailVerified, 'long')}
                         </p>
                     )}
                 </div>
             </section>
-            <section className="mt-4 border rounded-md p-4">
+            <section className="mt-4 border rounded-md p-4 flex flex-col items-center sm:items-start">
                 <h2 className="font-semibold text-xl mb-2">Blogs Written</h2>
                 {blogs.length ? (
                     <>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
                             {blogs.map((blog) => (
                                 <Link
                                     key={blog.id}
