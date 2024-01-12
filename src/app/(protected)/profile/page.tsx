@@ -1,6 +1,6 @@
 'use client'
 
-import { settingsAction } from '@/actions/settings'
+import { profileAction } from '@/actions/profile'
 import { FormError } from '@/components/form-error'
 import { FormSuccess } from '@/components/form-success'
 import LoadingButton from '@/components/loading-button'
@@ -11,7 +11,7 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage
+    FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import {
@@ -44,7 +44,7 @@ export default function SettingsPage() {
     const form = useForm<z.infer<typeof SettingsSchema>>({
         resolver: zodResolver(SettingsSchema),
         defaultValues: {
-            name: user?.name || undefined, //don't put empty string, cuz then the settingsAction prisma would get the name's field value of empty string and would update the record in the db to that empty string
+            name: user?.name || undefined, //don't put empty string, cuz then the profileAction prisma would get the name's field value of empty string and would update the record in the db to that empty string
             //if it is undefined, pirsma wouldn't even add the name field to the update part.. which is what we want right?
             email: user?.email || undefined,
             password: undefined,
@@ -77,7 +77,7 @@ export default function SettingsPage() {
             })
 
             try {
-                const data = await settingsAction(formData)
+                const data = await profileAction(formData)
 
                 if (data.error) {
                     setError(data.error)

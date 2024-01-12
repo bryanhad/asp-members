@@ -3,16 +3,15 @@
 import { getUserByEmail, getUserById } from '@/data/user'
 import { currentUser } from '@/lib/auth'
 import { db } from '@/lib/db'
+import { updateImage, uploadImage } from '@/lib/image-upload'
 import { sendEmailVerificationEmail } from '@/lib/mail'
 import { generateEmailVerificationToken } from '@/lib/tokens'
-import { SettingsSchema, SettingsSchemaBackend } from '@/schemas'
-import * as z from 'zod'
+import { getCloudinaryPublicImageId } from '@/lib/utils'
+import { SettingsSchemaBackend } from '@/schemas'
 import bcrypt from 'bcryptjs'
 import { revalidatePath } from 'next/cache'
-import { getCloudinaryPublicImageId } from '@/lib/utils'
-import { updateImage, uploadImage } from '@/lib/image-upload'
 
-export const settingsAction = async (formData: FormData) => {
+export const profileAction = async (formData: FormData) => {
     const user = await currentUser()
 
     if (!user) {
