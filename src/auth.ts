@@ -13,13 +13,14 @@ export const {
 } = NextAuth({
     pages: {
         signIn: '/auth/login',
-        error: '/auth/error'
+        error: '/auth/error',
     },
     adapter: PrismaAdapter(db),
     session: { strategy: 'jwt' }, // we can't use session db in prisma. cuz prisma doesn't work on the edge
     ...authConfig,
     callbacks: {
-        async jwt({ token }) { // on this token, we will get the user's id on the sub field in the token object
+        async jwt({ token }) {
+            // on this token, we will get the user's id on the sub field in the token object
 
             if (!token.sub) {
                 //no sub, means that the user is logged out.
@@ -36,7 +37,7 @@ export const {
 
             return token
         },
-        async session({ token, session }) {
+        async session({ token, session, user,  }) {
             if (token.sub && session.user) {
                 session.user.id = token.sub
             }
@@ -52,7 +53,8 @@ export const {
             }
             return session
         },
-        async signIn({user}) { //return false to not allow signIn, and true to allow
+        async signIn({ user }) {
+            //return false to not allow signIn, and true to allow
             const existingUser = await getUserById(user.id)
 
             if (!existingUser || !existingUser.emailVerified) {

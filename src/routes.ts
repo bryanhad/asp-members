@@ -9,17 +9,17 @@ export const publicRoutes = [
     '/api/public/members'
 ]
 
-/**
- * An array of routes that are accessible for ADMIN
- * @type {{start:string, end:string}[]}
- */
-export const adminRoutes = [
-    {start: '/member', end: '/add'},
-    {start: '/member', end: '/edit'},
-    {start: '/users', end: '/add'},
-    {start: '/practices', end: '/add'},
-    {start: '/practices', end: '/edit'},
-] as const
+// /**
+//  * An array of routes that are accessible for ADMIN
+//  * @type {{start:string, end:string}[]}
+//  */
+// export const adminRoutes = [
+//     {start: '/member', end: '/add'},
+//     {start: '/member', end: '/edit'},
+//     {start: '/users', end: '/add'},
+//     {start: '/practices', end: '/add'},
+//     {start: '/practices', end: '/edit'},
+// ] as const
 
 
 

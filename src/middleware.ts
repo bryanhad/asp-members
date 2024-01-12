@@ -3,7 +3,6 @@ import NextAuth from 'next-auth'
 
 import {
     DEFAULT_LOGIN_REDIRECT,
-    adminRoutes,
     apiAuthPrefix,
     authRoutes,
     publicApiPrefix,
@@ -19,7 +18,7 @@ const allowedOrigins =
         ? ['https://mydomain.com', 'https://www.mydomain.com']
         : ['http://localhost:3000', 'http://localhost:3001']
 
-export default auth((req) => {
+export default auth(async (req) => {
     const { nextUrl } = req
     const isLoggedIn = !!req.auth
     const origin = req.headers.get('origin')
@@ -46,11 +45,11 @@ export default auth((req) => {
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
     const isAuthRoute = authRoutes.includes(nextUrl.pathname)
     const isPublicApiRoute = nextUrl.pathname.startsWith(publicApiPrefix)
-    const isAdminRoute = adminRoutes.some((route) => {
-        const matchingStart = nextUrl.pathname.startsWith(route.start)
-        const matchingEnd = nextUrl.pathname.endsWith(route.end)
-        return matchingStart && matchingEnd
-    })
+    // const isAdminRoute = adminRoutes.some((route) => {
+    //     const matchingStart = nextUrl.pathname.startsWith(route.start)
+    //     const matchingEnd = nextUrl.pathname.endsWith(route.end)
+    //     return matchingStart && matchingEnd
+    // })
 
     if (isApiAuthRoute) {
         //null means that this middleware won't do anything lol
@@ -70,11 +69,18 @@ export default auth((req) => {
         return null
     }
 
-    if (isAdminRoute) {
-        if (req.auth && req.auth.user.role !== 'ADMIN') {
-            return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
-        }
-    }
+    // if (isAdminRoute) {
+    //     if (req.auth && req.auth.user.role !== 'ADMIN') {
+    //         const session = await auth()
+    //         console.log(session)
+
+    //         console.log(
+    //             'INI NGECEK APAKAH LU ADMIN APA BUKAN >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+    //         )
+    //         console.log(req.auth.user)
+    //         return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
+    //     }
+    // }
 
     if (!isLoggedIn && !isPublicRoute) {
         let callbackUrl = nextUrl.pathname
