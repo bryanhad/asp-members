@@ -4,6 +4,7 @@ import { deleteUser } from '@/actions/admin'
 import { OnlyShowToAdmin } from '@/components/auth/only-show-to-admin'
 import DeleteButtonModal from '@/components/delete-button-modal'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -13,7 +14,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { dateToString } from '@/lib/utils'
-import { User } from '@prisma/client'
+import { User, UserRole } from '@prisma/client'
 import { ColumnDef } from '@tanstack/react-table'
 import { MoreHorizontal } from 'lucide-react'
 import Link from 'next/link'
@@ -49,7 +50,19 @@ export const columns: ColumnDef<FetchedUser>[] = [
         accessorKey: 'email',
         header: 'Email',
     },
-    // TODO : ROLE COLUMN
+    {
+        accessorKey: 'role',
+        header: 'Role',
+        cell: ({ row }) => {
+            const role = row.getValue('role') as UserRole
+
+            return (
+                <Badge variant={role === 'ADMIN' ? 'default' : 'outline'}>
+                    {role}
+                </Badge>
+            )
+        },
+    },
     {
         accessorKey: 'blogs-count',
         header: 'Blogs Written',
