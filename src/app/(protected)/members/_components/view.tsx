@@ -1,3 +1,4 @@
+import { OnlyShowToAdmin } from '@/components/auth/only-show-to-admin'
 import { Button } from '@/components/ui/button'
 import { dateToString } from '@/lib/utils'
 import { Member, Position, Practice } from '@prisma/client'
@@ -14,11 +15,13 @@ export default function MemberView({ member }: AddMemberFormProps) {
         <div>
             <div className="flex max-sm:justify-center items-center mb-4 gap-5">
                 <h2 className="text-xl ">{member.name}</h2>
-                <Button asChild variant={'ghost'}>
-                    <Link href={`/members/${member.id}/edit`}>
-                        <PiPencilSimpleLine />
-                    </Link>
-                </Button>
+                <OnlyShowToAdmin>
+                    <Button asChild variant={'ghost'}>
+                        <Link href={`/members/${member.id}/edit`}>
+                            <PiPencilSimpleLine />
+                        </Link>
+                    </Button>
+                </OnlyShowToAdmin>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-9">
                 <div className="flex flex-col sm:flex-row gap-4 items-center">
@@ -39,7 +42,6 @@ export default function MemberView({ member }: AddMemberFormProps) {
                     description
                 />
 
-
                 <TextShowCase label="Email" text={member.email} />
 
                 <TextShowCase label="Position" text={member.position.name} />
@@ -47,7 +49,7 @@ export default function MemberView({ member }: AddMemberFormProps) {
                     label="Joined Since"
                     text={
                         member.joinedSince
-                            ? dateToString(member.joinedSince)
+                            ? dateToString(member.joinedSince, 'long')
                             : null
                     }
                 />

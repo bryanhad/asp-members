@@ -11,6 +11,7 @@ import Image from 'next/image'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Practice } from '@prisma/client'
 import { FaImage } from 'react-icons/fa'
+import { OnlyShowToAdmin } from '@/components/auth/only-show-to-admin'
 
 type PracticeTableCellProps = {
     practice: {
@@ -33,7 +34,10 @@ export default function PracticeTableCell({
                 <div className="flex-[1]">
                     <div className="flex items-center gap-2">
                         <Avatar className="h-8 w-8 rounded-sm">
-                            <AvatarImage src={practice.icon} className='bg-white p-[2px]'/>
+                            <AvatarImage
+                                src={practice.icon}
+                                className="bg-white p-[2px]"
+                            />
                             <AvatarFallback className="bg-secondary">
                                 <FaImage className="text-muted-foreground/30" />
                             </AvatarFallback>
@@ -41,24 +45,26 @@ export default function PracticeTableCell({
                         <p>{practice.name}</p>
                     </div>
                 </div>
-                <Button asChild variant="ghost" size="sm">
-                    <Link href={`/practices/${practice.id}/edit`}>
-                        <PiPencilSimpleLine />
-                    </Link>
-                </Button>
-                <DeleteButtonModal
-                    onConfirm={() => deletePractice(practice.id)}
-                    description={`Practice '${practice.name}' will be deleted permanently.`}
-                    onProceed={() => deletePractice(practice.id, true)}
-                >
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="dark:text-red-600 text-red-500"
-                    >
-                        <FiTrash />
+                <OnlyShowToAdmin>
+                    <Button asChild variant="ghost" size="sm">
+                        <Link href={`/practices/${practice.id}/edit`}>
+                            <PiPencilSimpleLine />
+                        </Link>
                     </Button>
-                </DeleteButtonModal>
+                    <DeleteButtonModal
+                        onConfirm={() => deletePractice(practice.id)}
+                        description={`Practice '${practice.name}' will be deleted permanently.`}
+                        onProceed={() => deletePractice(practice.id, true)}
+                    >
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="dark:text-red-600 text-red-500"
+                        >
+                            <FiTrash />
+                        </Button>
+                    </DeleteButtonModal>
+                </OnlyShowToAdmin>
             </div>
             <div className="flex sm:flex-col items-center gap-3 sm:gap-1">
                 <p className="text-secondary-foreground/20 text-sm">

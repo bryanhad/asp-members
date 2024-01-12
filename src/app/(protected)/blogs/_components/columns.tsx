@@ -2,13 +2,14 @@
 
 import { deleteBlog } from '@/actions/blog'
 import DeleteButtonModal from '@/components/delete-button-modal'
+import { OnlyShowToOwner } from '@/components/only-show-to-owner'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { dateToString } from '@/lib/utils'
 import { Blog, Practice, User } from '@prisma/client'
@@ -45,13 +46,12 @@ export const columns: ColumnDef<FetchedBlog>[] = [
         accessorKey: 'category',
         header: 'Category',
         cell: ({ row }) => {
-            const category = row.getValue('category') as Pick<Practice, 'name' | 'id'>
+            const category = row.getValue('category') as Pick<
+                Practice,
+                'name' | 'id'
+            >
 
-            return (
-                <p>
-                    {category.name}
-                </p>
-            )
+            return <p>{category.name}</p>
         },
     },
     {
@@ -81,7 +81,7 @@ export const columns: ColumnDef<FetchedBlog>[] = [
 
             return (
                 <div className="text-right font-medium">
-                    {dateToString(date)}
+                    {dateToString(date, 'long')}
                 </div>
             )
         },
@@ -109,14 +109,16 @@ export const columns: ColumnDef<FetchedBlog>[] = [
                                 <p>Edit</p>
                             </Link>
                         </DropdownMenuItem>
-                        <DeleteButtonModal
-                            onConfirm={() => deleteBlog(blog.id)}
-                            description={`Blog '${blog.title}' will be deleted permanently.`}
-                        >
-                            <p className="w-full text-destructive font-semibold cursor-pointer p-1 rounded-md hover:bg-secondary duration-200">
-                                delete
-                            </p>
-                        </DeleteButtonModal>
+                        <OnlyShowToOwner ownerId={blog.authorId}>
+                            <DeleteButtonModal
+                                onConfirm={() => deleteBlog(blog.id)}
+                                description={`Blog '${blog.title}' will be deleted permanently.`}
+                            >
+                                <p className="w-full text-destructive font-semibold cursor-pointer p-1 rounded-md hover:bg-secondary duration-200">
+                                    delete
+                                </p>
+                            </DeleteButtonModal>
+                        </OnlyShowToOwner>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )

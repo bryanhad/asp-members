@@ -63,7 +63,7 @@ export const UserView = ({
                                 </Link>
                             ))}
                         </div>
-                        <div className="flex justify-center">
+                        <div className="flex justify-center w-full">
                             <LoadMoreButton
                                 className="mt-4"
                                 currentPage={currentPage}

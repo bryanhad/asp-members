@@ -1,12 +1,13 @@
 import { Button } from '@/components/ui/button'
 import PracticesTable from './_components/practices-table'
 import Link from 'next/link'
+import { OnlyShowToAdmin } from '@/components/auth/only-show-to-admin'
 
 type PracticePageProps = {
     searchParams?: {
         q?: string
         page?: string
-        size?:string
+        size?: string
     }
 }
 export default function PracticesPage({ searchParams }: PracticePageProps) {
@@ -16,12 +17,16 @@ export default function PracticesPage({ searchParams }: PracticePageProps) {
 
     return (
         <div className="space-y-4">
-            <Button asChild>
-                <Link href={'/practices/add'}>
-                    Add New Practice
-                </Link>
-            </Button>
-            <PracticesTable size={tableSize} query={query} currentPage={currentPage} />
+            <OnlyShowToAdmin>
+                <Button asChild>
+                    <Link href={'/practices/add'}>Add New Practice</Link>
+                </Button>
+            </OnlyShowToAdmin>
+            <PracticesTable
+                size={tableSize}
+                query={query}
+                currentPage={currentPage}
+            />
         </div>
     )
 }

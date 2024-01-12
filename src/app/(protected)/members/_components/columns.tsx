@@ -63,7 +63,7 @@ export const columns: ColumnDef<FetchedMember>[] = [
             return (
                 <div className="text-right font-medium">
                     {date ? (
-                        dateToString(date)
+                        dateToString(date, 'long')
                     ) : (
                         <span className="italic text-muted-foreground/60">
                             unknown

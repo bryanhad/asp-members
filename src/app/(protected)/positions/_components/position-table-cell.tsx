@@ -8,6 +8,8 @@ import { PiPencilSimpleLine } from 'react-icons/pi'
 import EditingForm from './editing-form'
 import { cn } from '@/lib/utils'
 import { FiTrash } from 'react-icons/fi'
+import { OnlyShowToOwner } from '@/components/only-show-to-owner'
+import { OnlyShowToAdmin } from '@/components/auth/only-show-to-admin'
 
 type PositionTableCellProps = {
     position: {
@@ -24,8 +26,6 @@ export default function PositionTableCell({
     position,
 }: PositionTableCellProps) {
     const [isEditing, setIsEditing] = useState(false)
-
-
 
     return (
         <div
@@ -49,19 +49,23 @@ export default function PositionTableCell({
                         >
                             <PiPencilSimpleLine />
                         </Button>
-                        <DeleteButtonModal
-                            onConfirm={() => deletePosition(position.id)}
-                            description={`Position '${position.name}' will be deleted permanently.`}
-                            onProceed={() => deletePosition(position.id, true)}
-                        >
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="dark:text-red-600 text-red-500"
+                        <OnlyShowToAdmin>
+                            <DeleteButtonModal
+                                onConfirm={() => deletePosition(position.id)}
+                                description={`Position '${position.name}' will be deleted permanently.`}
+                                onProceed={() =>
+                                    deletePosition(position.id, true)
+                                }
                             >
-                                <FiTrash />
-                            </Button>
-                        </DeleteButtonModal>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="dark:text-red-600 text-red-500"
+                                >
+                                    <FiTrash />
+                                </Button>
+                            </DeleteButtonModal>
+                        </OnlyShowToAdmin>
                     </div>
                     <div className="flex sm:flex-col items-center gap-3 sm:gap-1">
                         <p className="text-secondary-foreground/20 text-sm">

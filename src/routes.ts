@@ -14,8 +14,11 @@ export const publicRoutes = [
  * @type {{start:string, end:string}[]}
  */
 export const adminRoutes = [
+    {start: '/member', end: '/add'},
     {start: '/member', end: '/edit'},
-    {start: '/users', end: '/add'}
+    {start: '/users', end: '/add'},
+    {start: '/practices', end: '/add'},
+    {start: '/practices', end: '/edit'},
 ] as const
 
 

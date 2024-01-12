@@ -260,7 +260,7 @@ export default function SettingsPage() {
                                     </FormItem>
                                 )}
                             />
-                            <FormField
+                            {/* <FormField
                                 control={form.control}
                                 name="role"
                                 render={({ field }) => (
@@ -292,7 +292,7 @@ export default function SettingsPage() {
                                         <FormMessage />
                                     </FormItem>
                                 )}
-                            />
+                            /> */}
                         </div>
                         <FormError message={error} />
                         <FormSuccess message={success} />
