@@ -29,5 +29,5 @@ export const resetPasswordAction = async (
         passwordResetToken.token
     )
 
-    return { success: 'Reset password email sent!' }
+    return { success: 'Reset password email sent. Please check your email.' }
 }

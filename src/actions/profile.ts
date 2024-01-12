@@ -58,7 +58,7 @@ export const profileAction = async (formData: FormData) => {
             verificationToken.token
         )
 
-        return { success: 'Verification email sent!' }
+        return { success: 'Verification email sent. Please Check your email.' }
     }
 
     if (input.password && input.newPassword) {

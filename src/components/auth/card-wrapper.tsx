@@ -7,8 +7,8 @@ import { Header } from './header'
 type CardWrapperProps = {
     children: React.ReactNode
     headerLabel: string
-    backButtonLabel: string
-    backButtonHref: string
+    backButtonLabel?: string
+    backButtonHref?: string
 }
 
 export const CardWrapper = ({
@@ -18,14 +18,16 @@ export const CardWrapper = ({
     headerLabel,
 }: CardWrapperProps) => {
     return (
-        <Card className="shadow-md w-full min-w-[500px]">
+        <Card className="shadow-md w-full max-w-[500px]">
             <CardHeader>
                 <Header label={headerLabel} />
             </CardHeader>
             <CardContent>{children}</CardContent>
-            <CardFooter>
-                <BackButton href={backButtonHref} label={backButtonLabel} />
-            </CardFooter>
+            {backButtonHref && backButtonLabel && (
+                <CardFooter>
+                    <BackButton href={backButtonHref} label={backButtonLabel} />
+                </CardFooter>
+            )}
         </Card>
     )
 }
