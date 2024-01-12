@@ -38,10 +38,10 @@ export const columns: ColumnDef<FetchedUser>[] = [
                     <Avatar className="h-8 w-8">
                         <AvatarImage src={user.profilePic || ''} />
                         <AvatarFallback className="bg-secondary">
-                            <FaUser className="text-muted-foreground/30" />
+                            <FaUser className="text-muted-foreground/40" />
                         </AvatarFallback>
                     </Avatar>
-                    <p>{user.name}</p>
+                    <p className="line-clamp-2">{user.name}</p>
                 </div>
             )
         },
@@ -69,7 +69,9 @@ export const columns: ColumnDef<FetchedUser>[] = [
         cell: ({ row }) => {
             const user = row.original //get the full row data
 
-            return <div>{user._count.blogs}</div>
+            return (
+                <div className="pl-4 md:pl-6 lg:pl-10">{user._count.blogs}</div>
+            )
         },
     },
     {
@@ -94,7 +96,7 @@ export const columns: ColumnDef<FetchedUser>[] = [
             return (
                 <div className="text-right font-medium">
                     {date ? (
-                        dateToString(date, 'long')
+                        <p>{dateToString(date)}</p>
                     ) : (
                         <span className="italic text-muted-foreground/60">
                             unknown

@@ -36,7 +36,7 @@ export const columns: ColumnDef<FetchedMember>[] = [
                             <FaUser className="text-muted-foreground/30" />
                         </AvatarFallback>
                     </Avatar>
-                    <p>{member.name}</p>
+                    <p className="line-clamp-2">{member.name}</p>
                 </div>
             )
         },
@@ -44,6 +44,11 @@ export const columns: ColumnDef<FetchedMember>[] = [
     {
         accessorKey: 'email',
         header: 'Email',
+        cell: ({ row }) => {
+            const email = row.getValue('email') as string
+
+            return <p>{email}</p>
+        },
     },
     {
         accessorKey: 'positionId',
@@ -51,7 +56,7 @@ export const columns: ColumnDef<FetchedMember>[] = [
         cell: ({ row }) => {
             const member = row.original //get the full row data
 
-            return <div>{member.position.name}</div>
+            return <p className="line-clamp-2">{member.position.name}</p>
         },
     },
     {
@@ -63,7 +68,7 @@ export const columns: ColumnDef<FetchedMember>[] = [
             return (
                 <div className="text-right font-medium">
                     {date ? (
-                        dateToString(date, 'long')
+                        <p className="line-clamp-2">{dateToString(date)}</p>
                     ) : (
                         <span className="italic text-muted-foreground/60">
                             unknown

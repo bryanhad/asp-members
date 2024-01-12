@@ -37,7 +37,7 @@ export const columns: ColumnDef<FetchedBlog>[] = [
                             <FaImage className="text-muted-foreground/30" />
                         </AvatarFallback>
                     </Avatar>
-                    <p>{blog.title}</p>
+                    <p className='line-clamp-2'>{blog.title}</p>
                 </div>
             )
         },
@@ -51,7 +51,7 @@ export const columns: ColumnDef<FetchedBlog>[] = [
                 'name' | 'id'
             >
 
-            return <p>{category.name}</p>
+            return <p className='line-clamp-2'>{category.name}</p>
         },
     },
     {
@@ -68,7 +68,7 @@ export const columns: ColumnDef<FetchedBlog>[] = [
                             <FaUser className="text-muted-foreground/30" />
                         </AvatarFallback>
                     </Avatar>
-                    <p>{blog.author.name}</p>
+                    <p className='line-clamp-2'>{blog.author.name}</p>
                 </div>
             )
         },
@@ -80,9 +80,9 @@ export const columns: ColumnDef<FetchedBlog>[] = [
             const date = row.getValue('createdAt') as Date
 
             return (
-                <div className="text-right font-medium">
-                    {dateToString(date, 'long')}
-                </div>
+                <p className="text-right font-medium">
+                    {dateToString(date)}
+                </p>
             )
         },
     },

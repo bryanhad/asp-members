@@ -40,7 +40,7 @@ export const UserButton = ({ onClick }: UserButtonProps) => {
                         <Avatar className="h-8 w-8">
                             <AvatarImage src={user?.profilePic || ''} />
                             <AvatarFallback className="bg-secondary">
-                                <FaUser className="text-white" />
+                                <FaUser className="text-muted-foreground/40" />
                             </AvatarFallback>
                         </Avatar>
                         <span className="text-start font-medium line-clamp-1">
@@ -72,8 +72,8 @@ export const UserButton = ({ onClick }: UserButtonProps) => {
                                         <AvatarImage
                                             src={user?.profilePic || ''}
                                         />
-                                        <AvatarFallback className="bg-sky-500">
-                                            <FaUser className="text-white" />
+                                        <AvatarFallback className="bg-secondary">
+                                            <FaUser className="text-muted-foreground/40" />
                                         </AvatarFallback>
                                     </Avatar>
                                 </div>
