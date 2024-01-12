@@ -10,28 +10,11 @@ import { RiMenu4Line } from 'react-icons/ri'
 import BurgerMenuContent from './burger-menu-content'
 import { UserButton } from './user-button'
 import { useState } from 'react'
+import { NAV_LINKS } from '@/constants'
 
 export function BurgerMenu() {
     const pathname = usePathname()
     const [open, setOpen] = useState(false)
-
-    const links = [
-        {
-            name: 'General',
-            nestedLinks: [
-                { name: 'Dashboard', href: '/' },
-                { name: 'Users', href: '/users' },
-                { name: 'Members', href: '/members' },
-                { name: 'Blogs', href: '/blogs' },
-                { name: 'Positions', href: '/positions' },
-                { name: 'Practices', href: '/practices' },
-            ],
-        },
-        {
-            name: 'User',
-            nestedLinks: [{ name: 'Profile', href: '/profile' }],
-        },
-    ]
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -43,7 +26,7 @@ export function BurgerMenu() {
             <BurgerMenuContent className="flex flex-col pt-12 items-end">
                 <UserButton onClick={() => setOpen(false)} />
                 <div className="flex flex-col gap-4 mt-4 pr-5">
-                    {links.map((link) => {
+                    {NAV_LINKS.map((link) => {
                         return (
                             <div key={link.name} className="flex flex-col">
                                 <Button

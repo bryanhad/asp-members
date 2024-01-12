@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { NAV_LINKS } from '@/constants'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -8,30 +9,13 @@ import { usePathname } from 'next/navigation'
 export default function SideBar() {
     const pathname = usePathname()
 
-    const links = [
-        {
-            name: 'General',
-            nestedLinks: [
-                { name: 'Dashboard', href: '/' },
-                { name: 'Users', href: '/users' },
-                { name: 'Members', href: '/members' },
-                { name: 'Blogs', href: '/blogs' },
-                { name: 'Positions', href: '/positions' },
-                { name: 'Practices', href: '/practices' },
-            ],
-        },
-        {
-            name: 'User',
-            nestedLinks: [{ name: 'Profile', href: '/profile' }],
-        },
-    ]
     return (
         <aside
             className={cn(
                 'absolute left-0 top-0 h-full lg:flex w-[250px] p-6 flex-col gap-4 bg-background hidden border-r-border border-r'
             )}
         >
-            {links.map((link) => (
+            {NAV_LINKS.map((link) => (
                 <div key={link.name} className="flex flex-col">
                     <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
                         {link.name}

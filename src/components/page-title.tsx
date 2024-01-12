@@ -1,5 +1,6 @@
 'use client'
 
+import { POSSIBLE_LINKS } from '@/constants'
 import { cn } from '@/lib/utils'
 import { usePathname } from 'next/navigation'
 
@@ -14,12 +15,15 @@ export default function PageTitle({ className }: PageTitleProps) {
 
     const isAddPage = pathnameArr[2] === 'add'
     const isEditPage = pathnameArr[3] === 'edit'
+    const isNotFound = !POSSIBLE_LINKS.includes(pathname)
 
     const singularPageTitle = pathnameArr[1].slice(0, -1)
 
     let title: string
 
     switch (true) {
+        case isNotFound:
+            return null
         case isAddPage:
             title = `Add ${singularPageTitle}`
             break
