@@ -1,3 +1,4 @@
+import DataTableSearch from '@/components/table/data-table-search'
 import AddForm from './_components/add-form'
 import PositionsTable from './_components/positions-table'
 
@@ -16,6 +17,7 @@ export default async function PositionsPage({ searchParams }: PositionPageProps)
 
     return (
         <div className="space-y-4">
+            <DataTableSearch placeholder='Search by name..'/>
             <AddForm />
             <PositionsTable size={tableSize} query={query} currentPage={currentPage} />
         </div>

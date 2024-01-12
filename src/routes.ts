@@ -4,7 +4,6 @@
  * @type {string[]}
  */
 export const publicRoutes = [
-    '/',
     '/auth/email-verification', // we put the email verification route to public, cuz we will allow logged in user to change their email from the settings page, which means the user is already logged in.
     // if we put the auth/email-verification route to the authRoutes, logged in user couldn't acces it.
     '/api/public/members'

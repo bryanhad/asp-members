@@ -19,7 +19,6 @@ export default async function PositionsTable({
     const positions = await fetchFilteredPositions(query, currentPage, size)
     const {totalPages, count} = await fetchPositionsPageAmount(query, size )
 
-
     return (
         <>
             <div className="flex flex-col gap-2">

@@ -10,18 +10,9 @@ export default function SideBar() {
 
     const links = [
         {
-            name: 'Test',
-            nestedLinks: [
-                { name: 'Dashboard', href: '/dashboard' },
-                { name: 'Settings', href: '/settings' },
-                { name: 'Server', href: '/server' },
-                { name: 'Client', href: '/client' },
-                { name: 'Admin', href: '/admin' },
-            ],
-        },
-        {
             name: 'General',
             nestedLinks: [
+                { name: 'Dashboard', href: '/' },
                 { name: 'Users', href: '/users' },
                 { name: 'Members', href: '/members' },
                 { name: 'Blogs', href: '/blogs' },
@@ -45,7 +36,7 @@ export default function SideBar() {
                     <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
                         {link.name}
                     </h2>
-                    <div className="space-y-1">
+                    <div className="ml-4 space-y-1">
                         {link.nestedLinks.map((item) => (
                             <Button
                                 key={item.name}

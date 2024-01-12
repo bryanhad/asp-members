@@ -60,7 +60,6 @@ export default function AddForm() {
                         name="name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Add new position</FormLabel>
                                 <FormControl>
                                     <SingleLineInput
                                         buttonText="Add Position"
