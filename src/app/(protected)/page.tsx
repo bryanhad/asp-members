@@ -5,8 +5,10 @@ import { RiArticleFill } from 'react-icons/ri'
 import { LuNetwork } from 'react-icons/lu'
 import { CgPassword } from 'react-icons/cg'
 import { getDashboardData } from '@/actions/dashboard'
+import { currentUser } from '@/lib/auth'
 
 export default async function DashboardPage() {
+    const user = await currentUser()
     const {
         usersCount,
         membersCount,
@@ -17,7 +19,12 @@ export default async function DashboardPage() {
 
     return (
         <div>
-            <p>A quick glance to the ASP Lawfirm page</p>
+            <div className="text-center sm:text-start ">
+                <h1 className="text-3xl"><span className='text-muted-foreground'>Welcome Back,</span> {user?.name}!</h1>
+                <p className="text-muted-foreground mt-2">
+                    Here&apos;s a quick overview to the ASP Lawfirm page
+                </p>
+            </div>
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <InfoCard
                     className={'bg-neutral-400'}
