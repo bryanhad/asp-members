@@ -10,9 +10,5 @@ export default async function ViewMemberPage({
 }: ViewMemberPageProps) {
     const member = await getMemberByIdWithPositionAndPractices(id)
 
-    return (
-        <div>
-            <MemberView member={member} />
-        </div>
-    )
+    return <MemberView member={member} />
 }

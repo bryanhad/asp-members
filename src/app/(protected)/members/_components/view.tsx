@@ -11,7 +11,7 @@ type AddMemberFormProps = {
 
 export default function MemberView({ member }: AddMemberFormProps) {
     return (
-        <div className="">
+        <div>
             <div className="flex max-sm:justify-center items-center mb-4 gap-5">
                 <h2 className="text-xl ">{member.name}</h2>
                 <Button asChild variant={'ghost'}>

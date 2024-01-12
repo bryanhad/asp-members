@@ -18,6 +18,31 @@ export const getUserById = async (id: string) => {
     }
 }
 
+export const getUserByIdWithBlogs = async (id: string, currentPage: number) => {
+    const ITEM_PER_PAGE = 3
+
+    const size = currentPage * ITEM_PER_PAGE
+
+    try {
+        const user = await db.user.findUnique({
+            where: { id },
+            include: {
+                blogs: {
+                    take: size,
+                    orderBy: { id: 'desc' },
+                },
+                _count: {
+                    select: { blogs: true },
+                },
+            },
+        })
+        return user
+    } catch (err) {
+        console.error('Database Error:', err)
+        throw new Error('Failed to fetch users with blogs')
+    }
+}
+
 export async function fetchFilteredUsers(
     query: string,
     currentPage: number,

@@ -48,6 +48,7 @@ export const columns: ColumnDef<FetchedUser>[] = [
         accessorKey: 'email',
         header: 'Email',
     },
+    // TODO : ROLE COLUMN
     {
         accessorKey: 'blogs-count',
         header: 'Blogs Written',
