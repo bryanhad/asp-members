@@ -1,12 +1,12 @@
 'use server'
 
-import * as z from 'zod'
+import { getUserByEmail } from '@/data/user'
+import { db } from '@/lib/db'
+import { sendEmailVerificationEmail } from '@/lib/mail'
+import { generateEmailVerificationToken } from '@/lib/tokens'
 import { RegisterSchema } from '@/schemas'
 import bcrypt from 'bcryptjs'
-import { db } from '@/lib/db'
-import { getUserByEmail } from '@/data/user'
-import { generateEmailVerificationToken } from '@/lib/tokens'
-import { sendEmailVerificationEmail } from '@/lib/mail'
+import * as z from 'zod'
 
 export const registerAction = async (
     values: z.infer<typeof RegisterSchema>
@@ -46,5 +46,7 @@ export const registerAction = async (
         emailVerificationToken.token,
     )
 
-    return { success: 'Check your email to verify your account!' }
+    // revalidatePath('/users')
+
+    return { success: 'Tell the new user to check their email to verify the their account!' }
 }

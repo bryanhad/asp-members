@@ -16,8 +16,7 @@ export const OnlyShowToAdmin = ({
     if (!user) return <p>unauthorized</p>
 
     if (
-        (user.role === 'ADMIN' && user.id !== ownerId) ||
-        (user.role === 'USER' && user.id === ownerId)
+        (user.role === 'ADMIN' && user.id !== ownerId)
     ) {
         //if the current user's role is not the same as the assigned allowedRole that is passed to this component
         return <>{children}</>

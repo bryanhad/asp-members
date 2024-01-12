@@ -14,7 +14,8 @@ export const publicRoutes = [
  * @type {{start:string, end:string}[]}
  */
 export const adminRoutes = [
-    {start: '/member', end: '/edit'}
+    {start: '/member', end: '/edit'},
+    {start: '/users', end: '/add'}
 ] as const
 
 
@@ -43,7 +44,7 @@ export const apiAuthPrefix = '/api/auth'
  * The default redirect path after logging in
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = '/settings'
+export const DEFAULT_LOGIN_REDIRECT = '/'
 
 /**
  * The prefix for public API routes

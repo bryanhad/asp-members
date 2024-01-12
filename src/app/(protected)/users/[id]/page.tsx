@@ -17,7 +17,7 @@ export default async function ViewUserPage({
     const userWithBlogs = await getUserByIdWithBlogs(id, currentPage)
 
     if (!userWithBlogs) {
-        return <p>User Not Found</p>
+        throw new Error('User Not Found')
     }
 
     return <UserView userWithBlogs={userWithBlogs} currentPage={currentPage} />

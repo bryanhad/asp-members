@@ -73,6 +73,19 @@ export const columns: ColumnDef<FetchedUser>[] = [
         },
     },
     {
+        accessorKey: 'emailVerified',
+        header: 'Email Verified',
+        cell: ({ row }) => {
+            const verified = !!row.getValue('emailVerified')
+
+            return (
+                <Badge variant={verified ? 'success' : 'destructive'}>
+                    {verified ? 'Yes' : 'No'}
+                </Badge>
+            )
+        },
+    },
+    {
         accessorKey: 'createdAt',
         header: () => <div className="text-right">Joined Since</div>,
         cell: ({ row }) => {

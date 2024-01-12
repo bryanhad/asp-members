@@ -4,6 +4,7 @@ import React from 'react'
 import { columns } from './_components/columns'
 import { fetchFilteredUsers, fetchUsersPageAmount } from '@/data/user'
 import { DataTable } from '@/components/table/data-table'
+import { OnlyShowToAdmin } from '@/components/auth/only-show-to-admin'
 
 type UsersPageProps = {
     searchParams?: {
@@ -18,16 +19,23 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
     const currentPage = Number(searchParams?.page) || 1
     const tableSize = Number(searchParams?.size) || 5
 
-    const {totalPages, count} = await fetchUsersPageAmount(query, tableSize)
+    const { totalPages, count } = await fetchUsersPageAmount(query, tableSize)
 
     const data = await fetchFilteredUsers(query, currentPage, tableSize)
 
     return (
         <div className="space-y-4">
-            <Button asChild >
-                <Link href="/users/add">Add New User</Link>
-            </Button>
-            <DataTable columns={columns} data={data} totalPages={totalPages} totalData={count} />
+            <OnlyShowToAdmin>
+                <Button asChild>
+                    <Link href="/users/add">Add New User</Link>
+                </Button>
+            </OnlyShowToAdmin>
+            <DataTable
+                columns={columns}
+                data={data}
+                totalPages={totalPages}
+                totalData={count}
+            />
         </div>
     )
 }

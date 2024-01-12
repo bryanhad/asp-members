@@ -22,8 +22,6 @@ export default function PageTitle({ className }: PageTitleProps) {
     let title: string
 
     switch (true) {
-        case isNotFound:
-            return null
         case isAddPage:
             title = `Add ${singularPageTitle}`
             break
@@ -33,6 +31,10 @@ export default function PageTitle({ className }: PageTitleProps) {
         default:
             title = pathnameArr[1] || 'Dashboard'
             break
+    }
+
+    if (!isAddPage && !isEditPage && isNotFound) {
+        return null
     }
 
     return (

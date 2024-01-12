@@ -21,7 +21,7 @@ export default async function DashboardPage() {
         <div>
             <div className="text-center sm:text-start ">
                 <h1 className="text-3xl"><span className='text-muted-foreground'>Welcome Back,</span> {user?.name}!</h1>
-                <p className="text-muted-foreground mt-2">
+                <p className="text-muted-foreground mt-2 text-sm">
                     Here&apos;s a quick overview to the ASP Lawfirm page
                 </p>
             </div>

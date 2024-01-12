@@ -10,6 +10,9 @@ export default async function EditBlogPage({
     params: { slug },
 }: EditBlogPageProps) {
     const blog = await getBlogBySlug(slug)
+    if (!blog) {
+        throw Error('Blog not found')
+    }
     const categories = await getAllPractices()
 
     return <EditBlogForm blog={blog} categories={categories} />
