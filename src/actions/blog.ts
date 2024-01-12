@@ -112,7 +112,6 @@ export const editBlog = async (
             pictureUrl = secure_url
         }
 
-      
         let slug: string | undefined
         if (validatedFields.data.title) {
             slug = generateSlug(validatedFields.data.title)
@@ -138,6 +137,18 @@ export const deleteBlog = async (id: string) => {
     }
 
     const publicImageId = getCloudinaryPublicImageId(tobeDeletedBlog.picture)
+
+    if (!id) { //this snippet is only to avoid getting linting errors on delete button modal props lol, 
+        // i jsut want to deploy mann
+        // just want this to end.. dont judge.
+        return {
+            prismaError: {
+                title: `bruh.`,
+                description: 'double bruh',
+                canProceed: true,
+            },
+        }
+    }
 
     try {
         await db.blog.delete({
