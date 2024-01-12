@@ -16,9 +16,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { createPageURL, generatePagination } from '@/lib/utils'
+import { createPageURL } from '@/lib/utils'
 import Link from 'next/link'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 type DataTablePaginationProps<TData> = {
     totalPages: number
@@ -54,7 +54,7 @@ export function DataTablePagination<TData>({
                     of {totalData} row(s) shown.
                 </div>
             )}
-            <div className="flex flex-col-reverse gap-3 md:flex-row items-center justify-between flex-[1] space-x-6 lg:space-x-8">
+            <div className="flex flex-col-reverse gap-3 md:flex-row items-center justify-between flex-[1]">
                 {table && (
                     <div className="flex items-center space-x-2 flex-col md:flex-row gap-3">
                         <p className="text-sm font-medium">Rows per page</p>
@@ -87,9 +87,9 @@ export function DataTablePagination<TData>({
                 <div className="md:flex hidden w-[100px] items-center justify-center text-sm font-medium">
                     Page {currentPage} of {totalPages}
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center gap-2">
                     {/* GO TO FIRST PAGE */}
-                    <Button
+                    {/* <Button
                         variant="outline"
                         className="hidden h-8 w-8 p-0 lg:flex"
                         disabled={currentPage <= 1}
@@ -98,7 +98,7 @@ export function DataTablePagination<TData>({
                             <span className="sr-only">Go to first page</span>
                             <DoubleArrowLeftIcon className="h-4 w-4" />
                         </Link>
-                    </Button>
+                    </Button> */}
                     {/* GO TO PREV PAGE */}
                     <Button
                         variant="outline"
@@ -126,7 +126,7 @@ export function DataTablePagination<TData>({
                         </Link>
                     </Button>
                     {/* GO TO LAST PAGE */}
-                    <Button
+                    {/* <Button
                         variant="outline"
                         className="hidden h-8 w-8 p-0 lg:flex"
                         disabled={currentPage >= totalPages}
@@ -135,7 +135,7 @@ export function DataTablePagination<TData>({
                             <span className="sr-only">Go to last page</span>
                             <DoubleArrowRightIcon className="h-4 w-4" />
                         </Link>
-                    </Button>
+                    </Button> */}
                 </div>
             </div>
         </div>
