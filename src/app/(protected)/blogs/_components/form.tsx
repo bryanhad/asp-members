@@ -186,6 +186,7 @@ export default function BlogForm({
                                     <FormLabel>Blog Content</FormLabel>
                                     <FormControl>
                                         <TextEditor
+                                            uploadImageFolderLocation='blog/content'
                                             onChange={field.onChange}
                                             initialContent={form.watch(
                                                 'content'

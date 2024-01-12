@@ -218,6 +218,7 @@ export const PracticeForm = ({
                                     <FormLabel>Practice Description</FormLabel>
                                     <FormControl>
                                         <TextEditor
+                                            uploadImageFolderLocation='practice/content'
                                             onChange={field.onChange}
                                             initialContent={form.watch(
                                                 'content'

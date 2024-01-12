@@ -1,30 +1,32 @@
 'use client'
 
+import { BlockNoteEditor } from '@blocknote/core'
 import { useTheme } from 'next-themes'
-import { Block, BlockNoteEditor, PartialBlock } from '@blocknote/core'
 
-import { BlockNoteView, useBlockNote } from '@blocknote/react'
-import '@blocknote/core/style.css'
 import { uploadImageToCloudinary } from '@/actions/image'
+import '@blocknote/core/style.css'
+import { BlockNoteView, useBlockNote } from '@blocknote/react'
 import { useEffect } from 'react'
 
 type TextEditorProps = {
     onChange: (value: string) => void
     initialContent?: string
     editable?: boolean
+    uploadImageFolderLocation: string
 }
 
 export default function TextEditor({
     onChange,
     editable,
     initialContent,
+    uploadImageFolderLocation
 }: TextEditorProps) {
     const { resolvedTheme } = useTheme()
 
     async function handleUpload(file: File) {
         const formData = new FormData()
         formData.append('file', file)
-        const url = await uploadImageToCloudinary(formData, 'practice/content')
+        const url = await uploadImageToCloudinary(formData, uploadImageFolderLocation)
         return url
     }
 
