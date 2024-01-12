@@ -22,7 +22,7 @@ export default function SideBar() {
         },
         {
             name: 'User',
-            nestedLinks: [{ name: 'Profile', href: '/settings' }],
+            nestedLinks: [{ name: 'Profile', href: '/profile' }],
         },
     ]
     return (

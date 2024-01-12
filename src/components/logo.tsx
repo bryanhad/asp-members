@@ -20,8 +20,8 @@ export const Logo = ({className}:LogoProps) => {
                 height='30'
                 width='30'
             />
-            <p className={cn('font-semibold text-muted-foreground ', font.className)}>
-                ASP-admin
+            <p className={cn('font-light text-muted-foreground ', font.className)}>
+                ASP-member
             </p>
         </div>
     )

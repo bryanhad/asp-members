@@ -6,7 +6,7 @@ import { useScrollTop } from '@/hooks/use-scroll-top'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { BurgerMenu } from './burger-menu'
-import { UserButtonn } from './user-button'
+import { UserButton } from './user-button'
 
 export const Navbar = () => {
     const scrolled = useScrollTop()
@@ -19,15 +19,14 @@ export const Navbar = () => {
             )}
         >
             <div className="max-w-[1540px] mx-auto h-[60px] flex justify-between px-7  items-center">
-                <Link href="/dashboard">
+                <Link href="/">
                     <Logo />
                 </Link>
 
-                <div className="flex gap-4 items-center">
                     <BurgerMenu />
-                    <ThemeToggleButton />
-                    {/* <UserButton /> */}
-                    <UserButtonn/>
+                <div className="lg:flex gap-4 items-center hidden">
+                        <ThemeToggleButton />
+                        <UserButton />
                 </div>
             </div>
         </nav>

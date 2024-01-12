@@ -16,12 +16,22 @@ import { LogoutButton } from '@/components/auth/logout-button'
 import Link from 'next/link'
 import { IoSettingsOutline } from 'react-icons/io5'
 
-export const UserButtonn = () => {
+type UserButtonProps = {
+    onClick?: () => void
+}
+
+export const UserButton = ({ onClick }: UserButtonProps) => {
     const user = useCurrentUser()
+
+    function handleClick() {
+        if (onClick) {
+            onClick()
+        }
+    }
 
     return (
         <DropdownMenu modal={false}>
-            <DropdownMenuTrigger asChild className="max-w-max">
+            <DropdownMenuTrigger asChild className="max-w-max rounded-md">
                 <div
                     role="button"
                     className="flex items-center text-sm p-3 w-full hover:bg-primary/5"
@@ -29,13 +39,13 @@ export const UserButtonn = () => {
                     <div className="flex gap-2 items-center">
                         <Avatar className="h-8 w-8">
                             <AvatarImage src={user?.profilePic || ''} />
-                            <AvatarFallback className="bg-sky-500">
+                            <AvatarFallback className="bg-secondary">
                                 <FaUser className="text-white" />
                             </AvatarFallback>
                         </Avatar>
-                        {/* <span className="text-start font-medium line-clamp-1">
+                        <span className="text-start font-medium line-clamp-1">
                             {user?.name}
-                        </span> */}
+                        </span>
                     </div>
                     <LuChevronsLeftRight className="rotate-90 ml-2 text-muted-foreground h-4 w-4" />
                 </div>
@@ -50,9 +60,10 @@ export const UserButtonn = () => {
                     <p className="text-xs font-medium leading-none text-muted-foreground">
                         {user?.email}
                     </p>
-                    <DropdownMenuItem asChild className='cursor-pointer'>
+                    <DropdownMenuItem asChild className="cursor-pointer">
                         <Link
-                            href={'/settings'}
+                            onClick={handleClick}
+                            href={'/profile'}
                             className="py-1 px-2 hover:bg-secondary duration-300 rounded-sm"
                         >
                             <div className="flex items-center gap-2">

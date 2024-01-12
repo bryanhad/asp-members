@@ -1,83 +1,66 @@
 'use client'
 
+import { ThemeToggleButton } from '@/components/theme-toggle-button'
 import { Button } from '@/components/ui/button'
-import {
-    Dialog,
-    DialogClose,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import BurgerMenuContent from './burger-menu-content'
-import { RiMenu4Line } from 'react-icons/ri'
-import Link from 'next/link'
+import { Dialog, DialogClose, DialogTrigger } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { RiMenu4Line } from 'react-icons/ri'
+import BurgerMenuContent from './burger-menu-content'
+import { UserButton } from './user-button'
+import { useState } from 'react'
 
 export function BurgerMenu() {
     const pathname = usePathname()
+    const [open, setOpen] = useState(false)
 
     const links = [
         {
-            name: 'Test',
-            nestedLinks: [
-                { name: 'Dashboard', href: '/dashboard' },
-                { name: 'Settings', href: '/settings' },
-                { name: 'Server', href: '/server' },
-                { name: 'Client', href: '/client' },
-                { name: 'Admin', href: '/admin' },
-            ],
-        },
-        {
             name: 'General',
             nestedLinks: [
+                { name: 'Dashboard', href: '/' },
                 { name: 'Users', href: '/users' },
                 { name: 'Members', href: '/members' },
                 { name: 'Blogs', href: '/blogs' },
                 { name: 'Positions', href: '/positions' },
+                { name: 'Practices', href: '/practices' },
             ],
         },
         {
             name: 'User',
-            nestedLinks: [{ name: 'Profile', href: '/settings' }],
+            nestedLinks: [{ name: 'Profile', href: '/profile' }],
         },
     ]
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" size="icon" className="xl:hidden">
+                <Button variant="outline" size="icon" className="lg:hidden">
                     <RiMenu4Line />
                 </Button>
             </DialogTrigger>
-            <BurgerMenuContent className="flex flex-col pt-6">
-                <div >
-                    <DialogClose asChild className='flex-[1]'>
-                        <Link href='/dashboard' className='p-2'>Logo</Link>
-                    </DialogClose>
-
-                    <div className="flex flex-col gap-4 mt-4 pr-5">
-                        {links.map((link) => (
+            <BurgerMenuContent className="flex flex-col pt-12 items-end">
+                <UserButton onClick={() => setOpen(false)} />
+                <div className="flex flex-col gap-4 mt-4 pr-5">
+                    {links.map((link) => {
+                        return (
                             <div key={link.name} className="flex flex-col">
                                 <Button
                                     size="sm"
                                     variant="looksOnly"
-                                    className="justify-end font-semibold"
+                                    className="justify-end font-semibold text-muted-foreground"
                                 >
                                     {link.name}
                                 </Button>
                                 {link.nestedLinks.map((item) => (
-                                    <DialogClose asChild key={link.name}>
+                                    <DialogClose asChild key={item.name}>
                                         <Button
                                             key={item.name}
                                             variant="link"
                                             size="sm"
-                                            className={cn('justify-end mr-2', {
-                                                'font-normal text-foreground':
+                                            className={cn('justify-end', {
+                                                'bg-secondary text-foreground':
                                                     pathname === item.href,
                                             })}
                                             asChild
@@ -89,8 +72,11 @@ export function BurgerMenu() {
                                     </DialogClose>
                                 ))}
                             </div>
-                        ))}
-                    </div>
+                        )
+                    })}
+                </div>
+                <div className="flex-[1] flex items-end">
+                    <ThemeToggleButton />
                 </div>
                 {/* <DialogHeader>
                     <DialogTitle>Share link</DialogTitle>
