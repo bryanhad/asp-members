@@ -141,7 +141,6 @@ export const EditMemberSchema = AddMemberSchema.extend({
 })
 
 export const EditMemberSchemaBackend = EditMemberSchema.extend({
-    memberId: z.string(),
     name: z.optional(MemberNameSchema),
     email: z.optional(MemberEmailSchema),
     positionSlug: z.optional(MemberPositionSchema),

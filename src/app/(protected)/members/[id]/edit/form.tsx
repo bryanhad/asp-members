@@ -61,7 +61,7 @@ export default function EditMemberForm({
                 Object.entries(values).forEach(([key, value]) => {
                     let input: File | string
 
-                    if (value && value !== member[key]) {
+                    if (value) {
                         if (key === 'picture' && values.picture) {
                             input = values.picture[0]
                         } else if (value instanceof Date) {
@@ -77,7 +77,7 @@ export default function EditMemberForm({
                 })
                 formData.append('memberId', member.id)
 
-                const { error, success } = await editMember(formData)
+                const { error, success } = await editMember(formData, member.id)
 
                 if (success) {
                     toast.success(success)

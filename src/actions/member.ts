@@ -39,7 +39,7 @@ export const addMember = async (formData: FormData) => {
         console.log(validatedFields.error)
         return { error: `Invalid fields!` }
     }
-    
+
     try {
         const existingMember = await getMemberByEmail(
             validatedFields.data.email
@@ -89,7 +89,7 @@ export const addMember = async (formData: FormData) => {
     }
 }
 
-export const editMember = async (formData: FormData) => {
+export const editMember = async (formData: FormData, id: string) => {
     const role = await currentRole()
 
     if (role !== UserRole.ADMIN) {
@@ -99,7 +99,6 @@ export const editMember = async (formData: FormData) => {
     const joinedSince = formData.get('joinedSince') as string | null
 
     const validatedFields = EditMemberSchemaBackend.safeParse({
-        memberId: formData.get('memberId'),
         picture: (formData.get('picture') as File | null) || undefined,
         name: formData.get('name') || undefined,
         email: formData.get('email') || undefined,
@@ -123,16 +122,13 @@ export const editMember = async (formData: FormData) => {
     }
 
     try {
-        const existingMember = await getMemberById(
-            validatedFields.data.memberId
-        )
+        const existingMember = await getMemberById(id)
         if (!existingMember) {
             return { error: 'Member not found!' }
         }
 
         const updateData = {
             ...validatedFields.data,
-            memberId: undefined,
         }
         let picture: string | undefined
 
@@ -213,8 +209,8 @@ export const deleteMember = async (id: string) => {
 
     const publicImageId = getCloudinaryPublicImageId(tobeDeletedMember.picture)
 
-    
-    if (!id) { //this snippet is only to avoid getting linting errors on delete button modal props lol, 
+    if (!id) {
+        //this snippet is only to avoid getting linting errors on delete button modal props lol,
         // i jsut want to deploy mann
         // just want this to end.. dont judge.
         return {
