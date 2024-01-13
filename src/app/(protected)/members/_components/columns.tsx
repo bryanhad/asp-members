@@ -99,7 +99,7 @@ export const columns: ColumnDef<FetchedMember>[] = [
                             }
                         >
                             <Link
-                                href={`/members/${member.id}`}
+                                href={`/members/${member.slug}`}
                                 className="w-full"
                             >
                                 <p>View</p>
@@ -109,7 +109,7 @@ export const columns: ColumnDef<FetchedMember>[] = [
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>
                                 <Link
-                                    href={`/members/${member.id}/edit`}
+                                    href={`/members/${member.slug}/edit`}
                                     className="w-full"
                                 >
                                     <p>Edit</p>

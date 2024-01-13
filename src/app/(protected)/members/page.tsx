@@ -5,6 +5,7 @@ import { columns } from './_components/columns'
 import { fetchFilteredMembers, fetchMembersPageAmount } from '@/data/member'
 import { DataTable } from '@/components/table/data-table'
 import { OnlyShowToAdmin } from '@/components/auth/only-show-to-admin'
+import { Metadata } from 'next'
 
 type MembersPageProps = {
     searchParams?: {
@@ -12,6 +13,11 @@ type MembersPageProps = {
         page?: string
         size?: string
     }
+}
+
+export const metadata:Metadata = {
+    title: 'Members',
+    description: `ASP lawfirm's members`
 }
 
 export default async function MembersPage({ searchParams }: MembersPageProps) {
@@ -33,8 +39,8 @@ export default async function MembersPage({ searchParams }: MembersPageProps) {
             <DataTable
                 columns={columns}
                 data={data}
-                totalPages={totalPages}
                 totalData={count}
+                totalPages={totalPages}
             />
         </div>
     )

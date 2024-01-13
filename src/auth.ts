@@ -15,6 +15,7 @@ export const {
         signIn: '/auth/login',
         error: '/auth/error',
     },
+    trustHost: true,
     adapter: PrismaAdapter(db),
     session: { strategy: 'jwt' }, // we can't use session db in prisma. cuz prisma doesn't work on the edge
     ...authConfig,

@@ -81,17 +81,17 @@ export const getMemberByIdWithPosition = async (id: string) => {
         return null
     }
 }
-export const getMemberByIdWithPositionAndPractices = async (id: string) => {
+export const getMemberBySlugdWithPositionAndPractices = async (slug: string) => {
     try {
         const member = await db.member.findUnique({
-            where: { id },
+            where: { slug },
             include: {
                 position: true,
                 practices: { select: { practice: true } },
             },
         })
         if (!member) {
-            throw 'bruh'
+            return null
         }
 
         const memberPractices = member.practices.map((el) => el.practice)
@@ -191,5 +191,16 @@ export async function getAllFilteredMembers(
     } catch (err) {
         console.error('Database Error:', err)
         throw new Error('Failed to fetch members')
+    }
+}
+
+export async function getAllMembersSlug() {
+    try {
+        const members = await db.member.findMany({
+            select: { slug: true },
+        })
+        return members.map(member => member.slug)
+    } catch (err) {
+        throw Error('Failed to fetch members slug')
     }
 }

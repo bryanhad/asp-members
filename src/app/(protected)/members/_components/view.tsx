@@ -17,7 +17,7 @@ export default function MemberView({ member }: AddMemberFormProps) {
                 <h2 className="text-xl ">{member.name}</h2>
                 <OnlyShowToAdmin>
                     <Button asChild variant={'ghost'}>
-                        <Link href={`/members/${member.id}/edit`}>
+                        <Link href={`/members/${member.slug}/edit`}>
                             <PiPencilSimpleLine />
                         </Link>
                     </Button>
