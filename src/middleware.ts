@@ -15,7 +15,7 @@ const { auth } = NextAuth(authConfig) // so isntead of getting the auth from the
 
 const allowedOrigins =
     process.env.NODE_ENV === 'production'
-        ? ['https://asp-members.vercel.app', 'https://www.mydomain.com', 'http://localhost:3000', 'http://localhost:3001']
+        ? ['https://asp-members.vercel.app', 'http://localhost:3000', 'http://localhost:3001']
         : ['http://localhost:3000', 'http://localhost:3001']
 
 export default auth(async (req) => {

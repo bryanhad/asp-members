@@ -19,16 +19,6 @@ type EditMemberFormProps = {
     practices: Practice[]
 }
 
-type EditMemberResponse =
-    | {
-          error: string
-          success?: undefined
-      }
-    | {
-          success: string
-          error?: undefined
-      }
-
 export default function EditMemberForm({
     positions,
     member,
