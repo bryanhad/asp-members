@@ -107,14 +107,14 @@ export const columns: ColumnDef<FetchedMember>[] = [
                         </DropdownMenuItem>
                         <OnlyShowToAdmin>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
+                            {/* <DropdownMenuItem>
                                 <Link
                                     href={`/members/${member.slug}/edit`}
                                     className="w-full"
                                 >
                                     <p>Edit</p>
                                 </Link>
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
                             <DeleteButtonModal
                                 onConfirm={() => deleteMember(member.id)}
                                 description={`Member '${member.name}' will be deleted permanently.`}
